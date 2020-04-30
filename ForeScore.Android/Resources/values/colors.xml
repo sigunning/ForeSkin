@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="launcher_background">#FFFFFF</color>
+    <color name="colorPrimary">#2e7d32</color>
+    <color name="colorPrimaryDark">#005005</color>
+    <color name="colorAccent">#B455B6</color>
+
+    <color name="my_blue">#3498DB</color>
+    <color name="my_green">#2e7d32</color>
+    <color name="my_darkgreen">#005005</color>
+    <color name="my_purple">#B455B6</color>
+    <color name="my_gray">#738182</color>
+  
+</resources>

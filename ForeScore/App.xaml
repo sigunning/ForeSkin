@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms" 
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       mc:Ignorable="d"
+       x:Class="ForeScore.App">
+    <Application.Resources>
+        <ResourceDictionary >
+
+            <!-- Theme Colors -->
+            <Color x:Key="colorPrimary">#2e7d32</Color>
+            <Color x:Key="colorPrimaryDark">#005005</Color>
+            <Color x:Key="colorPrimaryLight">#60ad5e</Color>
+            <Color x:Key="colorAccent">#B455B6</Color>
+
+            <!-- Shell Colors -->
+            <Color x:Key="BackGroundColor">#60ad5e</Color>
+            <Color x:Key="FlyoutBackGroundColor">#60ad5e</Color>
+            <Color x:Key="NavigationPrimary">#005005</Color>
+            <Color x:Key="FlyoutHeaderBackGroundColor">#005005</Color>
+
+            <!-- Controls -->
+
+            <Style x:Key="labelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Medium" />
+            </Style>
+            <Style x:Key="headingStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Large" />
+            </Style>
+
+            <Style  x:Key="stdButton" TargetType="Button">
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="BorderRadius" Value="15" />
+                <Setter Property="BackgroundColor" Value="{StaticResource colorPrimaryDark}" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontSize" Value="Medium" />
+            </Style>
+
+            <Style  x:Key="faButton" TargetType="Button">
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="BorderRadius" Value="15" />
+                <Setter Property="BackgroundColor" Value="{StaticResource colorPrimaryDark}" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontSize" Value="Large" />
+            </Style>
+            <Style  x:Key="faButtonStyle" TargetType="Button">
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="BorderRadius" Value="15" />
+                <Setter Property="BackgroundColor" Value="{StaticResource colorPrimaryDark}" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontSize" Value="Large" />
+            </Style>
+
+            <OnPlatform x:Key="AwesomeFontFamily" x:TypeArguments="x:String">
+                <On Platform="Android" Value="Fonts/fontawesome-webfont.ttf#FontAwesome Icons" />
+            </OnPlatform>
+            <OnPlatform x:Key="MaterialFontFamily" x:TypeArguments="x:String">
+                <On Platform="Android" Value="Fonts/MaterialIcons-Regular.ttf#Material Icons" />
+            </OnPlatform>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ForeScore.Models"
+             x:Class="ForeScore.Views.MainPage"
+             xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore"
+             xmlns:icons="clr-namespace:ForeScore.Helpers"
+             Title="ForeScore!">
+    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+        <StackLayout>
+            <!-- Place new controls here -->
+
+            <Image  Source="{Binding SplashSource}" HorizontalOptions="Center" VerticalOptions="Center" />
+            <Label Text="Golf Scoring App"  Style="{DynamicResource labelStyle}"  HorizontalOptions="Center" />
+                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.PlayArrow}"   HorizontalOptions="Center"
+                                     Command="{Binding PlayCommand}" Style="{DynamicResource faButton}"/>
+            
+                <Button Text="Synch All Data"  Command="{Binding SynchroniseCommand}" Style="{DynamicResource stdButton}"/>
+                <controls:FontAwesomeButton  Text="{x:Static icons:MaterialIcon.CloudUpload}" Command="{Binding SynchroniseCommand}"  Style="{DynamicResource faButton}" />
+
+
+
+
+
+            </StackLayout>
+        <!--Activity Indicator-->
+        <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                     AbsoluteLayout.LayoutFlags="PositionProportional"
+                     AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" />
+            <Label Text="{Binding ActivityMessage}" HorizontalOptions="Center" />
+
+
+        </StackLayout>
+        </StackLayout>
+
+
+    </AbsoluteLayout>
+</ContentPage>

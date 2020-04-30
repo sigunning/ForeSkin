@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Theme Colors -->
+    <Color x:Key="colorPrimary">#2e7d32</Color>
+    <Color x:Key="colorPrimaryDark">#005005</Color>
+    <Color x:Key="colorAccent">#B455B6</Color>
+
+    <!-- Shell Colors -->
+    <Color x:Key="BackGroundColor">gray</Color>
+    <Color x:Key="FlyoutBackGroundColor">yellow</Color>
+    <Color x:Key="NavigationPrimary">navy</Color>
+    <Color x:Key="FlyoutHeaderBackGroundColor">orange</Color>
+
+    <!-- Controls -->
+
+    <Style x:Key="labelStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="Medium" />
+    </Style>
+    <Style x:Key="headingStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="Large" />
+    </Style>
+    
+    <Style  x:Key="stdButton" TargetType="Button">
+        <Setter Property="HorizontalOptions" Value="Fill" />
+        <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+        <Setter Property="BorderRadius" Value="15" />
+        <Setter Property="BackgroundColor" Value="{StaticResource colorPrimaryDark}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="Medium" />
+    </Style>
+
+    <Style  x:Key="faButton" TargetType="Button">
+        <Setter Property="HorizontalOptions" Value="Fill" />
+        <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+        <Setter Property="BorderRadius" Value="15" />
+        <Setter Property="BackgroundColor" Value="{StaticResource colorPrimaryDark}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="Large" />
+    </Style>
+    <Style  x:Key="faButtonStyle" TargetType="Button">
+        <Setter Property="HorizontalOptions" Value="Fill" />
+        <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+        <Setter Property="BorderRadius" Value="15" />
+        <Setter Property="BackgroundColor" Value="{StaticResource colorPrimaryDark}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="Large" />
+    </Style>
+
+
+</ResourceDictionary>

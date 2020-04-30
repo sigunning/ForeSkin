@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms" 
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       mc:Ignorable="d"
+       xmlns:local="clr-namespace:ForeScore.Views"
+       xmlns:icons="clr-namespace:ForeScore.Helpers"
+       FlyoutBackgroundColor="white"
+       BackgroundColor="{DynamicResource colorPrimaryDark}"
+       FlyoutHeaderBehavior="CollapseOnScroll"
+       Title="ForeScore"
+       x:Name="self"
+       x:Class="ForeScore.AppShell">
+
+    <!-- 
+        Styles and Resources 
+    -->
+    <Shell.Resources>
+        <ResourceDictionary>
+            <Style x:Key="BaseStyle" TargetType="Element">
+                <Setter Property="Shell.BackgroundColor" Value="{DynamicResource colorPrimaryDark}" />
+                <Setter Property="Shell.ForegroundColor" Value="White" />
+                <Setter Property="Shell.TitleColor" Value="White" />
+                <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />
+                <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{DynamicResource colorPrimaryDark}" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="White"/>
+                <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF"/>
+                <Setter Property="Shell.TabBarTitleColor" Value="White"/>
+            </Style>
+            <Style x:Key="kShell"
+                   TargetType="Element"
+                   BasedOn="{StaticResource BaseStyle}">
+            </Style>
+
+
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!-- 
+        Header template
+    -->
+    <Shell.FlyoutHeader>
+        <Grid HeightRequest="100"    BackgroundColor="{DynamicResource colorPrimary}"         >
+            <Image Source="pinscribe_splash_white.png"
+                Aspect="AspectFit"
+                HeightRequest="100"
+                HorizontalOptions="Center"/>
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <!-- 
+        Flyout Item Templates 
+    -->
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*" />
+                    <ColumnDefinition Width="0.8*" />
+                </Grid.ColumnDefinitions>
+                <Image Source="{Binding FlyoutIcon}"
+                       Margin="5"
+                       HeightRequest="36" />
+                <Label Grid.Column="1"
+                       Text="{Binding Title}"
+                       VerticalTextAlignment="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <!-- 
+        Flyout Items 
+    -->
+    <FlyoutItem Route="home" 
+                Title="Home"
+                Style="{StaticResource kShell}">
+        <FlyoutItem.FlyoutIcon>
+            <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.Home}"   />
+        </FlyoutItem.FlyoutIcon>
+        <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Route="player" 
+                Title="Players"
+                Style="{StaticResource kShell}">
+        <FlyoutItem.FlyoutIcon>
+            <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.Person}"  />
+        </FlyoutItem.FlyoutIcon>
+        <ShellContent ContentTemplate="{DataTemplate local:PlayerPage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem Route="course" 
+                Title="Courses"
+                Style="{StaticResource kShell}">
+        <FlyoutItem.FlyoutIcon>
+            <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.GolfCourse}"   />
+        </FlyoutItem.FlyoutIcon>
+        <ShellContent ContentTemplate="{DataTemplate local:CoursePage}" />
+    </FlyoutItem>
+
+    <!--
+        Flyout Items for pages with bottom tab bar icon links to each page
+    -->
+        
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Style="{StaticResource kShell}">
+        <ShellContent Title="Players" ContentTemplate="{DataTemplate local:PlayerPage}" >
+            <ShellContent.FlyoutIcon>
+                <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.Person}"   />
+            </ShellContent.FlyoutIcon>
+            <ShellContent.Icon>
+                <FontImageSource Color="{DynamicResource colorPrimaryLight}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.Person}"   />
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent  Title="Courses" ContentTemplate="{DataTemplate local:CoursePage}" >
+            <ShellContent.FlyoutIcon>
+                <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.GolfCourse}"   />
+            </ShellContent.FlyoutIcon>
+            <ShellContent.Icon>
+                <FontImageSource Color="{DynamicResource colorPrimaryLight}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.GolfCourse}"   />
+            </ShellContent.Icon>
+        </ShellContent>
+    </FlyoutItem>
+
+</Shell>

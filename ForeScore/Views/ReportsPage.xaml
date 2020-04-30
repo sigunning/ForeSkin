@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ForeScore.Views.ReportsPage" xmlns:helpers="clr-namespace:ForeScore.Common;assembly=ForeScore"
+             xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore"
+            Title="{Binding Title}">
+
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <helpers:CourseNameConverter x:Key="CourseNameConverter" />
+      <helpers:PlayerNameConverter x:Key="PlayerNameConverter" />
+      <helpers:MarkerConverter x:Key="MarkerConverter" />
+    </ResourceDictionary>
+  </ContentPage.Resources>
+
+  <ContentPage.ToolbarItems>
+    <ToolbarItem  Icon="{Binding ConnectedIcon, Mode=TwoWay}" Order="Primary" Command="{Binding ShowConnectionCommand}"/>
+    <ToolbarItem Text="Toggle Offline Mode"  Order="Secondary"  Command="{Binding OfflineToggleCommand}"/>
+  </ContentPage.ToolbarItems>
+
+  <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+    <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+      <StackLayout Padding="10">
+
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+
+          <Label Grid.Column="0" Text="Tournament" Grid.Row="0"  />
+          <controls:BindablePicker Grid.Column="0" Grid.Row="1"
+          x:Name="PickerTournament"
+            Title = "Select Tournament"
+            ItemsSource="{Binding Path=Tournaments}"
+            DisplayMemberPath="TournamentName"
+            SelectedValuePath="Id"
+            SelectedValue="{Binding Path=ThisRound.Tournament_id, Mode=TwoWay}"  ItemSelected="OnTournamentSelected"/>
+
+          <Label Grid.Column="0" Grid.Row="2" Text="Round"   />
+          <controls:BindablePicker Grid.Column="0" Grid.Row="3"
+            Title = "Select Round"
+            ItemsSource="{Binding Path=LookupRounds}"
+            DisplayMemberPath="NameAndDate"
+            SelectedValuePath="Id"
+            SelectedValue="{Binding Path=ThisRound.Id, Mode=TwoWay}" ItemSelected="OnRoundSelected" />
+
+          <Label Grid.Column="0" Grid.Row="4" Text="Player"   />
+          <controls:BindablePicker Grid.Column="0" Grid.Row="5"
+            Title = "Select Player"
+            ItemsSource="{Binding Path=RoundPlayers}"
+            DisplayMemberPath="PlayerName"
+            SelectedValuePath="Id"
+            SelectedValue="{Binding Path=ThisPlayer.Id, Mode=TwoWay}"  ItemSelected="OnPlayerSelected" />
+
+        </Grid>
+         <!--<Label Text="View"  HorizontalOptions="Center" Style="{DynamicResource headingStyle}" />-->
+
+        <Grid Padding="10" RowSpacing="20">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+
+         <controls:FontAwesomeButton    Grid.Row="0"  Command="{Binding CardCommand}" IsEnabled="{Binding IsNotBusy}"
+                 Style="{DynamicResource faButtonStyle}" />
+          <Label  Grid.Row="0"  Text="Scorecard" Style="{DynamicResource ButtonLabel}"
+                 VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Transparent" />
+          
+        <controls:FontAwesomeButton    Grid.Row="1"  Command="{Binding RoundCommand}" IsEnabled="{Binding IsNotBusy}"
+                 Style="{DynamicResource faButtonStyle}" />
+          <Label  Grid.Row="1"  Text="Round Results" Style="{DynamicResource ButtonLabel}"
+                 VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Transparent" />
+      
+        <controls:FontAwesomeButton    Grid.Row="2"  Command="{Binding TournamentCommand}" IsEnabled="{Binding IsNotBusy}"
+                 Style="{DynamicResource faButtonStyle}" />
+          <Label  Grid.Row="2"  Text="Tournament Results" Style="{DynamicResource ButtonLabel}"
+                 VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Transparent" />
+      
+        </Grid>
+
+        <Button Text="Tournament Results"  Command="{Binding TournamentCommand}" IsEnabled="{Binding IsNotBusy}"/>
+        
+      </StackLayout>
+
+ 
+
+    </StackLayout>
+
+
+
+
+    <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+      <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{DynamicResource activityColor}"/>
+      <Frame  Padding="10,20"  BackgroundColor="{DynamicResource waitBackgroundColor}">
+        <Label Text="{Binding ActivityMessage}" HorizontalOptions="Center" TextColor="{DynamicResource waitMsgColor}" />
+      </Frame>
+
+    </StackLayout>
+  </AbsoluteLayout>
+
+
+</ContentPage>

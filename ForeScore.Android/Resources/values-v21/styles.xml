@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <!-- Inherit from the light Material Theme -->
+  <style name="MainTheme" parent="MainTheme.Base">
+    <!-- Customizations go here -->
+    <!-- Override the app bar color -->
+    <item name="android:colorPrimary">@color/colorPrimary</item>
+    <!-- Override the app bar color -->
+    <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+    <!-- Override the color of UI controls -->
+    <item name="android:colorAccent">@color/colorAccent</item>
+    
+  </style>
+</resources>

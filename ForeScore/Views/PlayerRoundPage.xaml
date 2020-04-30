@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ForeScore.Models"
+             x:Class="ForeScore.Views.PlayerRoundPage"
+             xmlns:helpers="clr-namespace:ForeScore.Common;assembly=ForeScore"
+             xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <helpers:CourseNameConverter x:Key="CourseNameConverter" />
+            <helpers:PlayerNameConverter x:Key="PlayerNameConverter" />
+            <helpers:MarkerConverter x:Key="MarkerConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+    <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <StackLayout Padding="10">
+
+                    <Label Text="Tournament"   />
+                    <controls:BindablePicker
+           x:Name="PickerTournament"
+             Title = "Select Tournament"
+             ItemsSource="{Binding Path=Tournaments}"
+             DisplayMemberPath="TournamentName"
+             SelectedValuePath="Id"
+             SelectedValue="{Binding Path=ThisRound.Tournament_id, Mode=TwoWay}"  ItemSelected="OnTournamentSelected"/>
+
+                    <Label Text="Round"   />
+                    <controls:BindablePicker
+             Title = "Select Round"
+             ItemsSource="{Binding Path=LookupRounds}"
+             DisplayMemberPath="NameAndDate"
+             SelectedValuePath="Id"
+             SelectedValue="{Binding Path=ThisRound.Id, Mode=TwoWay}" ItemSelected="OnRoundSelected" />
+
+                    <Label Text="Players In Group"   HorizontalOptions="Center" />
+
+                    <ScrollView Padding="10">
+                        <ListView x:Name="lstPlayerRounds"  ItemsSource="{Binding PlayerRounds, Mode=TwoWay}"  >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <ViewCell.View>
+                                            <StackLayout Orientation="Horizontal" Padding="1">
+                                                <Switch IsToggled="{Binding Path=Marker_id, Converter={StaticResource MarkerConverter}, ConverterParameter=None   }" HorizontalOptions="Start"/>
+                                                <Label Text="{Binding Path=Player_id, Converter={StaticResource PlayerNameConverter}, ConverterParameter=None   } "
+                                    VerticalOptions="Center"  WidthRequest="120"/>
+                                                <!--
+                    <Label Text="{Binding Marker_id}" Style="{DynamicResource labelStyle}"  TextColor="Red" Font="Large" VerticalOptions="Center" />
+                    <Entry Text="{Binding HCAP, Mode=TwoWay}" Style="{DynamicResource entryStyle}"  TextColor="Red"  VerticalOptions="Center" HorizontalOptions="Center"/>
+                    <Label Text="Hcap" Style="{DynamicResource labelStyle}"  TextColor="Gray" Font="Medium" VerticalOptions="Center" HorizontalOptions="Start"/>-->
+
+                                                <controls:BindablePicker
+                          WidthRequest="50"
+                          VerticalOptions="Center"
+                          HorizontalOptions="End"
+                          Title = "Hcap"
+                          ItemsSource="{Binding Path=BindingContext.PickerHcap, Source={x:Reference lstPlayerRounds}  }"
+                          SelectedItem="{Binding HCAP, Mode=TwoWay}" />
+
+
+                                                <controls:FontAwesomeButton Text="&#xf014;" FontSize="20" WidthRequest="50" 
+                                                    Command="{Binding Path=BindingContext.PlayerRemoveCommand, 
+                                                    Source={x:Reference Name=lstPlayerRounds}}"  CommandParameter="{Binding}"
+                                                    Style="{DynamicResource faButton}"/>
+
+                                            </StackLayout>
+                                        </ViewCell.View>
+                                    </ViewCell>
+
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollView>
+                </StackLayout>
+
+                <!--Add player selection-->
+                <StackLayout VerticalOptions="StartAndExpand" Padding="10">
+
+
+
+                    <controls:BindablePicker 
+           x:Name="PickerAddPlayer"
+             Title = "Add Player"
+             ItemsSource="{Binding Path=Players}"
+             DisplayMemberPath="PlayerName"
+             SelectedValuePath="Id"
+             ItemSelected="OnPlayerSelected"/>
+                </StackLayout>
+                <StackLayout VerticalOptions="EndAndExpand" Padding="10">
+
+                    <!--Play Away !-->
+                    <!--<Label Grid.Column="1" Text="Select your group"  VerticalOptions="Center" />-->
+                    <!--<controls:FontAwesomeButton Grid.Column="1" Text="&#xf29c;"   Command="{Binding HelpCommand}" Style="{DynamicResource faButtonStyle}"/>-->
+
+                    <!--<Button Text="Play"  Grid.Column="2" Image="ic_action_golf_course.png" Command="{Binding PlayCommand}" />-->
+                    <controls:FontAwesomeButton Text="&#xf04b;"   Command="{Binding PlayCommand}"  IsEnabled="{Binding IsNotBusy}"
+                                    Style="{DynamicResource faButton}"/>
+
+                </StackLayout>
+            </StackLayout>
+
+
+
+            <!--Activity Indicator-->
+            <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                     AbsoluteLayout.LayoutFlags="PositionProportional"
+                     AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" />
+                <Label Text="{Binding ActivityMessage}" HorizontalOptions="Center" />
+
+
+            </StackLayout>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>
