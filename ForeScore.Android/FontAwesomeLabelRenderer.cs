@@ -26,12 +26,12 @@ namespace ForeScore.Droid
             Typeface font;
             try
             {
-                font = Typeface.CreateFromAsset(Context.Assets, "Fonts/fontawesome-webfont.ttf");
+                font = Typeface.CreateFromAsset(Context.Assets, "Fonts/MaterialIcons-Regular.ttf");
                 label.Typeface = font;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("TTF file not found. Make sure the Android project contains it at '/Assets/Fonts/fontawesome-webfont.ttf'.");
+                System.Diagnostics.Debug.WriteLine("TTF file not found. Make sure the Android project contains it at '/Assets/Fonts/MaterialIcons-Regular.ttf'.");
             }
 
         }

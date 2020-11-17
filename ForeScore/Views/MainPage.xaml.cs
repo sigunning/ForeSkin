@@ -18,7 +18,13 @@ namespace ForeScore.Views
         {
             InitializeComponent();
             BindingContext = new BaseViewModel();
-            
+
+            // start in offline mode
+            Preferences.Set("OfflineMode", true);
+        }
+        private BaseViewModel viewModel
+        {
+            get { return BindingContext as BaseViewModel; }
         }
 
         protected override bool OnBackButtonPressed()

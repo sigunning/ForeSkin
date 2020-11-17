@@ -13,6 +13,7 @@
             <Color x:Key="colorPrimaryDark">#005005</Color>
             <Color x:Key="colorPrimaryLight">#60ad5e</Color>
             <Color x:Key="colorAccent">#B455B6</Color>
+            <Color x:Key="colorDisabled">#999999</Color>
 
             <!-- Shell Colors -->
             <Color x:Key="BackGroundColor">#60ad5e</Color>
@@ -25,17 +26,36 @@
             <Style x:Key="labelStyle" TargetType="Label">
                 <Setter Property="FontSize" Value="Medium" />
             </Style>
+            <Style x:Key="accentStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="TextColor" Value="{StaticResource colorAccent}"/>
+            </Style>
+            <Style x:Key="readonlyStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="TextColor" Value="{StaticResource colorDisabled}"/>
+            </Style>
+            <Style x:Key="validationStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="TextColor" Value="{StaticResource colorAccent}"/>
+            </Style>
+            <Style x:Key="listStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="TextColor" Value="{StaticResource colorPrimary}"/>
+            </Style>
             <Style x:Key="headingStyle" TargetType="Label">
                 <Setter Property="FontSize" Value="Large" />
+                <Setter Property="TextColor" Value="{StaticResource colorPrimaryDark}"/>
             </Style>
 
             <Style  x:Key="stdButton" TargetType="Button">
-                <Setter Property="HorizontalOptions" Value="Fill" />
+                
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="BorderRadius" Value="15" />
                 <Setter Property="BackgroundColor" Value="{StaticResource colorPrimaryDark}" />
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="Margin"  Value="5" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
             </Style>
 
             <Style  x:Key="faButton" TargetType="Button">
@@ -46,6 +66,15 @@
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="FontSize" Value="Large" />
             </Style>
+            <Style  x:Key="faButtonSmall" TargetType="Button">
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="BorderRadius" Value="10" />
+                <Setter Property="BackgroundColor" Value="{StaticResource colorPrimaryDark}" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="WidthRequest" Value="40"/>
+                <Setter Property="FontSize" Value="Large" />
+                <Setter Property="Margin"  Value="3" />
+            </Style>
             <Style  x:Key="faButtonStyle" TargetType="Button">
                 <Setter Property="HorizontalOptions" Value="Fill" />
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
@@ -54,9 +83,15 @@
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="FontSize" Value="Large" />
             </Style>
+            <Style  x:Key="faLabel" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource colorPrimaryDark}" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="FontSize" Value="Large" />
+               
+            </Style>
 
             <OnPlatform x:Key="AwesomeFontFamily" x:TypeArguments="x:String">
-                <On Platform="Android" Value="Fonts/fontawesome-webfont.ttf#FontAwesome Icons" />
+                <On Platform="Android" Value="Fonts/fontawesome-webfont.ttf#Material Icons" />
             </OnPlatform>
             <OnPlatform x:Key="MaterialFontFamily" x:TypeArguments="x:String">
                 <On Platform="Android" Value="Fonts/MaterialIcons-Regular.ttf#Material Icons" />

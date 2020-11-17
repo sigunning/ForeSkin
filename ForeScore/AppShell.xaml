@@ -106,6 +106,29 @@
         <ShellContent ContentTemplate="{DataTemplate local:CoursePage}" />
     </FlyoutItem>
 
+    <FlyoutItem Route="sync" 
+                Title="Synch Data"
+                Style="{StaticResource kShell}">
+        <FlyoutItem.FlyoutIcon>
+            <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.CloudUpload}"   />
+        </FlyoutItem.FlyoutIcon>
+        <ShellContent ContentTemplate="{DataTemplate local:SyncPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Route="play" 
+                Title="Play"
+                Style="{StaticResource kShell}">
+        <FlyoutItem.FlyoutIcon>
+            <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.PlayArrow}"   />
+        </FlyoutItem.FlyoutIcon>
+        <ShellContent ContentTemplate="{DataTemplate local:SocietyCompPage}" />
+    </FlyoutItem>
+
+    
     <!--
         Flyout Items for pages with bottom tab bar icon links to each page
     -->

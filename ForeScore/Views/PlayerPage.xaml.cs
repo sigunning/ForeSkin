@@ -36,6 +36,10 @@ namespace ForeScore.Views
 		private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
 		{
 			// filter using linq
+			if (string.IsNullOrWhiteSpace(e.NewTextValue))
+				lstPlayers.ItemsSource = viewModel.Players;
+			else
+				lstPlayers.ItemsSource = viewModel.Players.Where(i => i.PlayerName.ToLower().Contains(e.NewTextValue.ToLower()));
 		}
 
 		async void Handle_ItemSelected(object sender, SelectedItemChangedEventArgs e)

@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:viewModels="clr-namespace:ForeScore.ViewModels"
+             x:Class="ForeScore.Views.CourseDetailPage"    
+             Visual="Material">
+    
+    <ContentPage.BindingContext>
+        <viewModels:CourseDetailViewModel/>
+    </ContentPage.BindingContext>
+
+
+    <ContentPage.Content>
+        <StackLayout>
+
+
+            <Entry Placeholder="Course Name"  Text="{Binding Course.CourseName, Mode=TwoWay}" />
+            <StackLayout Orientation="Horizontal">
+                <Entry Placeholder="PAR"  Text="{Binding Course.PAR,Mode=TwoWay}"  HorizontalOptions="FillAndExpand" Keyboard="Numeric"/>
+                <Entry Placeholder="SSS"  Text="{Binding Course.SSS,Mode=TwoWay}" HorizontalOptions="FillAndExpand" Keyboard="Numeric"/>
+            </StackLayout>
+            
+            <ScrollView >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Headings -->
+                    <Label Text="Hole" Style="{DynamicResource headingStyle}" Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="Center"/>
+                    <Label Text="PAR" Style="{DynamicResource headingStyle}" Grid.Row="0" Grid.Column="1"/>
+                    <Label Text="SI" Style="{DynamicResource headingStyle}" Grid.Row="0" Grid.Column="2"/>
+                    <!-- Holes -->
+                    <Label Text="1" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="2" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="2" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="3" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="3" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="4" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="4" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="5" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="5" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="6" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="6" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="7" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="7" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="8" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="8" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="9" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="9" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="10" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="10" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="11" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="11" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="12" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="12" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="13" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="13" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="14" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="14" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="15" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="15" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="16" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="16" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="17" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="17" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="18" Style="{DynamicResource headingStyle}" IsEnabled="False" Grid.Row="18" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    
+
+                    <!-- PAR -->
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H1_Par,Mode=TwoWay}"  Grid.Row="1" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H2_Par,Mode=TwoWay}"  Grid.Row="2" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H3_Par,Mode=TwoWay}"  Grid.Row="3" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H4_Par,Mode=TwoWay}"  Grid.Row="4" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H5_Par,Mode=TwoWay}"  Grid.Row="5" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H6_Par,Mode=TwoWay}"  Grid.Row="6" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H7_Par,Mode=TwoWay}"  Grid.Row="7" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H8_Par,Mode=TwoWay}"  Grid.Row="8" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H9_Par,Mode=TwoWay}"  Grid.Row="9" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H10_Par,Mode=TwoWay}"  Grid.Row="10" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H11_Par,Mode=TwoWay}"  Grid.Row="11" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H12_Par,Mode=TwoWay}"  Grid.Row="12" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H13_Par,Mode=TwoWay}"  Grid.Row="13" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H14_Par,Mode=TwoWay}"  Grid.Row="14" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H15_Par,Mode=TwoWay}"  Grid.Row="15" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H16_Par,Mode=TwoWay}"  Grid.Row="16" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H17_Par,Mode=TwoWay}"  Grid.Row="17" Grid.Column="1"/>
+                    <Picker Title="Par"  ItemsSource="{Binding ParList}" SelectedItem="{Binding Course.H18_Par,Mode=TwoWay}"  Grid.Row="18" Grid.Column="1"/>
+                    
+                    
+                    <!-- SI -->
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H1_SI,Mode=TwoWay}" Grid.Row="1" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H2_SI,Mode=TwoWay}" Grid.Row="2" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H3_SI,Mode=TwoWay}" Grid.Row="3" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H4_SI,Mode=TwoWay}" Grid.Row="4" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H5_SI,Mode=TwoWay}" Grid.Row="5" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H6_SI,Mode=TwoWay}" Grid.Row="6" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H7_SI,Mode=TwoWay}" Grid.Row="7" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H8_SI,Mode=TwoWay}" Grid.Row="8" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H9_SI,Mode=TwoWay}" Grid.Row="9" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H10_SI,Mode=TwoWay}" Grid.Row="10" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H11_SI,Mode=TwoWay}" Grid.Row="11" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H12_SI,Mode=TwoWay}" Grid.Row="12" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H13_SI,Mode=TwoWay}" Grid.Row="13" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H14_SI,Mode=TwoWay}" Grid.Row="14" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H15_SI,Mode=TwoWay}" Grid.Row="15" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H16_SI,Mode=TwoWay}" Grid.Row="16" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H17_SI,Mode=TwoWay}" Grid.Row="17" Grid.Column="2"/>
+                    <Picker Title="SI" TextColor="Red"  ItemsSource="{Binding SIList}" SelectedItem="{Binding Course.H18_SI,Mode=TwoWay}" Grid.Row="18" Grid.Column="2"/>
+                    
+
+
+                    <!-- Place big space at end to enable scrolling above keyboard 
+                    <BoxView HeightRequest="170" Grid.Row="9" Grid.Column="0"/>
+                    -->
+                    
+                </Grid>
+            </ScrollView>
+
+            <Button Text="Save" Style="{DynamicResource stdButton}" Command="{Binding SaveCommand}" VerticalOptions="EndAndExpand"/>
+
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

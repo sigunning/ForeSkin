@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:viewModels="clr-namespace:ForeScore.ViewModels"
+             x:Class="ForeScore.Views.SocietyDetailPage"
+             Visual="Material"
+             Title="{Binding Title}">
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <Entry Placeholder="Society Name"  Text="{Binding Society.SocietyName, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+            <Entry Placeholder="Society Description"  Text="{Binding Society.SocietyDescription, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+            <Entry Placeholder="Creator"  Text="{Binding SocietyOwner.PlayerName, Mode=TwoWay}" Style="{DynamicResource  accentStyle}" HorizontalOptions="FillAndExpand" IsReadOnly="True" />
+
+            <Entry Placeholder="Created On"  Text="{Binding Society.CreatedDate,StringFormat='{0:dd-MMM-yyyy}'}" Style="{DynamicResource  accentStyle}"  HorizontalOptions="FillAndExpand" IsReadOnly="True" />
+
+            <Label Text="{Binding ValidationText}" Style="{DynamicResource  validationStyle}" HorizontalOptions="Center" VerticalOptions="End" />
+            <Button Text="Save" Style="{DynamicResource stdButton}" Command="{Binding SaveCommand}" VerticalOptions="EndAndExpand" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

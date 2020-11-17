@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForeScore", "ForeScore\ForeScore.csproj", "{0332306F-9FDC-46E9-BF3B-56F87D4065BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForeScore.Android", "ForeScore.Android\ForeScore.Android.csproj", "{A4B8EB17-246E-44BE-B236-8BAEBB23D86A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForeSkin.Android", "ForeScore.Android\ForeSkin.Android.csproj", "{A4B8EB17-246E-44BE-B236-8BAEBB23D86A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -30,7 +30,8 @@ namespace ForeScore.Views
             if (viewModel == null)
                 return;
 
-            viewModel.OnDisplay();
+            if (viewModel.Courses == null)
+                viewModel.OnDisplay();
 
         }
 
@@ -49,13 +50,13 @@ namespace ForeScore.Views
           
         }
 
-        async void Handle_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        void Handle_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
 
             if (viewModel == null || !viewModel.CanLoadMore || viewModel.IsBusy)
                 return;
-
-            await Navigation.PushAsync(new PlayerPage());
+            ((CollectionView)sender).SelectedItem = null;
+            //await Navigation.PushAsync(new PlayerPage());
             //await viewModel.OnItemSelected(sender, e);
 
         }

@@ -3,15 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ForeScore.Views.PlayerPage"
              xmlns:icons="clr-namespace:ForeScore.Helpers"
+             Visual="Material"
              Title="{Binding Title}">
     <ContentPage.Content>
         <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+      
 
-            <StackLayout>
-                <SearchBar Placeholder="Search for Player..." TextChanged="SearchBar_OnTextChanged"></SearchBar>
+            <SearchBar Placeholder="Search for Player..." TextChanged="SearchBar_OnTextChanged"></SearchBar>
 
 
-                <ListView x:Name="lstPlayers"  ItemsSource="{Binding Players}"  
+            <!--<ListView x:Name="lstPlayers"  ItemsSource="{Binding Players}"  
                           ItemSelected="Handle_ItemSelected"
                           IsPullToRefreshEnabled="True"
                           RefreshCommand="{Binding LoadItemsCommand}"
@@ -28,36 +30,56 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
 
-                </ListView>
-                
+                </ListView>-->
 
-                <!--<CollectionView x:Name="lstCourses" 
+
+
+            <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                        Command="{Binding RefreshCommand}">
+                    <CollectionView x:Name="lstPlayers" 
                                 EmptyView="No Items Found" 
-                                ItemsSource="{Binding Courses}"
+                                ItemsSource="{Binding Players}"
                                 SelectionMode="Single"
-                                SelectionChanged="courseview_SelectionChanged">
+                                SelectedItem="{Binding Selection, Mode=TwoWay}"
+                                SelectionChangedCommand="{Binding SelectionCommand}"
+                                SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference lstPlayers}}"
+                        >
                     
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout Orientation="Horizontal" Spacing="5" VerticalOptions="Center">
-                                <Image HeightRequest="36" WidthRequest="36" >
-                                    <Image.Source>
-                                        <FontImageSource Color="{DynamicResource colorPrimaryDark}"
-                                            FontFamily="{DynamicResource MaterialFontFamily}"
-                                            Glyph="{x:Static icons:MaterialIcon.GolfCourse}" />
-                                    </Image.Source>
-                                </Image>
+                            <DataTemplate>
+                                <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="4*"/>
+                                            <ColumnDefinition Width="6*"/>
+                                            
+                                        </Grid.ColumnDefinitions>
+                                        <Image Grid.Column="0" >
+                                            <Image.Source>
+                                                <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                                                FontFamily="{DynamicResource MaterialFontFamily}"                                            
+                                                Glyph="{Binding Glyph}"  />
+                                            </Image.Source>
+                                        </Image>
 
-                                <Label Text="{Binding CourseName}" Style="{DynamicResource headingStyle}" VerticalOptions="Center"/>
-                            </StackLayout>
-                        </DataTemplate>
+                                        <Label Text="{Binding NameAndHCAP}"  VerticalOptions="Center"  Grid.Column="1" Style="{DynamicResource listStyle}"  />
+                                        <Label Text="{Binding FullName}"  VerticalOptions="Center" Grid.Column="2"  Style="{DynamicResource labelStyle}" />
+                                    </Grid>
+
+                                
+
+
+
+                            </DataTemplate>
                         
-                    </CollectionView.ItemTemplate> 
-                </CollectionView>-->
 
-                
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+            <Button Text="Add Player"  VerticalOptions="EndAndExpand"   Style="{DynamicResource stdButton}"  Command="{Binding AddCommand}"/>
 
             </StackLayout>
+
             <!--Activity Indicator-->
             <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
                      AbsoluteLayout.LayoutFlags="PositionProportional"
@@ -66,9 +88,8 @@
                 <ActivityIndicator IsRunning="{Binding IsBusy}" />
                 <Label Text="{Binding ActivityMessage}" HorizontalOptions="Center" />
 
-
-            </StackLayout>
-
+        </StackLayout>
         </AbsoluteLayout>
+        
     </ContentPage.Content>
 </ContentPage>

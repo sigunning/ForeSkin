@@ -13,6 +13,7 @@ using System.Collections;
 using ForeScore.Helpers;
 using System.Collections.ObjectModel;
 using Xamarin.Essentials;
+using ForeScore.Models;
 
 namespace ForeScore.Common
 {
@@ -20,12 +21,44 @@ namespace ForeScore.Common
     public static class Lookups
     {
         public static Dictionary<string, string> _dictCourses = new Dictionary<string, string>();
+        public static Dictionary<string, string> _dictCompetitions = new Dictionary<string, string>();
+        public static Dictionary<string, string> _dictSocieties = new Dictionary<string, string>();
         public static Dictionary<string, string> _dictTournaments = new Dictionary<string, string>();
         public static Dictionary<string, string> _dictRounds = new Dictionary<string, string>();
         public static Dictionary<string, string> _dictPlayers = new Dictionary<string, string>();
 
+        public static string GetLookup(string lookupType, string value)
+        {
+            try
+            {
+                string retval = string.Empty;
+                lookupType = lookupType.ToLower();
+              
+                switch (lookupType)
+                {
+                    case "courses":
+                        retval = _dictCourses[value];
+                        break;
+                    case "competitions":
+                        retval = _dictCompetitions[value];
+                        break;
+
+
+
+                }
+
+                return retval;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+
+        }
 
     }
+
+    
 
     public static class Pickers
     {
@@ -38,6 +71,12 @@ namespace ForeScore.Common
 
         public static ObservableCollection<int> PickerPar = new ObservableCollection<int>()
             {3,4,5 };
+
+
+        // cut down lists for picker source
+        public static List<Society> PickerSociety = new List<Society>();
+        public static List<CourseLookup> PickerCourse = new List<CourseLookup>();
+        public static List<Competition> PickerCompetition = new List<Competition>();
 
     }
 

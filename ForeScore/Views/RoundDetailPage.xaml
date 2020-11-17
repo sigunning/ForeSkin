@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="ForeScore.Views.RoundDetailPage"
+             Visual="Material"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <StackLayout>
+
+            <Entry Placeholder="Society" Style="{DynamicResource  accentStyle}"  Text="{Binding Round.SocietyName}" HorizontalOptions="FillAndExpand" IsReadOnly="True" />
+            <Entry Placeholder="Competiton Name"  Text="{Binding Round.CompetitionName}" Style="{DynamicResource  accentStyle}"  HorizontalOptions="FillAndExpand" />
+            <Picker Title="Course" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding CoursePicker}"  ItemDisplayBinding="{Binding CourseName}"
+                    SelectedItem="{Binding SelectedCourse, Mode=TwoWay}"/>
+
+            <Label Text="Round Date" Style="{DynamicResource  labelStyle}" Margin="15,0,0,0" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
+
+            <DatePicker  Date="{Binding Round.RoundDate, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+            
+            
+            <Label Text="{Binding ValidationText}" Style="{DynamicResource  validationStyle}" HorizontalOptions="Center" VerticalOptions="End" />
+            
+            <Button Text="Save" Style="{DynamicResource stdButton}" Command="{Binding SaveCommand}" VerticalOptions="EndAndExpand" />
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

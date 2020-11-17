@@ -22,7 +22,7 @@ namespace ForeScore.ViewModels
     {
         // service and property vars
         protected AzureService azureService; // used in derived class
-        private ObservableCollection<Tournament> _Tournaments;
+        private ObservableCollection<Competition> _Tournaments;
         private List<LookupRound> _LookupRounds;
         protected ObservableCollection<Round> lstRounds;
         private ObservableCollection<Course> lstCourses;
@@ -69,7 +69,7 @@ namespace ForeScore.ViewModels
         }
 
 
-        public ObservableCollection<Tournament> Tournaments
+        public ObservableCollection<Competition> Tournaments
         {
             get { return _Tournaments; }
             set
@@ -128,10 +128,10 @@ namespace ForeScore.ViewModels
         {
 
             //List<Tournament> lst = await azureService.GetTournaments();
-            Tournaments = await azureService.GetTournaments();
+            Tournaments = await azureService.GetCompetitions();
 
             // load  to lookups
-            Lookups._dictTournaments = Tournaments.ToDictionary(x => x.Id, x => x.TournamentName);
+            Lookups._dictTournaments = Tournaments.ToDictionary(x => x.Id, x => x.CompetitionName);
 
 
         }
@@ -146,8 +146,8 @@ namespace ForeScore.ViewModels
             if (Tournaments == null)
             {
                 Debug.WriteLine("Loading tournament list...");
-                Tournaments = await azureService.GetTournaments();
-                Lookups._dictTournaments = Tournaments.ToDictionary(x => x.Id, x => x.TournamentName);
+                Tournaments = await azureService.GetCompetitions();
+                Lookups._dictTournaments = Tournaments.ToDictionary(x => x.Id, x => x.CompetitionName);
             }
 
 
@@ -197,8 +197,8 @@ namespace ForeScore.ViewModels
             if (IsBusy) return;
             IsBusy = true;
 
-            Debug.WriteLine(string.Concat("Tournament selected:", Lookups._dictTournaments[((Tournament)e.SelectedItem).Id]));
-            ThisRound.Tournament_id = ((Tournament)e.SelectedItem).Id;
+            Debug.WriteLine(string.Concat("Tournament selected:", Lookups._dictTournaments[((Competition)e.SelectedItem).Id]));
+            ThisRound.Tournament_id = ((Competition)e.SelectedItem).Id;
 
             // only load rounds if we have selected a new tournie
             if (Preferences.Get("Tournament_id",null) != ThisRound.Tournament_id)

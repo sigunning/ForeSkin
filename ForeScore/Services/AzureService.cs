@@ -13,9 +13,10 @@ using ForeScore.Models;
 using ForeScore.Helpers;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using System.Collections.ObjectModel;
+using ForeScore.Common;
 //using Plugin.Connectivity;
 using Xamarin.Essentials;
-
+using System.Linq;
 
 [assembly: Dependency(typeof(AzureService))]
 namespace ForeScore
@@ -35,22 +36,27 @@ namespace ForeScore
 
         // table vars
         IMobileServiceSyncTable<Player> tablePlayer;
-        IMobileServiceSyncTable<Tournament> tableTournament;
+        IMobileServiceSyncTable<Society> tableSociety;
+        IMobileServiceSyncTable<SocietyPlayer> tableSocietyPlayer;
+        IMobileServiceSyncTable<Competition> tableCompetition;
         IMobileServiceSyncTable<Course> tableCourse;
         IMobileServiceSyncTable<Sledge> tableSledge;
         IMobileServiceSyncTable<Round> tableRound;
         IMobileServiceSyncTable<PlayerRound> tablePlayerRound;
-        IMobileServiceSyncTable<CourseHoles> tableCourseHoles;
+        
         IMobileServiceSyncTable<Scores> tableScores;
+
+        IMobileServiceSyncTable<CourseHoles> tableCourseHoles;
 
         #region Init
 
         public async Task Initialize()
         {
-            if (client?.SyncContext?.IsInitialized ?? false)
+            if (  (client?.SyncContext?.IsInitialized ?? false) && ((Preferences.Get("ResetData", false) == false))  )
                 return;
 
-            var appUrl = "http://pinscribeapp.azurewebsites.net/";
+            //var appUrl = "http://pinscribeapp.azurewebsites.net/";
+            var appUrl = "http://forescore-rtg.azurewebsites.net/";
 
 
             //Create our client
@@ -69,9 +75,10 @@ namespace ForeScore
                 
                 var fileHelper = DependencyService.Get<IFileHelper>();
                 await fileHelper.DeleteLocalFileAsync(path);
-                Preferences.Set("ResetData", false) ;
+               
                 
             }
+            Preferences.Set("ResetData", false);
 
             //setup our local sqlite store and intialize our table
             var store = new MobileServiceSQLiteStore(path);
@@ -79,13 +86,14 @@ namespace ForeScore
 
             //Define tables - must be before sync context
             Debug.WriteLine("Defining local store tables... ");
-            store.DefineTable<Player>();
-            store.DefineTable<Tournament>();
+            store.DefineTable<Player>( );
+            store.DefineTable<Competition>();
             store.DefineTable<Course>();
             store.DefineTable<Round>();
             store.DefineTable<PlayerRound>();
             store.DefineTable<Sledge>();
-            store.DefineTable<CourseHoles>();
+            store.DefineTable<Society>();
+            store.DefineTable<SocietyPlayer>();
             store.DefineTable<Scores>();
 
 
@@ -97,18 +105,25 @@ namespace ForeScore
             // tables, which are then pushed to server
             Debug.WriteLine("Setting Player table... ");
             tablePlayer = client.GetSyncTable<Player>();
-            Debug.WriteLine("Setting Tournament table... ");
-            tableTournament = client.GetSyncTable<Tournament>();
             Debug.WriteLine("Setting Course table... ");
             tableCourse = client.GetSyncTable<Course>();
-            Debug.WriteLine("Setting CourseHoles table... ");
-            tableCourseHoles = client.GetSyncTable<CourseHoles>();
+            Debug.WriteLine("Setting Competition table... ");
+            tableCompetition = client.GetSyncTable<Competition>();
+            Debug.WriteLine("Setting Society table... ");
+            tableSociety = client.GetSyncTable<Society>();
+            Debug.WriteLine("Setting SocietyPlayer table... ");
+            tableSocietyPlayer = client.GetSyncTable<SocietyPlayer>();
             Debug.WriteLine("Setting Round table... ");
             tableRound = client.GetSyncTable<Round>();
+            /*
+            
+           
+            
             Debug.WriteLine("Setting PlayerRound table... ");
             tablePlayerRound = client.GetSyncTable<PlayerRound>();
             Debug.WriteLine("Setting Scores table... ");
             tableScores = client.GetSyncTable<Scores>();
+            */
 
             //Debug.WriteLine("Setting Sledge table... ");   
             //tableSledge = client.GetSyncTable<Sledge>();
@@ -141,9 +156,11 @@ namespace ForeScore
         */
 
 
-        public async Task SyncAllData()
+        public async Task SyncAllData(SyncOptions SyncOptionsObj )
+
         {
             // Refresh all data. Push updates then pull all from server
+            ReadOnlyCollection<MobileServiceTableOperationError> syncErrors = null;
             try
             {
                 if (( Connectivity.NetworkAccess == NetworkAccess.None) || (Preferences.Get("OfflineMode", false) == true) )
@@ -152,23 +169,77 @@ namespace ForeScore
                 //if ((!CrossConnectivity.Current.IsConnected) || (Settings.OfflineMode))
                 //    return; 
 
-                // Push async operates on all tables, not just specific
+                Debug.WriteLine("Starting SyncAllData..." );
+
+                // set reset flag for Init ?
+                if (SyncOptionsObj.Reset)
+                    Preferences.Set("ResetData", true);
+
+                // Initalize client context and local tables
                 await Initialize();
+
+                // everything gets pushed
+                Debug.WriteLine("Pushing updates to remote server...");
                 await client.SyncContext.PushAsync();
+
+                Debug.WriteLine("Pulling updates from remote server...");
                 _queryId =  null;
-                await tablePlayer.PullAsync(_queryId, tablePlayer.CreateQuery());
-                await tableTournament.PullAsync(_queryId, tableTournament.CreateQuery());
-                await tableCourse.PullAsync(_queryId, tableCourse.CreateQuery());
-                await tableRound.PullAsync(_queryId, tableRound.CreateQuery());
-                await tableCourseHoles.PullAsync(_queryId, tableCourseHoles.CreateQuery());
-                await tablePlayerRound.PullAsync(_queryId, tablePlayerRound.CreateQuery());
-                await tableScores.PullAsync(_queryId, tableScores.CreateQuery());
+                if (SyncOptionsObj.Courses)
+                    { await tableCourse.PullAsync(_queryId, tableCourse.CreateQuery());  }
+                if (SyncOptionsObj.Players)
+                    {   await tablePlayer.PullAsync(_queryId, tablePlayer.CreateQuery());  }
+                if (SyncOptionsObj.Societies)
+                    { await tableSociety.PullAsync(_queryId, tableSociety.CreateQuery());
+                    await tableSocietyPlayer.PullAsync(_queryId, tableSocietyPlayer.CreateQuery());
+                    }
+                if (SyncOptionsObj.Competitions)
+                    { 
+                    await tableCompetition.PullAsync(_queryId, tableCompetition.CreateQuery());
+                    await tableRound.PullAsync(_queryId, tableRound.CreateQuery());
+                    }
 
+                
+                /*
+              
+             
 
+              await tableTournament.PullAsync(_queryId, tableTournament.CreateQuery());
+             
+              await tableCourseHoles.PullAsync(_queryId, tableCourseHoles.CreateQuery());
+              await tablePlayerRound.PullAsync(_queryId, tablePlayerRound.CreateQuery());
+              await tableScores.PullAsync(_queryId, tableScores.CreateQuery());
+              */
+
+                Debug.WriteLine("Completed SyncAllData");
             }
-            catch (Exception ex)
+            catch (MobileServicePushFailedException exc)
             {
-                Debug.WriteLine("Unable to sync, using offline capabilities: " + ex.Message);
+                if (exc.PushResult != null)
+                {
+                    syncErrors = exc.PushResult.Errors;
+                }
+            }
+            // Simple error/conflict handling. A real application would handle the various errors like network conditions,
+            // server conflicts and others via the IMobileServiceSyncHandler.
+            if (syncErrors != null)
+            {
+                foreach (var error in syncErrors)
+                {
+                    if (error.OperationKind == MobileServiceTableOperationKind.Update && error.Result != null)
+                    {
+                        //Update failed, reverting to server's copy.
+                        Debug.WriteLine(error.Result);
+                        await error.CancelAndUpdateItemAsync(error.Result);
+                    }
+                    else
+                    {
+                        // Discard local change.
+                        Debug.WriteLine(error.Result);
+                        await error.CancelAndDiscardItemAsync();
+                    }
+
+                    Debug.WriteLine(@"Error executing sync operation. Item: {0} ({1}). Operation discarded.", error.TableName, error.Item["id"]);
+                }
             }
 
         }
@@ -184,6 +255,18 @@ namespace ForeScore
             return await tablePlayer
                 .OrderBy(x => x.PlayerName)
                 .ToCollectionAsync();
+        }
+
+        public async Task<Player> GetPlayer(string playerId)
+        {
+            await Initialize();
+            await SyncPlayers();
+            ObservableCollection<Player> results = await tablePlayer
+                .Where(x => x.PlayerId == playerId)
+                .ToCollectionAsync();
+            return results.SingleOrDefault();
+            
+               
         }
 
         public async Task SyncPlayers()
@@ -234,11 +317,91 @@ namespace ForeScore
 
         #endregion Player
 
+        #region Society
 
-        #region Tournament
-        
+        public async Task<ObservableCollection<Society>> GetSocieties()
+        {
+            await Initialize();
+            return await tableSociety
+                .OrderBy(x => x.SocietyName)
+                .ToCollectionAsync();
+        }
+        public async Task<ObservableCollection<Society>> GetSocieties(string playerId)
+        {
+            await Initialize();
+            return await tableSociety
+                .OrderBy(x => x.SocietyName)
+                .Where(x => x.CreatedByPlayerId == playerId)
+                .ToCollectionAsync();
+        }
 
-        public async Task SyncTournaments()
+        public async Task LoadSocietyLookup(string playerId)
+        {
+            //Load societies to picker lists
+           
+            ObservableCollection<Society> lstSocieties;
+            Debug.WriteLine("Loading Society lookup list...");
+            lstSocieties = await GetSocieties(playerId);
+            Pickers.PickerSociety = lstSocieties.ToList();
+            Lookups._dictSocieties = lstSocieties.ToDictionary(x => x.SocietyId, x => x.SocietyName);
+  
+        }
+
+        public async Task SaveSocietyAsync(Society society)
+        {
+            await Initialize();
+
+            try
+            {
+
+                if (society.Id == null)
+                {
+                    await tableSociety.InsertAsync(society);
+                }
+                else
+                {
+                    await tableSociety.UpdateAsync(society);
+                }
+                // await Syncsocieties();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Unable to save society: " + ex);
+            }
+        }
+        #endregion Society
+
+        #region SocietyPlayer
+
+        public async Task SaveSocietyPlayerAsync(SocietyPlayer societyPlayer)
+        {
+            await Initialize();
+
+            try
+            {
+
+                if (societyPlayer.Id == null)
+                {
+                    await tableSocietyPlayer.InsertAsync(societyPlayer);
+                }
+                else
+                {
+                    await tableSocietyPlayer.UpdateAsync(societyPlayer);
+                }
+                // await Syncsocieties();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Unable to save society player: " + ex);
+            }
+        }
+
+        #endregion SocietyPlayer
+
+        #region Competition
+
+
+        public async Task SyncCompetitions()
         {
             try
             {
@@ -248,8 +411,8 @@ namespace ForeScore
                     return;
 
                 await client.SyncContext.PushAsync();
-                _queryId = (_UseQueryId ? "allTournaments" : null);
-                await tableTournament.PullAsync(_queryId, tableTournament.CreateQuery());
+                _queryId = (_UseQueryId ? "allCompetitions" : null);
+                await tableCompetition.PullAsync(_queryId, tableCompetition.CreateQuery());
             }
             catch (Exception ex)
             {
@@ -258,40 +421,62 @@ namespace ForeScore
 
         }
 
-        public async Task<ObservableCollection<Tournament>> GetTournaments()
+        public async Task<ObservableCollection<Competition>> GetCompetitions()
         {
             await Initialize();
-            await SyncTournaments();
-            return await tableTournament
+            await SyncCompetitions();
+            return await tableCompetition
                 .OrderBy(x => x.StartDate)
                 .ToCollectionAsync();
             
         }
+        public async Task<ObservableCollection<Competition>> GetCompetitionsForSociety(string societyId)
+        {
+            await Initialize();
+            await SyncCompetitions();
+            return await tableCompetition
+                .Where(x => x.SocietyId == societyId)
+                .OrderBy(x => x.StartDate)
+                .ToCollectionAsync();
 
-        public async Task SaveTournamentAsync(Tournament tournament)
+        }
+
+        public async Task LoadCompetitionLookup(string societyId)
+        {
+            //Load comps to picker lists
+            ObservableCollection<Competition> lstCompetitions;
+            Debug.WriteLine("Loading Competition lookup list...");
+            lstCompetitions = await GetCompetitionsForSociety(societyId);
+            Pickers.PickerCompetition = lstCompetitions.ToList();
+            Lookups._dictCompetitions = lstCompetitions.ToDictionary(x => x.CompetitionId, x => x.CompetitionName);
+            //Pickers.PickerCompetition = lstCompetitions.Select(x => new CompetitionLookup { Id = x.Id, CompetitionId = x.CompetitionId, CompetitionName = x.CompetitionName }).ToList();
+
+        }
+
+        public async Task SaveCompetitionAsync(Competition competition)
         {
             await Initialize();
 
             try
             {
 
-                if (tournament.Id == null)
+                if (competition.Id == null)
                 {
-                    await tableTournament.InsertAsync(tournament);
+                    await tableCompetition.InsertAsync(competition);
                 }
                 else
                 {
-                    await tableTournament.UpdateAsync(tournament);
+                    await tableCompetition.UpdateAsync(competition);
                 }
-                await SyncTournaments();
+                await SyncCompetitions();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Unable to save tournament: " + ex);
+                Debug.WriteLine("Unable to save competition: " + ex);
             }
         }
 
-        #endregion Tournament
+        #endregion Competition
 
 
         #region Course
@@ -352,6 +537,39 @@ namespace ForeScore
                 .OrderBy(x=> x.CourseName)
                 .ToCollectionAsync();
         }
+
+
+        // Lookup list for pickers
+
+        public async Task<ObservableCollection<CourseLookup>> GetCourseLookup()
+        {
+            // if we have already loaded courses to picker lists, just return new collection
+            if (Pickers.PickerCourse.Count == 0)
+            {
+                ObservableCollection<Course> lstCourses; 
+                Debug.WriteLine("Loading course lookup list...");
+                lstCourses = await GetCourses();
+                Lookups._dictCourses = lstCourses.ToDictionary(x => x.CourseId, x => x.CourseName);
+                Pickers.PickerCourse = lstCourses.Select(x => new CourseLookup { Id = x.Id, CourseId = x.CourseId, CourseName = x.CourseName }).ToList();
+            }
+            return new ObservableCollection<CourseLookup>(Pickers.PickerCourse);
+
+
+        }
+        public async Task LoadCourseLookup()
+        {
+            // if we have already loaded courses to picker lists, just return new collection
+            if (Pickers.PickerCourse.Count == 0)
+            {
+                ObservableCollection<Course> lstCourses;
+                Debug.WriteLine("Loading course lookup list...");
+                lstCourses = await GetCourses();
+                Lookups._dictCourses = lstCourses.ToDictionary(x => x.CourseId, x => x.CourseName);
+                Pickers.PickerCourse = lstCourses.Select(x => new CourseLookup { Id = x.Id, CourseId = x.CourseId, CourseName = x.CourseName }).ToList();
+            }
+        }
+
+
         public async Task<ObservableCollection<Course>> GetCourses(Boolean bLocalOnly)
         {
             if (!bLocalOnly)
@@ -492,12 +710,23 @@ namespace ForeScore
 
         }
 
-        public async Task<ObservableCollection<Round>> GetRounds(string course_id)
+        public async Task<ObservableCollection<Round>> GetRoundsForCompetition(string competitonId)
         {
             await Initialize();
             await SyncRounds();
             return await tableRound
-                .Where(t => t.Course_id == course_id)
+                .Where(t => t.CompetitionId == competitonId)
+                .OrderBy(t => t.RoundDate)
+                .ToCollectionAsync();
+
+        }
+
+        public async Task<ObservableCollection<Round>> GetRounds(string courseId)
+        {
+            await Initialize();
+            await SyncRounds();
+            return await tableRound
+                .Where(t => t.CourseId == courseId)
                 .OrderBy(t => t.RoundDate)
                 .ToCollectionAsync();
 

@@ -7,6 +7,7 @@ using ForeScore.Helpers;
 using ForeScore.Views;
 using Xamarin.Forms;
 using Xamarin.Essentials;
+using ForeScore.Helpers;
 
 namespace ForeScore.ViewModels
 {
@@ -18,12 +19,12 @@ namespace ForeScore.ViewModels
 
         public BaseViewModel()
         {
-            //Icon = ((!CrossConnectivity.Current.IsConnected) || (Settings.OfflineMode)) ? "icon.png" : "ic_action_cloud_queue.png";
-            //Icon = "ic_action_cloud_queue.png";
+            //SetMode();
             azureService = DependencyService.Get<AzureService>();
 
             // #### temp user setting
             Preferences.Set("UserId", "11E66BCF-BA40-434A-8F8E-0D5CB0F7968B" );
+            Preferences.Set("PlayerId", "867DC91B-BFBE-48BC-9A8D-1F133ADD4A6D");
         }
 
         private string title = string.Empty;
@@ -46,7 +47,28 @@ namespace ForeScore.ViewModels
             }
         }
 
+        //---------------------------------------------------------------------------------------
+        private string connectedIcon = null;
+        /// Gets or sets the "Connected Icon" of the viewmodel
+        public string ConnectedIcon
+        {
+            get { return connectedIcon; }
+            set { SetProperty(ref connectedIcon, value); }
+        }
 
+        private bool connectedMode = false;
+        /// Gets or sets the "Connected Icon" of the viewmodel
+        public bool ConnectedMode
+        {
+            get { return connectedMode; }
+            set { SetProperty(ref connectedMode, value); }
+        }
+        private string _connectedMsg;
+        public string ConnectedMsg
+        {
+            get { return _connectedMsg; }
+            set { SetProperty(ref _connectedMsg, value); }
+        }
 
         #region INotifyPropertyChanged implementation
 
@@ -85,13 +107,19 @@ namespace ForeScore.ViewModels
         protected virtual void OnAppearing()
         {
             // set connectivity icon property for view binding
-            // SetMode();
+            SetMode();
 
         }
 
         public void SetMode()
         {
             //we may be in offline mode by design...or have no signal
+
+            
+            ConnectedIcon = (Connectivity.NetworkAccess == NetworkAccess.None) ? MaterialIcon.CloudOff : MaterialIcon.CloudDone;
+            ConnectedMode = (Connectivity.NetworkAccess == NetworkAccess.None) ? false : true;
+            ConnectedMsg = (Connectivity.NetworkAccess == NetworkAccess.None) ? "No Connection!" : "Connected";
+
             /*
             if (Settings.OfflineMode)
                 ConnectedIcon = "ic_action_cloud_off.png";
@@ -178,8 +206,17 @@ namespace ForeScore.ViewModels
                 return ImageSource.FromResource(resource);
             }
         }
+        public ImageSource LogoSource
+        {
+            get
+            {
+                string resource = "ForeScore.Resources.logo.gif";
+                return ImageSource.FromResource(resource);
+            }
+        }
 
         // sync data
+        /*
         public Command SynchroniseCommand
         {
             get
@@ -194,6 +231,24 @@ namespace ForeScore.ViewModels
                 });
             }
         }
+        */
+
+        // sync data
+        public Command ToggleOfflineModeCommand
+        {
+            get
+            {
+                return new Command( (sender) =>
+                {
+                    Preferences.Set("ResetData", false);
+                    IsOfflineMode = (!IsOfflineMode);
+                    Preferences.Set("OfflineMode", false);
+                });
+            }
+        }
+
+
+        
 
     }
 }

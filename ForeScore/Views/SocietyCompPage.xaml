@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore"
+             xmlns:icons="clr-namespace:ForeScore.Helpers"
+             xmlns:viewModels="clr-namespace:ForeScore.ViewModels"
+             x:Class="ForeScore.Views.SocietyCompPage"
+             Visual="Material"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <StackLayout>
+           
+            <!--<Label Text="Round Setup" Style="{DynamicResource headingStyle}"  />-->
+            <!-- Society -->
+            <StackLayout Orientation="Horizontal">
+                <Picker Title="Society" HorizontalOptions="FillAndExpand"  ItemsSource="{Binding SocietiesPicker}"  ItemDisplayBinding="{Binding SocietyName}"
+                    SelectedItem="{Binding SelectedSociety,Mode=TwoWay}"/>
+                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Edit}"   HorizontalOptions="End"
+                                     Command="{Binding EditSocietiesCommand}" Style="{DynamicResource faButtonSmall}"/>
+                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
+                                     Command="{Binding AddSocietiesCommand}" Style="{DynamicResource faButtonSmall}"/>
+            </StackLayout>
+            <!-- Competition-->
+            <StackLayout Orientation="Horizontal">
+                <Picker Title="Competition" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding CompetitionsPicker}"  ItemDisplayBinding="{Binding CompetitionName}"
+                    SelectedItem="{Binding SelectedCompetition,Mode=TwoWay}"/>
+                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Edit}"   HorizontalOptions="End"
+                                     Command="{Binding EditCompetitionsCommand}" Style="{DynamicResource faButtonSmall}"/>
+                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
+                                     Command="{Binding AddCompetitionsCommand}" Style="{DynamicResource faButtonSmall}"/>
+            </StackLayout>
+            <!-- Round-->
+            <StackLayout Orientation="Horizontal">
+                <Picker Title="Round" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding Rounds}"  ItemDisplayBinding="{Binding CourseName}"
+                    SelectedItem="{Binding SelectedRound,Mode=TwoWay}" WidthRequest="200"/>
+                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Edit}"   HorizontalOptions="End"
+                                     Command="{Binding EditRoundsCommand}" Style="{DynamicResource faButtonSmall}"/>
+                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
+                                     Command="{Binding AddRoundsCommand}" Style="{DynamicResource faButtonSmall}"/>
+            </StackLayout>
+
+            <Entry Placeholder="Round Date"  Text="{Binding SelectedRound.RoundDate,StringFormat='{0:dd-MMM-yyyy}'}" Style="{DynamicResource  accentStyle}"  HorizontalOptions="FillAndExpand" IsReadOnly="True" />
+
+
+            <Button Text="Players"  Clicked="Button_Clicked" VerticalOptions="EndAndExpand"/>
+        </StackLayout>
+        
+    </ContentPage.Content>
+</ContentPage>

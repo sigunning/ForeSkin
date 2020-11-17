@@ -23,6 +23,7 @@ namespace ForeScore.Droid
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.SetFlags("Shell_Experimental", "CollectionView_Experimental");
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState); // Xamarin Essentials
             ImageCircle.Forms.Plugin.Droid.ImageCircleRenderer.Init();
 

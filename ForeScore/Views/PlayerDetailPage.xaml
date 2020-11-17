@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:viewModels="clr-namespace:ForeScore.ViewModels"
+             x:Class="ForeScore.Views.PlayerDetailPage"
+             Visual="Material">
+    
+    <ContentPage.Content>
+        <StackLayout>
+
+            <StackLayout Orientation="Horizontal" >
+                <Entry Placeholder="Player Name"  Text="{Binding Player.PlayerName, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+                <Entry Placeholder="HCAP"  Text="{Binding Player.LastHCAP, Mode=TwoWay}" HorizontalOptions="End"  WidthRequest="68"/>
+                <Image  HeightRequest="48" WidthRequest="48">
+                    <Image.Source>
+                        <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                                                FontFamily="{DynamicResource MaterialFontFamily}"
+                                                Glyph="{Binding Player.Glyph}"  />
+                    </Image.Source>
+                </Image>
+            </StackLayout>
+
+            <Entry Placeholder="First Name"  Text="{Binding Player.FirstName,Mode=TwoWay}"  HorizontalOptions="FillAndExpand" />
+            <Entry Placeholder="Last Name"  Text="{Binding Player.LastName,Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+            <Entry Placeholder="Email"  Text="{Binding Player.EmailAddress}"  HorizontalOptions="FillAndExpand" />
+            
+
+            <StackLayout Orientation="Horizontal" Padding="10" >
+                <Label Text="Admin User" VerticalOptions="Center" />
+                <Switch  IsToggled="{Binding Player.AdminYN, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+            <Label Text="{Binding ValidationText}" Style="{DynamicResource  validationStyle}" HorizontalOptions="Center" VerticalOptions="End" />
+          
+
+            <Label Text="Society Memberships" Padding="10" Style="{DynamicResource headingStyle}"/>
+
+
+
+            <Button Text="Save" Style="{DynamicResource stdButton}" Command="{Binding SaveCommand}" VerticalOptions="EndAndExpand"/>
+
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

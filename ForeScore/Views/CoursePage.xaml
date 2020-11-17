@@ -3,11 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ForeScore.Views.CoursePage"
              xmlns:icons="clr-namespace:ForeScore.Helpers"
-             Title="Courses">
+             xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore"
+             Visual="Material"
+             Title="{Binding Title}">
     <ContentPage.Content>
-        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
-            <StackLayout>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+
+
+
+
                 <SearchBar Placeholder="Search for Course..." TextChanged="SearchBar_OnTextChanged" ></SearchBar>
 
 
@@ -54,11 +60,18 @@
                 </CollectionView>-->
 
                 <!-- SelectionChanged="courseview_SelectionChanged" -->
-                <CollectionView x:Name="lstCourses" 
+
+                <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                        Command="{Binding RefreshCommand}">
+
+                    <CollectionView x:Name="lstCourses" 
                                 EmptyView="No Items Found" 
                                 ItemsSource="{Binding Courses}"
                                 SelectionMode="Single"
-                                SelectionChanged="courseview_SelectionChanged">
+                                SelectedItem="{Binding Selection, Mode=TwoWay}"
+                                SelectionChangedCommand="{Binding SelectionCommand}"
+                                SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference lstCourses}}"
+                                >
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="10" HorizontalItemSpacing="10" Span="1"/>
                     </CollectionView.ItemsLayout>
@@ -67,7 +80,7 @@
                         <DataTemplate>
                             
                                 <StackLayout Orientation="Horizontal" Spacing="5" VerticalOptions="Center">
-                                    <Image HeightRequest="36" WidthRequest="36" >
+                                    <Image >
                                         <Image.Source>
                                             <FontImageSource Color="{DynamicResource colorPrimaryDark}"
                                             FontFamily="{DynamicResource MaterialFontFamily}"
@@ -75,15 +88,20 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="{Binding CourseName}" Style="{DynamicResource headingStyle}" VerticalOptions="Center"/>
+                                    <Label Text="{Binding CourseName}"  VerticalOptions="Center" Style="{DynamicResource listStyle}" />
                                 </StackLayout>
                            
                         </DataTemplate>
 
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+                </RefreshView>
+                <Button Text="Add Course"  
+                        Style="{DynamicResource stdButton}"
+                        Command="{Binding AddCommand}"/>
 
             </StackLayout>
+
             <!--Activity Indicator-->
             <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
                      AbsoluteLayout.LayoutFlags="PositionProportional"
@@ -94,8 +112,8 @@
 
 
             </StackLayout>
-           
         </AbsoluteLayout>
+
     </ContentPage.Content>
     
 

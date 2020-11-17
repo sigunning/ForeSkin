@@ -34,6 +34,7 @@
     <EnableLLVM>false</EnableLLVM>
     <BundleAssemblies>false</BundleAssemblies>
     <MandroidI18n />
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,6 +64,9 @@
       <Version>3.0.0.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
+      <Version>4.5.0.617</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms.Visual.Material">
       <Version>4.5.0.617</Version>
     </PackageReference>
   </ItemGroup>
@@ -109,7 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ForeScore\ForeScore.csproj">
-      <Project>{E7113E3B-2643-4A01-B6BE-E6C3C01CB4A1}</Project>
+      <Project>{0332306F-9FDC-46E9-BF3B-56F87D4065BA}</Project>
       <Name>ForeScore</Name>
     </ProjectReference>
   </ItemGroup>
