@@ -31,6 +31,7 @@ namespace ForeScore.ViewModels
         public ICommand EditSocietiesCommand { private set; get; }
         public ICommand EditCompetitionsCommand { private set; get; }
         public ICommand EditRoundsCommand { private set; get; }
+        public ICommand PlayersCommand { private set; get; }
 
         //constructor
         public SocietyCompViewModel()
@@ -122,9 +123,23 @@ namespace ForeScore.ViewModels
 
             });
 
+            PlayersCommand = new Command(async () =>
+            {
+                IsBusy = true;
+                // create new competition object
+                if (SelectedRound != null)
+                {
+                   
+                    await Shell.Current.Navigation.PushAsync(new CompPlayersPage(SelectedRound));
+                }
+                IsBusy = false;
+
+            });
+
+
         }
 
-       
+
         public async Task LoadData()
         {
             await azureService.LoadCourseLookup();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ForeScore.Common;
 
 namespace ForeScore.Models
 {
@@ -14,8 +15,14 @@ namespace ForeScore.Models
         public bool DeletedYN { get; set; }
 
         [Newtonsoft.Json.JsonIgnore]
-        public string PlayerName { get; set; }
+        public string PlayerName
+        {
+            get { return PlayerId == null ? string.Empty : Lookups._dictPlayers[PlayerId]; }
+        }
         [Newtonsoft.Json.JsonIgnore]
-        public string SocietyName { get; set; }
+        public string SocietyName
+        {
+            get { return SocietyId == null ? string.Empty : Lookups._dictSocieties[SocietyId]; }
+        }
     }
 }

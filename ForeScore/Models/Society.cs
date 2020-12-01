@@ -24,7 +24,7 @@ namespace ForeScore.Models
 
     public class SocietyLookup
     {
-        public string Id { get; set; }
+        public string id { get; set; }
         public string SocietyId { get; set; }
 
         public string SocietyName { get; set; }

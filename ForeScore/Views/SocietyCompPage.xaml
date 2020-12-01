@@ -45,7 +45,9 @@
             <Entry Placeholder="Round Date"  Text="{Binding SelectedRound.RoundDate,StringFormat='{0:dd-MMM-yyyy}'}" Style="{DynamicResource  accentStyle}"  HorizontalOptions="FillAndExpand" IsReadOnly="True" />
 
 
-            <Button Text="Players"  Clicked="Button_Clicked" VerticalOptions="EndAndExpand"/>
+            <Button Text="Select Players >" Style="{DynamicResource stdButton}" Command="{Binding PlayersCommand}" VerticalOptions="EndAndExpand"/>
+
+           
         </StackLayout>
         
     </ContentPage.Content>

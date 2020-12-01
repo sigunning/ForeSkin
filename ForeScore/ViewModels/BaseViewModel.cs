@@ -2,12 +2,12 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-
+using System.Windows.Input;
 using ForeScore.Helpers;
 using ForeScore.Views;
 using Xamarin.Forms;
 using Xamarin.Essentials;
-using ForeScore.Helpers;
+
 
 namespace ForeScore.ViewModels
 {
@@ -16,6 +16,7 @@ namespace ForeScore.ViewModels
         // service and property vars
         private AzureService azureService;
 
+        public ICommand PlayCommand { private set; get; }
 
         public BaseViewModel()
         {
@@ -25,6 +26,15 @@ namespace ForeScore.ViewModels
             // #### temp user setting
             Preferences.Set("UserId", "11E66BCF-BA40-434A-8F8E-0D5CB0F7968B" );
             Preferences.Set("PlayerId", "867DC91B-BFBE-48BC-9A8D-1F133ADD4A6D");
+
+            // Go for it!
+            PlayCommand = new Command(async () =>
+            {
+                IsBusy = true;
+                await Shell.Current.Navigation.PushAsync(new SocietyCompPage());
+                IsBusy = false;
+
+            });
         }
 
         private string title = string.Empty;

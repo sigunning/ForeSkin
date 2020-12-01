@@ -4,8 +4,10 @@ using System.Text;
 
 namespace ForeScore.Helpers
 {
+
     public class SyncOptions
     {
+
         public bool Scores { get; set; }
         public bool Competitions { get; set; }
         public bool Courses { get; set; }
@@ -15,9 +17,12 @@ namespace ForeScore.Helpers
 
         public bool Reset { get; set; }
 
+
+
         public SyncOptions()
         {
             SyncMsg = "Data Synchronisation Status";
+
         }
 
     }

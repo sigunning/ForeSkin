@@ -4,12 +4,117 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="ForeScore.Views.CompPlayersPage">
+             xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore"
+             x:Class="ForeScore.Views.CompPlayersPage"
+             x:Name="Page"
+             xmlns:icons="clr-namespace:ForeScore.Helpers"
+             xmlns:helpers="clr-namespace:ForeScore.Common;assembly=ForeScore"
+             Visual="Material"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <helpers:CourseNameConverter x:Key="CourseNameConverter" />
+            <helpers:PlayerNameConverter x:Key="PlayerNameConverter" />
+            <helpers:MarkerConverter x:Key="MarkerConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Competition Players"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+
+                <StackLayout Margin="5">
+                    <!-- Add Player-->
+
+                    <StackLayout Orientation="Horizontal">
+                        <Picker Title="Add Player to Round" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding PlayersPicker}"  ItemDisplayBinding="{Binding PlayerName}"
+                    SelectedItem="{Binding SelectedPlayer, Mode=TwoWay}"/>
+                        <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
+                                     Command="{Binding AddPlayerCommand}" Style="{DynamicResource faButtonSmall}"/>
+                        <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.GroupAdd}"   HorizontalOptions="End"
+                                     Command="{Binding AddMembersCommand}" Style="{DynamicResource faButtonSmall}"/>
+                    </StackLayout>
+
+
+
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="15*"/>
+                            <ColumnDefinition Width="65*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="10*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25" />
+                        </Grid.RowDefinitions>
+                        <BoxView  Grid.ColumnSpan="4" Color="{DynamicResource BackGroundColor}"/>
+                        <!--<controls:FontAwesomeLabel Text="{x:Static icons:MaterialIcon.}" Style="{DynamicResource faLabel}"/>-->
+                        <Label Text="Mark" Style="{DynamicResource labelStyle}" Grid.Column="0"/>
+                        <Label Text="Player" Style="{DynamicResource labelStyle}" Grid.Column="1"/>
+                        <Label Text="HC" Style="{DynamicResource labelStyle}" Grid.Column="2"/>
+
+                    </Grid>
+                    <CollectionView x:Name="lstPlayers" 
+                                EmptyView="No Players Selected" 
+                                ItemsSource="{Binding PlayerScores}"
+                                SelectionMode="None"
+                                SelectedItem="{Binding SelectedPlayerScore, Mode=TwoWay}"
+                                SelectionChangedCommand="{Binding SelectionCommand}"
+                                SelectionChangedCommandParameter="{Binding SelectedPlayerScore, Source={x:Reference lstPlayers}}"
+                                >
+
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="15*"/>
+                                        <ColumnDefinition Width="65*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <BoxView  Grid.ColumnSpan="4" Color="Red" IsVisible="{Binding DeletedYN}"/>
+                                    <Switch HorizontalOptions="Start" Grid.Column="0"  IsToggled="{Binding Mark}"/>
+                                    <Label Text="{Binding Path=PlayerId, Converter={StaticResource PlayerNameConverter}, ConverterParameter=None   } " 
+                                               Style="{DynamicResource labelStyle}"
+                                               VerticalOptions="Center" Grid.Column="1"
+                                               />
+                                    <Entry Placeholder="HCAP"  Text="{Binding Path=HCAP}"   Grid.Column="2" Keyboard="Numeric"/>
+                                    <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Remove}"   HorizontalOptions="End"
+                                     Command="{Binding Path=BindingContext.RemovePlayerCommand, Source={x:Reference Name=lstPlayers}}" CommandParameter="{Binding .}" Style="{DynamicResource faButtonSmall}" Grid.Column="3"/>
+                                </Grid>
+
+
+
+                            </DataTemplate>
+
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+
+
+
+                    <Button Text="Save and Continue >" Style="{DynamicResource stdButton}" Command="{Binding SavePlayersCommand}" VerticalOptions="EndAndExpand"/>
+
+
+                </StackLayout>
+
+            </StackLayout>
+
+            <!--Activity Indicator-->
+            <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                     AbsoluteLayout.LayoutFlags="PositionProportional"
+                     AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" />
+                <Label Text="{Binding ActivityMessage}" HorizontalOptions="Center" />
+
+
+            </StackLayout>
+        </AbsoluteLayout>
+
     </ContentPage.Content>
 </ContentPage>

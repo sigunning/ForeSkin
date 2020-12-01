@@ -19,30 +19,31 @@
 
                 <StackLayout>
                     <StackLayout Orientation="Vertical">
-                    <Label Text="Connection Status" Style="{DynamicResource headingStyle}" HorizontalOptions="Center"/>
+                        <Label Text="Connection Status" Style="{DynamicResource headingStyle}" HorizontalOptions="Center"/>
 
                         <controls:FontAwesomeLabel Text="{Binding ConnectedIcon}" 
                          HorizontalOptions="Center"    Style="{DynamicResource faLabel}" FontSize="50"/>
 
                         <Label Text="{Binding ConnectedMsg}"  HorizontalOptions="Center"  />
                     </StackLayout>
-                    
 
-                    <TableView Intent="Settings">
+
+                    <TableView Intent="Settings"  >
                         <TableRoot>
                             <TableSection Title="Synchronise Options">
-                                <SwitchCell Text="Scores" On="{Binding SyncOptionsObj.Scores,Mode=TwoWay}" />
-                                <SwitchCell Text="Competitions" On="{Binding SyncOptionsObj.Competitions,Mode=TwoWay}"/>
-                                <SwitchCell Text="Players" On="{Binding SyncOptionsObj.Players,Mode=TwoWay}"/>
-                                <SwitchCell Text="Societies" On="{Binding SyncOptionsObj.Societies,Mode=TwoWay}"/>
-                                <SwitchCell Text="Courses" On="{Binding SyncOptionsObj.Courses,Mode=TwoWay}"/>
+                                <SwitchCell x:Name="scScores" Text="Scores" OnChanged="SwitchCell_OnChanged" On="{Binding SyncOptionsObj.Scores, Mode=TwoWay}"  />
+                                <SwitchCell x:Name="scCompetitions" Text="Competitions" OnChanged="SwitchCell_OnChanged" On="{Binding SyncOptionsObj.Competitions, Mode=TwoWay}"/>
+                                <SwitchCell x:Name="scPlayers" Text="Players" OnChanged="SwitchCell_OnChanged" On="{Binding SyncOptionsObj.Players, Mode=TwoWay}"/>
+                                <SwitchCell x:Name="scSocieties" Text="Societies" OnChanged="SwitchCell_OnChanged" On="{Binding SyncOptionsObj.Societies, Mode=TwoWay}"/>
+                                <SwitchCell x:Name="scCourses" Text="Courses" OnChanged="SwitchCell_OnChanged" On="{Binding SyncOptionsObj.Courses, Mode=TwoWay}"/>
                             </TableSection>
                             <TableSection Title="Reset">
-                                <SwitchCell Text="Clear All Local Data" On="{Binding SyncOptionsObj.Reset,Mode=TwoWay}" />
+                                <SwitchCell x:Name="scReset" Text="Clear All Local Data" OnChanged="SwitchCell_OnChanged" On="{Binding SyncOptionsObj.Reset, Mode=TwoWay}" />
                             </TableSection>
                         </TableRoot>
                     </TableView>
                 </StackLayout>
+
                 <Label Text="{Binding StatusMsg, Mode=TwoWay}"  HorizontalOptions="Center"  />
                 <Button Text="Synchronise Data" VerticalOptions="EndAndExpand"  Style="{DynamicResource stdButton}" Command="{Binding SyncCommand}" IsEnabled="{Binding ConnectedMode}"/>
 

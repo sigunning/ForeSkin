@@ -74,6 +74,7 @@ namespace ForeScore.Common
 
 
         // cut down lists for picker source
+        public static List<Player> PickerPlayer = new List<Player>();
         public static List<Society> PickerSociety = new List<Society>();
         public static List<CourseLookup> PickerCourse = new List<CourseLookup>();
         public static List<Competition> PickerCompetition = new List<Competition>();
@@ -162,7 +163,7 @@ namespace ForeScore.Common
             bool IsMarker;
             try
             {
-                IsMarker = ( value.Equals(Preferences.Get("UserId", string.Empty)) );
+                IsMarker = ( value.Equals(Preferences.Get("PlayerId", string.Empty)) );
             }
             catch
             {
@@ -178,7 +179,7 @@ namespace ForeScore.Common
             string marker_id;
             try
             {
-                marker_id = ( (bool)value==true ? Preferences.Get("UserId", string.Empty) : string.Empty);
+                marker_id = ( (bool)value==true ? Preferences.Get("PlayerId", string.Empty) : string.Empty);
             }
             catch
             {

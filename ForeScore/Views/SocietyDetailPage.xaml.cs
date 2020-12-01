@@ -37,7 +37,7 @@ namespace ForeScore.Views
             if (viewModel == null)
                 return;
 
-            await viewModel.ExecuteLoadLookupsCommand();
+            await viewModel.LoadData();
 
         }
     }

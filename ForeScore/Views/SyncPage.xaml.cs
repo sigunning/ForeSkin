@@ -37,5 +37,31 @@ namespace ForeScore.Views
        
 
         }
+
+        private void SwitchCell_OnChanged(object sender, ToggledEventArgs e)
+        {
+            // if reset switched on, set all others
+            var sw = (SwitchCell)sender;
+            if (sw.Text.Contains("Clear"))
+            {
+                if (e.Value == true)
+                {
+                    // set others on 
+                    scScores.On = true;
+                    scCompetitions.On = true;
+                    scPlayers.On = true;
+                    scSocieties.On = true;
+                    scCourses.On = true;
+                }
+            }
+            else
+            {
+                if (e.Value == false)
+                {
+                    scReset.On = false;
+                }
+                
+            }
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -60,6 +62,17 @@ namespace ForeScore.ViewModels
             }
         }
 
+        private ObservableCollection<Society> _societies;
+        public ObservableCollection<Society> Societies
+        {
+            get { return _societies; }
+            set
+            {
+                _societies = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         private string _validationText;
         public string ValidationText
@@ -73,14 +86,22 @@ namespace ForeScore.ViewModels
         }
 
 
+
         private bool Validate()
         {
-            bool isValid = (Player != null && _player.PlayerName != null );
+            bool isValid = (Player != null && _player.PlayerName != null);
             ValidationText = (isValid ? string.Empty : "Please enter player Name");
             return isValid;
         }
 
+        public async Task LoadData()
+        {
 
-
+            // get soc members
+            if (!IsNew)
+                Societies = await azureService.GetSocieties(Player.PlayerId);
+        }
     }
+
+
 }

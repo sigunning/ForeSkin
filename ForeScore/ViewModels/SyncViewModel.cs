@@ -41,7 +41,7 @@ namespace ForeScore.ViewModels
                 return;
 
             IsBusy = true;
-            StatusMsg = "Synchronisation starting...";
+            StatusMsg = "Synchronisation in progress...";
             // set offline mode off
             Preferences.Set("OfflineMode", false);
 
@@ -59,7 +59,8 @@ namespace ForeScore.ViewModels
         {
             get { return _syncOptions; }
             set 
-            {   SetProperty(ref _syncOptions, value);
+            {   
+                SetProperty(ref _syncOptions, value);
                 OnPropertyChanged();
             }
         }
@@ -73,5 +74,6 @@ namespace ForeScore.ViewModels
         }
 
 
+        
     }
 }

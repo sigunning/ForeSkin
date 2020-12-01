@@ -27,10 +27,6 @@ namespace ForeScore.Views
             get { return BindingContext as SocietyCompViewModel; }
         }
   
-        private async void Button_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new CompPlayersPage());
-        }
 
         protected override async void OnAppearing()
         {
@@ -42,5 +38,6 @@ namespace ForeScore.Views
             await viewModel.LoadData();
 
         }
+
     }
 }

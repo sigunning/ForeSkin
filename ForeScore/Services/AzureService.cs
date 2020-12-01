@@ -42,6 +42,7 @@ namespace ForeScore
         IMobileServiceSyncTable<Course> tableCourse;
         IMobileServiceSyncTable<Sledge> tableSledge;
         IMobileServiceSyncTable<Round> tableRound;
+        IMobileServiceSyncTable<PlayerScore> tablePlayerScore;
         IMobileServiceSyncTable<PlayerRound> tablePlayerRound;
         
         IMobileServiceSyncTable<Scores> tableScores;
@@ -90,6 +91,7 @@ namespace ForeScore
             store.DefineTable<Competition>();
             store.DefineTable<Course>();
             store.DefineTable<Round>();
+            store.DefineTable<PlayerScore>();
             store.DefineTable<PlayerRound>();
             store.DefineTable<Sledge>();
             store.DefineTable<Society>();
@@ -115,6 +117,8 @@ namespace ForeScore
             tableSocietyPlayer = client.GetSyncTable<SocietyPlayer>();
             Debug.WriteLine("Setting Round table... ");
             tableRound = client.GetSyncTable<Round>();
+            Debug.WriteLine("Setting PlayerScore table... ");
+            tablePlayerScore = client.GetSyncTable<PlayerScore>();
             /*
             
            
@@ -193,10 +197,14 @@ namespace ForeScore
                     await tableSocietyPlayer.PullAsync(_queryId, tableSocietyPlayer.CreateQuery());
                     }
                 if (SyncOptionsObj.Competitions)
-                    { 
+                {
                     await tableCompetition.PullAsync(_queryId, tableCompetition.CreateQuery());
                     await tableRound.PullAsync(_queryId, tableRound.CreateQuery());
-                    }
+                }
+                if (SyncOptionsObj.Scores)
+                { 
+                    await tablePlayerScore.PullAsync(_queryId, tablePlayerScore.CreateQuery());
+                }
 
                 
                 /*
@@ -257,6 +265,8 @@ namespace ForeScore
                 .ToCollectionAsync();
         }
 
+        
+
         public async Task<Player> GetPlayer(string playerId)
         {
             await Initialize();
@@ -267,6 +277,19 @@ namespace ForeScore
             return results.SingleOrDefault();
             
                
+        }
+
+        public async Task LoadPlayerLookup(bool reload=false)
+        {
+            // if we have already loaded courses to picker lists, just return new collection
+            if ((Lookups._dictPlayers.Count == 0) || (reload=true))
+                {
+                ObservableCollection<Player> lstPlayers;
+                Debug.WriteLine("Loading player lookup list...");
+                lstPlayers = await GetPlayers();
+                Lookups._dictPlayers = lstPlayers.ToDictionary(x => x.PlayerId, x => x.PlayerName);
+                Pickers.PickerPlayer = lstPlayers.ToList();
+            }
         }
 
         public async Task SyncPlayers()
@@ -328,11 +351,30 @@ namespace ForeScore
         }
         public async Task<ObservableCollection<Society>> GetSocieties(string playerId)
         {
+            // need to get societies where player is a member - join to SocietyPlayer
             await Initialize();
-            return await tableSociety
-                .OrderBy(x => x.SocietyName)
-                .Where(x => x.CreatedByPlayerId == playerId)
-                .ToCollectionAsync();
+            ObservableCollection<Society> societies = await GetSocieties();
+            ObservableCollection<SocietyPlayer> societyPlayers = await GetSocietyPlayers();
+            List<Society> lstPlayerSocieties = new List<Society>();
+            lstPlayerSocieties = (from s1 in societies 
+                     join sp1 in societyPlayers.Where(o => o.PlayerId == playerId) on s1.SocietyId equals sp1.SocietyId
+                     select new Society
+                     {
+                         Id = s1.Id,
+                         SocietyId = s1.SocietyId,
+                         SocietyName = s1.SocietyName,
+                         SocietyDescription = s1.SocietyDescription,
+                         CreatedByPlayerId= s1.CreatedByPlayerId,
+                         CreatedDate = s1.CreatedDate
+                     }).ToList();
+
+            return new ObservableCollection<Society>( lstPlayerSocieties
+                .OrderBy(x => x.SocietyName) );
+     
+            //return await tableSociety
+            //    .OrderBy(x => x.SocietyName)
+            //    .Where(x => x.CreatedByPlayerId == playerId)
+            //    .ToCollectionAsync();
         }
 
         public async Task LoadSocietyLookup(string playerId)
@@ -395,6 +437,37 @@ namespace ForeScore
                 Debug.WriteLine("Unable to save society player: " + ex);
             }
         }
+
+        public async Task DeleteSocietyPlayerAsync(SocietyPlayer societyPlayer)
+        {
+            if (societyPlayer.Id == null) return;
+
+            await Initialize();
+            try
+            {
+                await tableSocietyPlayer.DeleteAsync(societyPlayer);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Unable to delete society Player: " + ex);
+            }
+        }
+
+        public async Task<ObservableCollection<SocietyPlayer>> GetSocietyPlayers()
+        {
+            await Initialize();
+            return await tableSocietyPlayer
+                .ToCollectionAsync();
+        }
+
+        public async Task<ObservableCollection<SocietyPlayer>> GetSocietyPlayers(string societyId)
+        {
+            await Initialize();
+            return await tableSocietyPlayer
+                .Where(x => x.SocietyId == societyId)
+                .ToCollectionAsync();
+        }
+
 
         #endregion SocietyPlayer
 
@@ -556,10 +629,10 @@ namespace ForeScore
 
 
         }
-        public async Task LoadCourseLookup()
+        public async Task LoadCourseLookup(bool reload = false)
         {
             // if we have already loaded courses to picker lists, just return new collection
-            if (Pickers.PickerCourse.Count == 0)
+            if (( Pickers.PickerCourse.Count == 0) || (reload==true))
             {
                 ObservableCollection<Course> lstCourses;
                 Debug.WriteLine("Loading course lookup list...");
@@ -787,6 +860,64 @@ namespace ForeScore
         }
 
         #endregion Round
+
+        #region PlayerScore
+
+        public async Task<ObservableCollection<PlayerScore>> GetPlayerScores(string roundId)
+        {
+            await Initialize();
+           
+            
+                return await tablePlayerScore
+                    .Where(t => t.RoundId == roundId)
+                    .ToCollectionAsync();
+            
+            
+
+        }
+
+        public async Task SavePlayerScoreAsync(PlayerScore playerScore)
+        {
+            await Initialize();
+
+            try
+            {
+
+                if (playerScore.Id == null)
+                {
+                    await tablePlayerScore.InsertAsync(playerScore);
+                }
+                else
+                {
+                    await tablePlayerScore.UpdateAsync(playerScore);
+                }
+ 
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Unable to save society player: " + ex);
+            }
+        }
+
+        public async Task DeletePlayerScoreAsync(PlayerScore playerScore)
+        {
+            if (playerScore.Id == null) return;
+
+            await Initialize();
+            try
+            {
+                await tablePlayerScore.DeleteAsync(playerScore);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Unable to delete course: " + ex);
+            }
+        }
+
+        #endregion PlayerScore
+
+
+
 
 
         #region PlayerRound

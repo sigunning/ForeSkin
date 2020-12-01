@@ -28,5 +28,14 @@ namespace ForeScore.Views
             get { return BindingContext as PlayerDetailViewModel; }
         }
 
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if (viewModel == null)
+                return;
+
+            await viewModel.LoadData();
+
+        }
     }
 }

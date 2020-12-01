@@ -5,8 +5,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              xmlns:viewModels="clr-namespace:ForeScore.ViewModels"
+             xmlns:icons="clr-namespace:ForeScore.Helpers"
+             xmlns:helpers="clr-namespace:ForeScore.Common;assembly=ForeScore"
              x:Class="ForeScore.Views.PlayerDetailPage"
-             Visual="Material">
+             Visual="Material"
+             Title="{Binding Title}">
+
+    
     
     <ContentPage.Content>
         <StackLayout>
@@ -22,9 +27,10 @@
                     </Image.Source>
                 </Image>
             </StackLayout>
-
-            <Entry Placeholder="First Name"  Text="{Binding Player.FirstName,Mode=TwoWay}"  HorizontalOptions="FillAndExpand" />
-            <Entry Placeholder="Last Name"  Text="{Binding Player.LastName,Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+            <StackLayout Orientation="Horizontal"  >
+                <Entry Placeholder="First Name"  Text="{Binding Player.FirstName,Mode=TwoWay}"  HorizontalOptions="FillAndExpand" />
+                <Entry Placeholder="Last Name"  Text="{Binding Player.LastName,Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+            </StackLayout>
             <Entry Placeholder="Email"  Text="{Binding Player.EmailAddress}"  HorizontalOptions="FillAndExpand" />
             
 
@@ -35,7 +41,20 @@
             <Label Text="{Binding ValidationText}" Style="{DynamicResource  validationStyle}" HorizontalOptions="Center" VerticalOptions="End" />
           
 
-            <Label Text="Society Memberships" Padding="10" Style="{DynamicResource headingStyle}"/>
+            <Label Text="Society Memberships"  Style="{DynamicResource labelStyle}"/>
+            <ListView ItemsSource="{Binding Societies}" Margin="5">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ImageCell Text="{Binding SocietyName}" Detail="{Binding SocietyDescription}">
+                            <ImageCell.ImageSource>
+                                <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                                        FontFamily="{DynamicResource MaterialFontFamily}"
+                                        Glyph="{x:Static icons:MaterialIcon.Group}" />
+                            </ImageCell.ImageSource>
+                        </ImageCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
 
 
