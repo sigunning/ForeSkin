@@ -15,12 +15,11 @@
 
                 <Image  Source="{Binding SplashSource}" HorizontalOptions="Center" VerticalOptions="Center" />
                 <Label Text="Golf Scoring App"  Style="{DynamicResource labelStyle}"  HorizontalOptions="Center" />
-                
-
 
             </StackLayout>
-            <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.PlayArrow}"   VerticalOptions="EndAndExpand"
-                                     Command="{Binding PlayCommand}" Style="{DynamicResource stdButton}"/>
+            
+            <Button Text="{x:Static icons:FontAwesomeIcon.Play_circle}"   VerticalOptions="EndAndExpand" FontSize="Large"
+                  FontFamily="{StaticResource FontAwesomeFamily}"   Command="{Binding PlayCommand}" Style="{DynamicResource stdButton}"/>
         <!--Activity Indicator-->
         <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
                      AbsoluteLayout.LayoutFlags="PositionProportional"

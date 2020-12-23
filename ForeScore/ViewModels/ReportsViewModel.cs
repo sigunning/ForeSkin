@@ -273,7 +273,7 @@ namespace ForeScore.ViewModels
                     }
                     // just last hole
                     lstPlayerRoundScores = lstPlayerRoundScores.Where(o => o.Hole == 18).OrderBy(o => o.CumPoints).ToList<PlayerRoundScore>();
-                    await _navigation.PushAsync(new ResultsPage(lstPlayerRoundScores));
+            //        await _navigation.PushAsync(new ResultsPage(lstPlayerRoundScores));
 
 
                     IsBusy = false;
@@ -374,7 +374,7 @@ namespace ForeScore.ViewModels
 
                     // just last round
                     lstPlayerRoundScores = lstPlayerRoundScores.Where(o => o.Round_id == lastRoundId).OrderBy(o => o.CumPoints).ToList<PlayerRoundScore>();
-                    await _navigation.PushAsync(new ResultsPage(lstPlayerRoundScores));
+            //        await _navigation.PushAsync(new ResultsPage(lstPlayerRoundScores));
 
 
                     IsBusy = false;

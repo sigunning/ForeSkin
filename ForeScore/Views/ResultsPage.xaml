@@ -7,146 +7,136 @@
             Title="{Binding Title}">
 
 
-  <ContentPage.Resources>
-    <ResourceDictionary>
-      <helpers:CourseNameConverter x:Key="CourseNameConverter" />
-      <helpers:PlayerNameConverter x:Key="PlayerNameConverter" />
-      <helpers:MarkerConverter x:Key="MarkerConverter" />
-    </ResourceDictionary>
-  </ContentPage.Resources>
-
-  <ContentPage.ToolbarItems>
-    <ToolbarItem  Icon="{Binding ConnectedIcon, Mode=TwoWay}" Order="Primary" Command="{Binding ShowConnectionCommand}"/>
-    <ToolbarItem Text="Toggle Offline Mode"  Order="Secondary"  Command="{Binding OfflineToggleCommand}"/>
-  </ContentPage.ToolbarItems>
-
-  <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-
-    <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
-      <StackLayout Padding="5">
-
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-          </Grid.RowDefinitions>
-
-          <Label Grid.Column="0" Text="{Binding TournamentName}"  Style="{DynamicResource labelStyle}" HorizontalOptions="Start" />
-          <Label Grid.Column="1" Text="{Binding CourseName}"  Style="{DynamicResource labelStyle}" HorizontalOptions="End" />
-
-        </Grid>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <helpers:CourseNameConverter x:Key="CourseNameConverter" />
+            <helpers:PlayerNameConverter x:Key="PlayerNameConverter" />
+            <helpers:MarkerConverter x:Key="MarkerConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
 
-        <Grid RowSpacing="0" ColumnSpacing="0"  Padding="0">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="35*" />
-            <ColumnDefinition Width="14*" />
-            <ColumnDefinition Width="13*" />
-            <ColumnDefinition Width="13*" />
-            <ColumnDefinition Width="10*" />
-            <ColumnDefinition Width="15*" />
+    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+        <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+            <StackLayout Padding="5">
 
 
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-          </Grid.RowDefinitions>
-          <BoxView Color="#003300" Grid.Row="0" Grid.ColumnSpan="6"/>
-          <Label Grid.Column="0" Text="Player"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center" HorizontalTextAlignment="Start" />
-          <Label Grid.Column="1" Text="Grs"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center" HorizontalTextAlignment="Center" />
-          <Label Grid.Column="2" Text="Net"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center" HorizontalTextAlignment="Center" />
-          <Label Grid.Column="3" Text="Pts"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center"  HorizontalTextAlignment="Center"/>
-          <Label Grid.Column="4" Text="Dis"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center"  HorizontalTextAlignment="Center" />
-          <Label Grid.Column="5" Text="Tot"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center"  HorizontalTextAlignment="Center" />
-        </Grid>
+                <StackLayout Orientation="Horizontal">
+                    <Picker Title="Round" Grid.Column="0" HorizontalOptions="StartAndExpand"   ItemsSource="{Binding Rounds}"  ItemDisplayBinding="{Binding CourseName}"
+                    SelectedItem="{Binding SelectedRound,Mode=TwoWay}" WidthRequest="200"/>
+                    <Label  Style="{DynamicResource labelStyle}"  VerticalOptions="Center" Text="{Binding SelectedRound.RoundDate,Mode=TwoWay,StringFormat='{0:dd-MMM-yyyy}'}"
+                           HorizontalOptions="EndAndExpand" />
+                </StackLayout>
 
-        <ListView x:Name="lstPlayerRoundScores"  ItemsSource="{Binding PlayerRoundScores, Mode=TwoWay}" SeparatorVisibility="Default" SeparatorColor="Black">
-          <ListView.ItemTemplate>
-            <DataTemplate>
-              <ViewCell>
-                <ViewCell.View>
-                  <Grid RowSpacing="0" ColumnSpacing="0"  Padding="0" >
+
+                <Grid RowSpacing="0" ColumnSpacing="0"  Padding="0">
                     <Grid.ColumnDefinitions>
-
-                      <ColumnDefinition Width="35*" />
-                      <ColumnDefinition Width="14*" />
-                      <ColumnDefinition Width="13*" />
-                      <ColumnDefinition Width="13*" />
-                      <ColumnDefinition Width="10*" />
-                      <ColumnDefinition Width="15*" />
+                        <ColumnDefinition Width="35*" />
+                        <ColumnDefinition Width="14*" />
+                        <ColumnDefinition Width="13*" />
+                        <ColumnDefinition Width="13*" />
+                        <ColumnDefinition Width="10*" />
+                        <ColumnDefinition Width="15*" />
 
 
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                      <RowDefinition Height="*"  />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
+                    <BoxView Color="#003300" Grid.Row="0" Grid.ColumnSpan="6" CornerRadius="10"/>
+                    <Label Grid.Column="0" Text="Player"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center" HorizontalTextAlignment="Start" />
+                    <Label Grid.Column="1" Text="Grs"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center" HorizontalTextAlignment="Center" />
+                    <Label Grid.Column="2" Text="Net"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center" HorizontalTextAlignment="Center" />
+                    <Label Grid.Column="3" Text="Pts"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center"  HorizontalTextAlignment="Center"/>
+                    <Label Grid.Column="4" Text="Dis"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center"  HorizontalTextAlignment="Center" />
+                    <Label Grid.Column="5" Text="Tot"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center"  HorizontalTextAlignment="Center" />
+                </Grid>
+
+                <ListView x:Name="lstPlayerSummaryScores"  ItemsSource="{Binding PlayerSummaryScores, Mode=TwoWay}" SeparatorVisibility="Default" SeparatorColor="Black">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <Grid RowSpacing="0" ColumnSpacing="0"  Padding="0" >
+                                        <Grid.ColumnDefinitions>
+
+                                            <ColumnDefinition Width="35*" />
+                                            <ColumnDefinition Width="14*" />
+                                            <ColumnDefinition Width="13*" />
+                                            <ColumnDefinition Width="13*" />
+                                            <ColumnDefinition Width="10*" />
+                                            <ColumnDefinition Width="15*" />
 
 
-                    <Frame Grid.Column="0" Padding="0" OutlineColor="Black" >
-                      <Label  Text="{Binding PlayerHcap}"  Style="{DynamicResource labelStyle}"  TextColor="Black" VerticalOptions="Center"  HorizontalTextAlignment="Start"/>
-                    </Frame>
-
-                    <Frame Grid.Column="1" Padding="0" OutlineColor="Black" >
-                      <Label Text="{Binding CumGross}"  Style="{DynamicResource labelStyle}"  BackgroundColor="White" TextColor="Black" VerticalOptions="Center" HorizontalTextAlignment="Center" />
-                    </Frame>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"  />
+                                        </Grid.RowDefinitions>
 
 
-                    <Frame Grid.Column="2" Padding="0" OutlineColor="Black" BackgroundColor="White">
-                      <Label Text="{Binding CumNet}"  Style="{DynamicResource labelStyle}"  TextColor="Red" VerticalOptions="Center" HorizontalTextAlignment="Center"  />
-                    </Frame>
+                                        <Frame Grid.Column="0" Padding="0" OutlineColor="Black" >
+                                            <Label  Text="{Binding PlayerName}"  Style="{DynamicResource labelStyle}"  TextColor="Black" VerticalOptions="Center"  HorizontalTextAlignment="Start"/>
+                                        </Frame>
 
-                    <Frame Grid.Column="3" Padding="0" OutlineColor="Black">
-                      <Label  Text="{Binding CumPoints}"  Style="{DynamicResource labelStyle}"  TextColor="Black" VerticalOptions="Center" HorizontalTextAlignment="Center"  />
-                    </Frame>
-
-                    <Frame Grid.Column="4" Padding="0" OutlineColor="Black">
-                      <Label  Text=" "  Style="{DynamicResource labelStyle}"  TextColor="Green" VerticalOptions="Center"  HorizontalTextAlignment="Center"  />
-                    </Frame>
-
-                    <Frame Grid.Column="5" Padding="0" OutlineColor="Black">
-                      <Label  Text="{Binding CumPoints}"  Style="{DynamicResource labelStyle}"  TextColor="Navy" VerticalOptions="Center" HorizontalTextAlignment="Center"   />
-                    </Frame>
-
-         
+                                        <Frame Grid.Column="1" Padding="0" OutlineColor="Black" >
+                                            <Label Text="{Binding Out_Score}"  Style="{DynamicResource labelStyle}"  BackgroundColor="White" TextColor="Black" VerticalOptions="Center" HorizontalTextAlignment="Center" />
+                                        </Frame>
 
 
+                                        <Frame Grid.Column="2" Padding="0" OutlineColor="Black" BackgroundColor="White">
+                                            <Label Text="{Binding In_Score}"  Style="{DynamicResource labelStyle}"  TextColor="Red" VerticalOptions="Center" HorizontalTextAlignment="Center"  />
+                                        </Frame>
 
-                  </Grid>
+                                        <Frame Grid.Column="3" Padding="0" OutlineColor="Black">
+                                            <Label  Text="{Binding Out_Net}"  Style="{DynamicResource labelStyle}"  TextColor="Black" VerticalOptions="Center" HorizontalTextAlignment="Center"  />
+                                        </Frame>
 
-                </ViewCell.View>
-              </ViewCell>
+                                        <Frame Grid.Column="4" Padding="0" OutlineColor="Black">
+                                            <Label  Text="{Binding Out_Pts}"  Style="{DynamicResource labelStyle}"  TextColor="Green" VerticalOptions="Center"  HorizontalTextAlignment="Center"  />
+                                        </Frame>
 
-
-            </DataTemplate>
-          </ListView.ItemTemplate>
-        </ListView>
+                                        <Frame Grid.Column="5" Padding="0" OutlineColor="Black">
+                                            <Label  Text="{Binding Tot_Score}"  Style="{DynamicResource labelStyle}"  TextColor="Navy" VerticalOptions="Center" HorizontalTextAlignment="Center"   />
+                                        </Frame>
 
 
 
 
-      </StackLayout>
+
+                                    </Grid>
+
+                                </ViewCell.View>
+                            </ViewCell>
+
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
 
 
 
-    </StackLayout>
+
+            </StackLayout>
+
+
+
+        </StackLayout>
 
 
 
 
-    <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+        <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
                  AbsoluteLayout.LayoutFlags="PositionProportional"
                  AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
 
-      <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{DynamicResource activityColor}"/>
-      <Frame  Padding="10,20"  BackgroundColor="{DynamicResource waitBackgroundColor}">
-        <Label Text="{Binding ActivityMessage}" HorizontalOptions="Center" TextColor="{DynamicResource waitMsgColor}" />
-      </Frame>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{DynamicResource activityColor}"/>
+            <Frame  Padding="10,20"  BackgroundColor="{DynamicResource waitBackgroundColor}">
+                <Label Text="{Binding ActivityMessage}" HorizontalOptions="Center" TextColor="{DynamicResource waitMsgColor}" />
+            </Frame>
 
-    </StackLayout>
-  </AbsoluteLayout>
+        </StackLayout>
+    </AbsoluteLayout>
 
 
 </ContentPage>

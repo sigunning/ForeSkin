@@ -11,15 +11,15 @@ namespace ForeScore.Views
 {
     public partial class ResultsPage : ContentPage
     {
-        public ResultsPage(List<PlayerRoundScore> lstPlayerRoundScores)
+        public ResultsPage()
         {
             InitializeComponent();
-            ResultsViewModel vm = new ResultsViewModel(this.Navigation);
+            BindingContext = new ResultsViewModel();
 
             // pass list to view model
-            vm.PlayerRoundScores = lstPlayerRoundScores;
+            // vm.PlayerRoundScores = lstPlayerRoundScores;
 
-            BindingContext = vm;
+            
         }
 
         private ResultsViewModel viewModel
@@ -34,7 +34,7 @@ namespace ForeScore.Views
             if (viewModel == null || !viewModel.CanLoadMore || viewModel.IsBusy)
                 return;
 
-            viewModel.OnAppearing();
+            viewModel.LoadData();
 
         }
 

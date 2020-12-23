@@ -27,7 +27,7 @@ namespace ForeScore.Models
         [Newtonsoft.Json.JsonIgnore]
         public string CourseName 
         {
-            get { return CourseId == null ? string.Empty : Lookups._dictCourses[CourseId];  }
+            get { return CourseId == null ? "All" : Lookups._dictCourses[CourseId];  }
         }
         [Newtonsoft.Json.JsonIgnore]
         public string CompetitionName

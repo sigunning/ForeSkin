@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="ForeScore.Views.PlayerCardPage" 
+             xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore"
+             xmlns:icons="clr-namespace:ForeScore.Helpers"
+             xmlns:helpers="clr-namespace:ForeScore.Common;assembly=ForeScore"
+             Visual="Material"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <helpers:CourseNameConverter x:Key="CourseNameConverter" />
+            <helpers:PlayerNameConverter x:Key="PlayerNameConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    
+    <ContentPage.Content>
+        <StackLayout>
+
+            <!--Hole Headings and hole selection-->
+            <Grid  Margin="5" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <BoxView  Grid.ColumnSpan="3" Grid.Row="0" Color="{DynamicResource colorPrimary}"  CornerRadius="5"/>
+                <Label Text= "Competition" Style="{DynamicResource labelStyle}" TextColor="White"  HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+                <Label Text= "Player" Style="{DynamicResource labelStyle}" TextColor="White" Grid.Column="1" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                <Label Text= "HC" Style="{DynamicResource labelStyle}" Grid.Column="2" TextColor="White" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+
+                <Label Text= "{Binding Round.CompetitionName}" Style="{DynamicResource labelStyle}" VerticalOptions="CenterAndExpand"
+                       TextColor="Black" Grid.Column="0" Grid.Row="1"  HorizontalOptions="StartAndExpand" />
+                <Label Text= "{Binding PlayerScore.PlayerName}" Style="{DynamicResource labelStyle}"   VerticalOptions="CenterAndExpand"
+                       TextColor="Black" Grid.Column="1" Grid.Row="1" HorizontalOptions="StartAndExpand"/>
+                <Label Text= "{Binding PlayerScore.HCAP}" Style="{DynamicResource labelStyle}"   VerticalOptions="CenterAndExpand"
+                       TextColor="Red" Grid.Column="2" Grid.Row="1" HorizontalOptions="StartAndExpand"/>
+
+                <!--Remove for space-->
+                <!--<BoxView  Grid.ColumnSpan="3" Grid.Row="2" Color="{DynamicResource colorPrimary}"  CornerRadius="5"/>
+                <Label Text= "Course" Style="{DynamicResource labelStyle}" TextColor="White" Grid.Row="2" HorizontalOptions="Start" VerticalOptions="Center"/>
+                <Label Text= "Date" Style="{DynamicResource labelStyle}" TextColor="White" Grid.Row="2" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" />
+                <Label Text= "Par" Style="{DynamicResource labelStyle}" Grid.Row="2" Grid.Column="2" TextColor="White" HorizontalOptions="Start" VerticalOptions="Center"/>
+
+                <Label Text= "{Binding Course.CourseName }" Style="{DynamicResource labelStyle}"   VerticalOptions="CenterAndExpand"
+                       TextColor="Black" Grid.Column="0" Grid.Row="3" HorizontalOptions="Start"/>
+                <Label Text= "{Binding Round.RoundDate,StringFormat='{0:dd-MM-yy}' }" Style="{DynamicResource labelStyle}"   VerticalOptions="CenterAndExpand"
+                       TextColor="Black" Grid.Column="1" Grid.Row="3" HorizontalOptions="Start"/>
+                <Label Text= "{Binding Course.PAR}" Style="{DynamicResource labelStyle}"   VerticalOptions="CenterAndExpand"
+                       TextColor="Red" Grid.Column="2" Grid.Row="3" HorizontalOptions="Start"/>-->
+                
+
+
+
+            </Grid>
+
+            <!--score-->
+            <Grid  Margin="0"  HorizontalOptions="FillAndExpand">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <BoxView  Grid.ColumnSpan="6"  Color="{DynamicResource colorAccent}"  CornerRadius="0"/>
+                <Label Text= "Hole" Style="{DynamicResource labelStyle}" Grid.Column="0"  TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Text= "Par" Style="{DynamicResource labelStyle}" Grid.Column="1"  TextColor="White"  HorizontalOptions="Center" VerticalOptions="Center" />
+                <Label Text= "SI" Style="{DynamicResource labelStyle}" Grid.Column="2" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Text= "Score" Style="{DynamicResource labelStyle}" Grid.Column="3" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Text= "Net" Style="{DynamicResource labelStyle}" Grid.Column="4" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Text= "Pts" Style="{DynamicResource labelStyle}" Grid.Column="5" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Grid>
+
+
+            <!--Player Score Entry List-->
+            <CollectionView x:Name="lstPlayerCards" 
+                                EmptyView="No Player Cards" 
+                                ItemsSource="{Binding PlayerCards}"
+                                SelectionMode="None"
+                                Margin="0" >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid BackgroundColor="LightGray" Padding="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="22"/>
+                            </Grid.RowDefinitions>
+
+                            <!--This to get grid lines effect-->
+                            <BoxView Color="White" Grid.Column="0" />
+                            <BoxView Color="White" Grid.Column="1" />
+                            <BoxView Color="White" Grid.Column="2" />
+                            <BoxView Color="White" Grid.Column="3" />
+                            <BoxView Color="White" Grid.Column="4" />
+                            <BoxView Color="White" Grid.Column="5" />
+
+
+                            <BoxView  Grid.ColumnSpan="6"  Color="LightYellow" IsVisible="{Binding IsTotal}"         />
+                            <!--<Label Text="{Binding Path=PlayerId, Converter={StaticResource PlayerNameConverter}, ConverterParameter=None   } " 
+                                               Style="{DynamicResource labelStyle}"   VerticalOptions="Center" Grid.Column="1"   />-->
+                           
+                            <Label Text="{Binding HoleName} " HorizontalOptions="Center" 
+                                               Style="{DynamicResource labelStyle}"   VerticalOptions="Center" Grid.Column="0" FontAttributes="Bold" />
+                           
+                            <Label   Text="{Binding Path=Par}"   Grid.Column="1" Style="{DynamicResource labelStyle}" 
+                                     VerticalOptions="Center" HorizontalOptions="Center"/>
+
+                            <Label   Text="{Binding Path=SI}" TextColor="Red"  Grid.Column="2" Style="{DynamicResource labelStyle}" 
+                                     VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsVisible}"/>
+
+
+                            <BoxView Color="PapayaWhip" Grid.Column="3" WidthRequest="20" HeightRequest="1" IsVisible="{Binding IsUnderPar}"/>
+                            <BoxView Color="PaleTurquoise" Grid.Column="3" WidthRequest="20" HeightRequest="1" IsVisible="{Binding IsOverPar}"/>
+
+                            <Label   Text="{Binding Path=Score}"   Grid.Column="3" Style="{DynamicResource labelStyle}" 
+                                     VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsVisible}"/>
+                            
+
+                            <Label   Text="{Binding Path=Net}"   Grid.Column="4" Style="{DynamicResource labelStyle}" 
+                                     VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsVisible}"/>
+
+                            <Label   Text="{Binding Path=Pts}"   Grid.Column="5" Style="{DynamicResource labelStyle}" 
+                                     VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsVisible}"/>
+                        </Grid>
+
+
+
+                    </DataTemplate>
+
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

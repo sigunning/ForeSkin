@@ -11,44 +11,64 @@
              Visual="Material"
              Title="{Binding Title}">
     <ContentPage.Content>
-        <StackLayout>
-           
-            <!--<Label Text="Round Setup" Style="{DynamicResource headingStyle}"  />-->
-            <!-- Society -->
-            <StackLayout Orientation="Horizontal">
-                <Picker Title="Society" HorizontalOptions="FillAndExpand"  ItemsSource="{Binding SocietiesPicker}"  ItemDisplayBinding="{Binding SocietyName}"
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+
+                <StackLayout>
+
+                    <!--<Label Text="Round Setup" Style="{DynamicResource headingStyle}"  />-->
+                    <!-- Society -->
+                    <StackLayout Orientation="Horizontal">
+                        <Picker Title="Society" HorizontalOptions="FillAndExpand"  ItemsSource="{Binding SocietiesPicker}"  ItemDisplayBinding="{Binding SocietyName}"
                     SelectedItem="{Binding SelectedSociety,Mode=TwoWay}"/>
-                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Edit}"   HorizontalOptions="End"
+                        <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Edit}"   HorizontalOptions="End"
                                      Command="{Binding EditSocietiesCommand}" Style="{DynamicResource faButtonSmall}"/>
-                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
+                        <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
                                      Command="{Binding AddSocietiesCommand}" Style="{DynamicResource faButtonSmall}"/>
-            </StackLayout>
-            <!-- Competition-->
-            <StackLayout Orientation="Horizontal">
-                <Picker Title="Competition" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding CompetitionsPicker}"  ItemDisplayBinding="{Binding CompetitionName}"
+                    </StackLayout>
+                    <!-- Competition-->
+                    <StackLayout Orientation="Horizontal">
+                        <Picker Title="Competition" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding CompetitionsPicker}"  ItemDisplayBinding="{Binding CompetitionName}"
                     SelectedItem="{Binding SelectedCompetition,Mode=TwoWay}"/>
-                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Edit}"   HorizontalOptions="End"
+                        <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Edit}"   HorizontalOptions="End"
                                      Command="{Binding EditCompetitionsCommand}" Style="{DynamicResource faButtonSmall}"/>
-                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
+                        <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
                                      Command="{Binding AddCompetitionsCommand}" Style="{DynamicResource faButtonSmall}"/>
-            </StackLayout>
-            <!-- Round-->
-            <StackLayout Orientation="Horizontal">
-                <Picker Title="Round" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding Rounds}"  ItemDisplayBinding="{Binding CourseName}"
+                    </StackLayout>
+                    <!-- Round-->
+                    <StackLayout Orientation="Horizontal">
+                        <Picker Title="Round" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding Rounds}"  ItemDisplayBinding="{Binding CourseName}"
                     SelectedItem="{Binding SelectedRound,Mode=TwoWay}" WidthRequest="200"/>
-                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Edit}"   HorizontalOptions="End"
+                        <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Edit}"   HorizontalOptions="End"
                                      Command="{Binding EditRoundsCommand}" Style="{DynamicResource faButtonSmall}"/>
-                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
+                        <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
                                      Command="{Binding AddRoundsCommand}" Style="{DynamicResource faButtonSmall}"/>
+                    </StackLayout>
+
+                    <Entry Placeholder="Round Date"  Text="{Binding SelectedRound.RoundDate,StringFormat='{0:dd-MMM-yyyy}'}" Style="{DynamicResource  accentStyle}"  HorizontalOptions="FillAndExpand" IsReadOnly="True" />
+
+
+                    
+
+
+                </StackLayout>
+                <Button Text="Select Players >" Style="{DynamicResource stdButton}" Command="{Binding PlayersCommand}" 
+                    VerticalOptions="EndAndExpand" IsEnabled="{Binding IsNotBusy}"/>
             </StackLayout>
 
-            <Entry Placeholder="Round Date"  Text="{Binding SelectedRound.RoundDate,StringFormat='{0:dd-MMM-yyyy}'}" Style="{DynamicResource  accentStyle}"  HorizontalOptions="FillAndExpand" IsReadOnly="True" />
+
+            <!--Activity Indicator-->
+            <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                     AbsoluteLayout.LayoutFlags="PositionProportional"
+                     AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" />
+                <Label Text="{Binding ActivityMessage}" HorizontalOptions="Center" />
+            </StackLayout>
 
 
-            <Button Text="Select Players >" Style="{DynamicResource stdButton}" Command="{Binding PlayersCommand}" VerticalOptions="EndAndExpand"/>
+        </AbsoluteLayout>
 
-           
-        </StackLayout>
-        
+
     </ContentPage.Content>
 </ContentPage>

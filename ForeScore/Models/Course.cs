@@ -58,7 +58,20 @@ namespace ForeScore.Models
         public int H17_SI { get; set; }
         public int H18_SI { get; set; }
 
+        // arrays to store Par and SI of holes indexed by hole number
+        [Newtonsoft.Json.JsonIgnore]
+        public int[] arPar;
+        [Newtonsoft.Json.JsonIgnore]
+        public int[] arSI;
 
+ 
+    }
+   
+    public class CourseHole
+    {
+        public int HoleNumber { get; set; }
+        public int Par { get; set; }
+        public int SI { get; set; }
     }
     public class CourseLookup
     {

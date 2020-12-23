@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="ForeScore.Views.ScoreEntryPage"
+             xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore"
+             xmlns:icons="clr-namespace:ForeScore.Helpers"
+             xmlns:helpers="clr-namespace:ForeScore.Common;assembly=ForeScore"
+             Visual="Material"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <helpers:CourseNameConverter x:Key="CourseNameConverter" />
+            <helpers:PlayerNameConverter x:Key="PlayerNameConverter" />
+            <helpers:MarkerConverter x:Key="MarkerConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+    <ContentPage.Content>
+
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+
+
+                <StackLayout>
+                    <!--Hole Headings and hole selection-->
+                    <Grid  Margin="5" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="60"/>
+                        </Grid.RowDefinitions>
+                        <BoxView  Grid.ColumnSpan="3"  Color="{DynamicResource colorPrimary}"  CornerRadius="5"/>
+                        <Label Text= "Hole" Style="{DynamicResource labelStyle}" TextColor="White" Grid.Row="0" HorizontalTextAlignment="Center"/>
+                        <Label Text= "Par" Style="{DynamicResource labelStyle}" TextColor="White" Grid.Column="1" HorizontalTextAlignment="Center"  />
+                        <Label Text= "SI" Style="{DynamicResource labelStyle}" Grid.Column="2" TextColor="White" HorizontalTextAlignment="Center"/>
+
+
+                        <Picker TextColor="Blue"  ItemsSource="{Binding HoleList}"  VerticalOptions="CenterAndExpand"  HorizontalOptions="CenterAndExpand" WidthRequest="60"
+                        SelectedItem="{Binding SelectedHole, Mode=TwoWay}" Grid.Row="1" FontSize="30"/>
+                        <Label Text= "{Binding CurrentPar}" Style="{DynamicResource headingStyle}"  FontSize="35" VerticalOptions="CenterAndExpand"
+                       TextColor="Black" Grid.Column="1" Grid.Row="1" HorizontalTextAlignment="Center"/>
+                        <Label Text= "{Binding CurrentSI}" Style="{DynamicResource headingStyle}" VerticalOptions="CenterAndExpand"
+                       TextColor="Red" Grid.Column="2" Grid.Row="1" FontSize="35" HorizontalTextAlignment="Center" />
+                    </Grid>
+
+
+
+                    <!--Player Score Section-->
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="12*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="17*"/>
+                            <ColumnDefinition Width="12*"/>
+                            <ColumnDefinition Width="13*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+                        <!--Player Score Heading-->
+                        <BoxView  Grid.ColumnSpan="5" Color="{DynamicResource colorPrimary}"  CornerRadius="5"/>
+                        <controls:FontAwesomeLabel Text="{x:Static icons:MaterialIcon.PlusOne}" VerticalOptions="Center"
+                    Style="{DynamicResource faLabel}" TextColor="White" Grid.Column="0" HorizontalTextAlignment="Center"/>
+                        <!--<Label Text="  *" Style="{DynamicResource labelStyle}" TextColor="White" Grid.Column="0"/>-->
+                        <Label Text="Player" Style="{DynamicResource labelStyle}" TextColor="White" Grid.Column="1"/>
+                        <Label Text="Score" Style="{DynamicResource labelStyle}" TextColor="White" Grid.Column="2"/>
+                        <Label Text="Pts" Style="{DynamicResource labelStyle}" TextColor="White" Grid.Column="3" />
+
+                    </Grid>
+
+                    <!--Player Score Entry List-->
+                    <CollectionView x:Name="lstPlayers" 
+                                EmptyView="No Players Selected" 
+                                ItemsSource="{Binding PlayerScores}"
+                                SelectionMode="None"
+                                Margin="5" >
+                        <CollectionView.ItemTemplate>
+                            
+                            <DataTemplate>
+                                
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="10*"/>
+                                        <ColumnDefinition Width="60*"/>
+                                        <ColumnDefinition Width="12*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                        <ColumnDefinition Width="15*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label  Text="{Binding Path=Current_ShotStars, Mode=TwoWay}" Style="{DynamicResource headingStyle}"
+                                    TextColor="Red" VerticalOptions="Center" Grid.Column="0" HorizontalOptions="Center" />
+                                    <!--<Label Text="{Binding Path=PlayerId, Converter={StaticResource PlayerNameConverter}, ConverterParameter=None   } " 
+                                               Style="{DynamicResource labelStyle}"   VerticalOptions="Center" Grid.Column="1"   />-->
+                                    <Label Text="{Binding PlayerNameHcap} " 
+                                               Style="{DynamicResource labelStyle}"   VerticalOptions="Center" Grid.Column="1"   />
+                                    <Picker Title="#" TextColor="Blue"  ItemsSource="{Binding Path=BindingContext.PickerScore, Source={x:Reference Name=lstPlayers} }"
+                                    SelectedItem="{Binding Path=Current_Score, Mode=TwoWay}" Grid.Column="2" Style="{DynamicResource headingStyle}"  />
+
+
+                                    <!--<Entry Placeholder="Pts"  Text="{Binding Path=Current_Pts}"   Grid.Column="3" IsReadOnly="True"/>-->
+                                    <Label   Text="{Binding Path=Current_Pts}"   Grid.Column="3" Style="{DynamicResource headingStyle}" 
+                                     VerticalOptions="Center" HorizontalOptions="Center"/>
+
+                                    <Button Text="{x:Static icons:FontAwesomeIcon.Calculator}" FontFamily="{StaticResource FontAwesomeFamily}"  HorizontalOptions="End"
+                                        Command="{Binding Path=BindingContext.PlayerCardCommand, Source={x:Reference Name=lstPlayers}}" 
+                                        CommandParameter="{Binding .}" Style="{DynamicResource faButtonSmall}" Grid.Column="4"/>
+                                </Grid>
+
+
+
+                            </DataTemplate>
+
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!--Save & move buttons-->
+                    <StackLayout Orientation="Horizontal" Margin="5">
+                        <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.FastRewind}" Command="{Binding SavePrevCommand}" 
+                     Style="{DynamicResource stdButton}" VerticalOptions="StartAndExpand"  IsEnabled="{Binding IsNotBusy}"/>
+                        <!--<Button Text="Prev" Style="{DynamicResource stdButton}" Command="{Binding SavePrevCommand}" VerticalOptions="StartAndExpand" />-->
+                        <Button Text="Save" Style="{DynamicResource stdButton}" Command="{Binding SaveScoreCommand}" 
+                        VerticalOptions="CenterAndExpand" IsEnabled="{Binding IsNotBusy}"/>
+                        <!--<Button Text="Next" Style="{DynamicResource stdButton}" Command="{Binding SaveNextCommand}" VerticalOptions="EndAndExpand" />-->
+                        <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.FastForward}" Command="{Binding SaveNextCommand}" 
+                                            Style="{DynamicResource stdButton}" VerticalOptions="EndAndExpand" IsEnabled="{Binding IsNotBusy}"/>
+
+                    </StackLayout>
+
+                </StackLayout>
+            </StackLayout>
+
+            <!--Activity Indicator-->
+            <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                     AbsoluteLayout.LayoutFlags="PositionProportional"
+                     AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" />
+                <Label Text="{Binding ActivityMessage}" HorizontalOptions="Center" />
+
+
+            </StackLayout>
+        </AbsoluteLayout>
+
+    </ContentPage.Content>
+</ContentPage>

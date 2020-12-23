@@ -976,5 +976,6 @@ namespace ForeScore.Helpers
 		public const string SmokingRooms = "\ueb4b";
 		public const string Spa = "\ueb4c";
 		public const string Icon38 = "\U0010fffd";
+
 	}
 }

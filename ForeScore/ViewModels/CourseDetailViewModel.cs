@@ -8,6 +8,7 @@ using ForeScore.Models;
 using ForeScore.Views;
 using Xamarin.Forms;
 
+
 namespace ForeScore.ViewModels
 {
     class CourseDetailViewModel : BaseViewModel

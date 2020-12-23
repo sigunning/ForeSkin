@@ -5,14 +5,15 @@ using System.Text;
 using ForeScore.Models;
 using ForeScore.Views;
 using ForeScore;
-
+using System.Linq;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Runtime.CompilerServices;
-using System.Dynamic;
 using System.Runtime.InteropServices;
+
+
 
 namespace ForeScore.ViewModels
 {
@@ -132,6 +133,9 @@ namespace ForeScore.ViewModels
             if (IsBusy)
                 return;
 
+            //string[] values = new string[] { "Group1", "Group2", "Group3" };
+            //var result = values.AsQueryable().Where("it in (\"Group2\")").ToArray();
+
             IsBusy = true;
             RefreshCommand.ChangeCanExecute();
 
@@ -141,6 +145,7 @@ namespace ForeScore.ViewModels
 
             IsBusy = false;
             RefreshCommand.ChangeCanExecute();
+
         }
 
 
@@ -158,7 +163,7 @@ namespace ForeScore.ViewModels
 
         public async void OnDisplay()
         {
-            base.OnAppearing();
+
             Debug.WriteLine("Loading courses...");
             await this.ExecuteLoadCoursesCommand();
 

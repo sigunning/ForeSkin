@@ -28,7 +28,7 @@
                     <!-- Add Player-->
 
                     <StackLayout Orientation="Horizontal">
-                        <Picker Title="Add Player to Round" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding PlayersPicker}"  ItemDisplayBinding="{Binding PlayerName}"
+                        <Picker Title="Add Players" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding PlayersPicker}"  ItemDisplayBinding="{Binding PlayerName}"
                     SelectedItem="{Binding SelectedPlayer, Mode=TwoWay}"/>
                         <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
                                      Command="{Binding AddPlayerCommand}" Style="{DynamicResource faButtonSmall}"/>
@@ -42,19 +42,20 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="15*"/>
-                            <ColumnDefinition Width="65*"/>
-                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="12*"/>
                             <ColumnDefinition Width="10*"/>
                         </Grid.ColumnDefinitions>
 
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="25" />
+                            <RowDefinition Height="30" />
                         </Grid.RowDefinitions>
-                        <BoxView  Grid.ColumnSpan="4" Color="{DynamicResource BackGroundColor}"/>
+                        <BoxView  Grid.ColumnSpan="4" Color="{DynamicResource colorPrimary}" CornerRadius="5"/>
                         <!--<controls:FontAwesomeLabel Text="{x:Static icons:MaterialIcon.}" Style="{DynamicResource faLabel}"/>-->
-                        <Label Text="Mark" Style="{DynamicResource labelStyle}" Grid.Column="0"/>
-                        <Label Text="Player" Style="{DynamicResource labelStyle}" Grid.Column="1"/>
-                        <Label Text="HC" Style="{DynamicResource labelStyle}" Grid.Column="2"/>
+                        <Label Text="Mark" Style="{DynamicResource labelStyle}"  TextColor="White"  Grid.Column="0" 
+                                VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                        <Label Text="Player" Style="{DynamicResource labelStyle}" TextColor="White" Grid.Column="1"  VerticalTextAlignment="Center"/>
+                        <Label Text="HC" Style="{DynamicResource labelStyle}" TextColor="White" Grid.Column="2" VerticalTextAlignment="Center"/>
 
                     </Grid>
                     <CollectionView x:Name="lstPlayers" 
@@ -73,10 +74,10 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="15*"/>
                                         <ColumnDefinition Width="65*"/>
-                                        <ColumnDefinition Width="10*"/>
-                                        <ColumnDefinition Width="10*"/>
+                                        <ColumnDefinition Width="12*"/>
+                                        <ColumnDefinition Width="12*"/>
                                     </Grid.ColumnDefinitions>
-                                    <BoxView  Grid.ColumnSpan="4" Color="Red" IsVisible="{Binding DeletedYN}"/>
+                                    <BoxView  Grid.ColumnSpan="4" Color="Red" IsVisible="{Binding DeletedYN}" CornerRadius="5"/>
                                     <Switch HorizontalOptions="Start" Grid.Column="0"  IsToggled="{Binding Mark}"/>
                                     <Label Text="{Binding Path=PlayerId, Converter={StaticResource PlayerNameConverter}, ConverterParameter=None   } " 
                                                Style="{DynamicResource labelStyle}"
@@ -84,7 +85,8 @@
                                                />
                                     <Entry Placeholder="HCAP"  Text="{Binding Path=HCAP}"   Grid.Column="2" Keyboard="Numeric"/>
                                     <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Remove}"   HorizontalOptions="End"
-                                     Command="{Binding Path=BindingContext.RemovePlayerCommand, Source={x:Reference Name=lstPlayers}}" CommandParameter="{Binding .}" Style="{DynamicResource faButtonSmall}" Grid.Column="3"/>
+                                        Command="{Binding Path=BindingContext.RemovePlayerCommand, Source={x:Reference Name=lstPlayers}}" 
+                                        CommandParameter="{Binding .}" Style="{DynamicResource faButtonSmall}" Grid.Column="3"/>
                                 </Grid>
 
 
@@ -97,7 +99,8 @@
 
 
 
-                    <Button Text="Save and Continue >" Style="{DynamicResource stdButton}" Command="{Binding SavePlayersCommand}" VerticalOptions="EndAndExpand"/>
+                    <Button Text="Save and Continue >" Style="{DynamicResource stdButton}" Command="{Binding SavePlayersCommand}"
+                            VerticalOptions="EndAndExpand" IsEnabled="{Binding IsNotBusy}"/>
 
 
                 </StackLayout>

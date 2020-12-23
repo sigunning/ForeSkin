@@ -321,7 +321,7 @@ namespace ForeScore.Helpers
 		public const string Compass = "\uf14e";
 		public const string Collapse = "\uf150";
 		public const string Collapse_top = "\uf151";
-		public const string _317 = "\uf152";
+		public const string Play_Box = "\uf152";
 		public const string Eur = "\uf153";
 		public const string Gbp = "\uf154";
 		public const string Usd = "\uf155";
@@ -466,7 +466,7 @@ namespace ForeScore.Helpers
 		public const string _459 = "\uf1e9";
 		public const string _460 = "\uf1ea";
 		public const string _461 = "\uf1eb";
-		public const string _462 = "\uf1ec";
+		public const string Calculator = "\uf1ec";
 		public const string _463 = "\uf1ed";
 		public const string _464 = "\uf1ee";
 		public const string UniF1F0 = "\uf1f0";

@@ -12,6 +12,7 @@
             <Color x:Key="colorPrimary">#2e7d32</Color>
             <Color x:Key="colorPrimaryDark">#005005</Color>
             <Color x:Key="colorPrimaryLight">#60ad5e</Color>
+            <Color x:Key="colorPrimaryPale">#C8E6C9</Color>
             <Color x:Key="colorAccent">#B455B6</Color>
             <Color x:Key="colorDisabled">#999999</Color>
 
@@ -64,6 +65,7 @@
                 <Setter Property="BorderRadius" Value="15" />
                 <Setter Property="BackgroundColor" Value="{StaticResource colorPrimaryDark}" />
                 <Setter Property="TextColor" Value="White" />
+                <Setter Property="Margin"  Value="5" />
                 <Setter Property="FontSize" Value="Large" />
             </Style>
             <Style  x:Key="faButtonSmall" TargetType="Button">
@@ -73,7 +75,7 @@
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="WidthRequest" Value="40"/>
                 <Setter Property="FontSize" Value="Large" />
-                <Setter Property="Margin"  Value="3" />
+                <Setter Property="Margin"  Value="2" />
             </Style>
             <Style  x:Key="faButtonStyle" TargetType="Button">
                 <Setter Property="HorizontalOptions" Value="Fill" />
@@ -90,7 +92,7 @@
                
             </Style>
 
-            <OnPlatform x:Key="AwesomeFontFamily" x:TypeArguments="x:String">
+            <OnPlatform x:Key="FontAwesomeFamily" x:TypeArguments="x:String">
                 <On Platform="Android" Value="Fonts/fontawesome-webfont.ttf#Material Icons" />
             </OnPlatform>
             <OnPlatform x:Key="MaterialFontFamily" x:TypeArguments="x:String">

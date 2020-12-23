@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
+
 namespace ForeScore.ViewModels
 {
     class CompPlayersViewModel : BaseViewModel
@@ -93,6 +94,7 @@ namespace ForeScore.ViewModels
                         await azureService.SavePlayerScoreAsync(playerScore);
                 }
 
+                await Shell.Current.Navigation.PushAsync(new ScoreEntryPage(_round));
                 IsBusy = false;
             });
         }
@@ -172,6 +174,11 @@ namespace ForeScore.ViewModels
 
         public async Task LoadData()
         {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+
             // load the lookups and picker lists. Only show members of this society
             await azureService.LoadPlayerLookup();
 
@@ -194,8 +201,10 @@ namespace ForeScore.ViewModels
             // show players already in round
             PlayerScores = await azureService.GetPlayerScores(Round.RoundId);
 
+            IsBusy = false;
 
 
+           
         }
 
     }

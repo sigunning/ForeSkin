@@ -128,6 +128,16 @@
         <ShellContent ContentTemplate="{DataTemplate local:SocietyCompPage}" />
     </FlyoutItem>
 
+    <FlyoutItem Route="results" 
+                Title="Results"
+                Style="{StaticResource kShell}">
+        <FlyoutItem.FlyoutIcon>
+            <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.Announcement}"   />
+        </FlyoutItem.FlyoutIcon>
+        <ShellContent ContentTemplate="{DataTemplate local:ResultsPage}" />
+    </FlyoutItem>
     
     <!--
         Flyout Items for pages with bottom tab bar icon links to each page

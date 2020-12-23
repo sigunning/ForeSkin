@@ -18,6 +18,7 @@ using ForeScore.Common;
 using Xamarin.Essentials;
 using System.Linq;
 
+
 [assembly: Dependency(typeof(AzureService))]
 namespace ForeScore
 {
@@ -503,6 +504,20 @@ namespace ForeScore
                 .ToCollectionAsync();
             
         }
+
+        public async Task<Competition> GetCompetition(string competitionId)
+        {
+            await Initialize();
+
+            ObservableCollection<Competition> lstCompetitions;
+            lstCompetitions = await tableCompetition
+                .Where(o => o.CompetitionId == competitionId)
+                .ToCollectionAsync();
+            Competition competition = lstCompetitions.FirstOrDefault(o => o.CompetitionId == competitionId);
+
+            return competition;
+
+        }
         public async Task<ObservableCollection<Competition>> GetCompetitionsForSociety(string societyId)
         {
             await Initialize();
@@ -604,11 +619,76 @@ namespace ForeScore
         public async Task<ObservableCollection<Course>> GetCourses()
         {
             await Initialize();
-            await SyncCourses();
-            //IEnumerable<Course> items = await tableCourse.ToEnumerableAsync();
+            //await SyncCourses();
+           
             return await tableCourse
                 .OrderBy(x=> x.CourseName)
                 .ToCollectionAsync();
+
+        }
+
+        public async Task<Course> GetCourse(string courseId)
+        {
+            await Initialize();
+            //await SyncCourses();
+            ObservableCollection<Course> lstCourses;
+            lstCourses = await tableCourse
+                .Where(o => o.CourseId == courseId)
+                .ToCollectionAsync() ;
+            Course course = lstCourses.FirstOrDefault(o => o.CourseId == courseId);
+            // populate course Par & SI array lists
+            StoreCourseParSI(course);
+
+
+            return course;
+
+        }
+
+        private void StoreCourseParSI(Course course)
+        {
+            // populate array of Par
+            course.arPar = new int[19];
+            course.arPar[0] = course.PAR;
+            course.arPar[1] = course.H1_Par;
+            course.arPar[2] = course.H2_Par;
+            course.arPar[3] = course.H3_Par;
+            course.arPar[4] = course.H4_Par;
+            course.arPar[5] = course.H5_Par;
+            course.arPar[6] = course.H6_Par;
+            course.arPar[7] = course.H7_Par;
+            course.arPar[8] = course.H8_Par;
+            course.arPar[9] = course.H9_Par;
+            course.arPar[10] = course.H10_Par;
+            course.arPar[11] = course.H11_Par;
+            course.arPar[12] = course.H12_Par;
+            course.arPar[13] = course.H13_Par;
+            course.arPar[14] = course.H14_Par;
+            course.arPar[15] = course.H15_Par;
+            course.arPar[16] = course.H16_Par;
+            course.arPar[17] = course.H17_Par;
+            course.arPar[18] = course.H18_Par;
+            // etc TODO
+            // populate array of stroke index
+            course.arSI = new int[19];
+            course.arSI[0] = course.SSS;
+            course.arSI[1] = course.H1_SI;
+            course.arSI[2] = course.H2_SI;
+            course.arSI[3] = course.H3_SI;
+            course.arSI[4] = course.H4_SI;
+            course.arSI[5] = course.H5_SI;
+            course.arSI[6] = course.H6_SI;
+            course.arSI[7] = course.H7_SI;
+            course.arSI[8] = course.H8_SI;
+            course.arSI[9] = course.H9_SI;
+            course.arSI[10] = course.H10_SI;
+            course.arSI[11] = course.H11_SI;
+            course.arSI[12] = course.H12_SI;
+            course.arSI[13] = course.H13_SI;
+            course.arSI[14] = course.H14_SI;
+            course.arSI[15] = course.H15_SI;
+            course.arSI[16] = course.H16_SI;
+            course.arSI[17] = course.H17_SI;
+            course.arSI[18] = course.H18_SI;
         }
 
 
@@ -783,10 +863,23 @@ namespace ForeScore
 
         }
 
+        public async Task<Round> GetRound(string roundId)
+        {
+            await Initialize();
+            ObservableCollection<Round> lstRounds;
+            lstRounds = await tableRound
+                .Where(o => o.RoundId == roundId)
+                .ToCollectionAsync();
+            Round round = lstRounds.FirstOrDefault(o => o.RoundId == roundId);
+      
+            return round;
+
+        }
+
         public async Task<ObservableCollection<Round>> GetRoundsForCompetition(string competitonId)
         {
             await Initialize();
-            await SyncRounds();
+            
             return await tableRound
                 .Where(t => t.CompetitionId == competitonId)
                 .OrderBy(t => t.RoundDate)
@@ -875,6 +968,19 @@ namespace ForeScore
             
 
         }
+
+        public async Task<ObservableCollection<PlayerScore>> GetPlayerScores(string roundId, string markerId)
+        {
+            await Initialize();
+
+            return await tablePlayerScore
+                .Where(t => t.RoundId == roundId && t.MarkerId == Preferences.Get("PlayerId",null) )
+                .ToCollectionAsync();
+
+
+
+        }
+
 
         public async Task SavePlayerScoreAsync(PlayerScore playerScore)
         {
