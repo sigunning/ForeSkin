@@ -45,13 +45,15 @@
                                      Command="{Binding AddRoundsCommand}" Style="{DynamicResource faButtonSmall}"/>
                     </StackLayout>
 
-                    <Entry Placeholder="Round Date"  Text="{Binding SelectedRound.RoundDate,StringFormat='{0:dd-MMM-yyyy}'}" Style="{DynamicResource  accentStyle}"  HorizontalOptions="FillAndExpand" IsReadOnly="True" />
-
-
-                    
-
+                    <StackLayout Orientation="Horizontal">
+                        <Entry Placeholder="Round Date"  Text="{Binding SelectedRound.RoundDate,StringFormat='{0:dd-MMM-yyyy}'}" 
+                               Style="{DynamicResource  accentStyle}"  HorizontalOptions="FillAndExpand" IsReadOnly="True" />
+                        <Button FontFamily="{StaticResource FontAwesomeFamily}" Text="{x:Static icons:FontAwesomeIcon.Trophy}"   HorizontalOptions="End"
+                                     Command="{Binding ResultsCommand}" Style="{DynamicResource faButton}"/>
+                    </StackLayout>
 
                 </StackLayout>
+     
                 <Button Text="Select Players >" Style="{DynamicResource stdButton}" Command="{Binding PlayersCommand}" 
                     VerticalOptions="EndAndExpand" IsEnabled="{Binding IsNotBusy}"/>
             </StackLayout>

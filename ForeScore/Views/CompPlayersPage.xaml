@@ -63,9 +63,9 @@
                                 ItemsSource="{Binding PlayerScores}"
                                 SelectionMode="None"
                                 SelectedItem="{Binding SelectedPlayerScore, Mode=TwoWay}"
-                                SelectionChangedCommand="{Binding SelectionCommand}"
-                                SelectionChangedCommandParameter="{Binding SelectedPlayerScore, Source={x:Reference lstPlayers}}"
-                                >
+                                SelectionChangedCommand="{Binding SelectionCommand}">
+                        <!--SelectionChangedCommandParameter="{Binding SelectedPlayerScore, Source={x:Reference lstPlayers}}"-->
+                                
 
 
                         <CollectionView.ItemTemplate>
@@ -78,7 +78,7 @@
                                         <ColumnDefinition Width="12*"/>
                                     </Grid.ColumnDefinitions>
                                     <BoxView  Grid.ColumnSpan="4" Color="Red" IsVisible="{Binding DeletedYN}" CornerRadius="5"/>
-                                    <Switch HorizontalOptions="Start" Grid.Column="0"  IsToggled="{Binding Mark}"/>
+                                    <Switch HorizontalOptions="Start" Grid.Column="0"  IsToggled="{Binding Mark, Mode=TwoWay}"/>
                                     <Label Text="{Binding Path=PlayerId, Converter={StaticResource PlayerNameConverter}, ConverterParameter=None   } " 
                                                Style="{DynamicResource labelStyle}"
                                                VerticalOptions="Center" Grid.Column="1"
@@ -100,7 +100,7 @@
 
 
                     <Button Text="Save and Continue >" Style="{DynamicResource stdButton}" Command="{Binding SavePlayersCommand}"
-                            VerticalOptions="EndAndExpand" IsEnabled="{Binding IsNotBusy}"/>
+                            VerticalOptions="EndAndExpand" IsEnabled="{Binding IsNotBusy}" />
 
 
                 </StackLayout>

@@ -80,6 +80,71 @@ namespace ForeScore.Common
         public static List<Competition> PickerCompetition = new List<Competition>();
 
     }
+    //----------------------------------------------------------------------------------------------
+    // Useful converters
+    //----------------------------------------------------------------------------------------------
+    public class InverseBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return !((bool)value);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
+    public class ToUpperConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            var text = $"{value}";
+            if (!string.IsNullOrEmpty(text))
+                return text.ToUpper();
+
+            return string.Empty;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return string.Empty;
+        }
+    }
+
+    public class ToLowerConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            var text = $"{value}";
+            if (!string.IsNullOrEmpty(text))
+                return text.ToLower();
+
+            return string.Empty;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
+    public class EmptyValueToBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return !string.IsNullOrEmpty($"{value}");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
+
+
 
     public class MyNumericColorConverter : IValueConverter
     {

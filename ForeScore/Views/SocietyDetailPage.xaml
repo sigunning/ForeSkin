@@ -20,7 +20,11 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <Entry Placeholder="Society Name"  Text="{Binding Society.SocietyName, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+            <StackLayout Orientation="Horizontal">
+                <Entry Placeholder="Society Name"  Text="{Binding Society.SocietyName, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+                <Label Text="{x:Static icons:MaterialIcon.Edit}"   HorizontalOptions="End"  FontFamily="{DynamicResource  MaterialFontFamily}"
+                     Style="{DynamicResource  faLabel}" VerticalOptions="Center"             IsVisible="{Binding Path=BindingContext.SocietyAdminYN, Source={x:Reference Name=lstPlayers}}"/>
+            </StackLayout>
             <Entry Placeholder="Society Description"  Text="{Binding Society.SocietyDescription, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
             <StackLayout Orientation="Horizontal">
             <Entry Placeholder="Creator"  Text="{Binding SocietyOwner.PlayerName, Mode=TwoWay}" Style="{DynamicResource  accentStyle}" HorizontalOptions="FillAndExpand" IsReadOnly="True" />
@@ -76,7 +80,9 @@
                             <Switch HorizontalOptions="Start" Grid.Column="1"  IsToggled="{Binding SocietyAdmin}"/>
 
                             <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Remove}"   HorizontalOptions="End" HeightRequest="24"
-                                     Command="{Binding Path=BindingContext.RemovePlayerCommand, Source={x:Reference Name=lstPlayers}}" CommandParameter="{Binding .}" Style="{DynamicResource faButtonSmall}" Grid.Column="2"/>
+                                     Command="{Binding Path=BindingContext.RemovePlayerCommand, Source={x:Reference Name=lstPlayers}}" 
+                                     CommandParameter="{Binding .}" Style="{DynamicResource faButtonSmall}" Grid.Column="2"
+                                     IsEnabled="{Binding Path=BindingContext.SocietyAdminYN, Source={x:Reference Name=lstPlayers}}"/>
                         </Grid>
                     </DataTemplate>
 
@@ -86,11 +92,14 @@
                 <Picker Title="Add Player to Society" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding PlayersPicker}"  ItemDisplayBinding="{Binding PlayerName}"
                     SelectedItem="{Binding SelectedPlayer, Mode=TwoWay}"/>
                     <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
-                                Command="{Binding AddPlayerCommand}" Style="{DynamicResource faButtonSmall}" IsEnabled="{Binding IsNotNew}"/>
+                                Command="{Binding AddPlayerCommand}" Style="{DynamicResource faButtonSmall}" 
+                                IsEnabled="{Binding IsNotNew}"/>
                 </StackLayout>
             </StackLayout>
             
-            <Button Text="Save" Style="{DynamicResource stdButton}" Command="{Binding SaveCommand}" VerticalOptions="EndAndExpand" />
+            <Button Text="Save" Style="{DynamicResource stdButton}" Command="{Binding SaveCommand}" VerticalOptions="EndAndExpand"
+                    IsVisible="{Binding Path=BindingContext.SocietyAdminYN, Source={x:Reference Name=lstPlayers}}"
+                    IsEnabled="{Binding UserPlayer.AdminYN}"/>
 
         </StackLayout>
     </ContentPage.Content>

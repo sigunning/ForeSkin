@@ -14,7 +14,9 @@ namespace ForeScore.Helpers
 
         public static ObservableCollection<Course> Courses { get; set; }
 
-      
+
+
+        
     }
 
     

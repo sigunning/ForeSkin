@@ -44,17 +44,20 @@
                                 SelectionChangedCommand="{Binding SelectionCommand}"
                                 SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference lstPlayers}}"
                         >
-                    
-                    <CollectionView.ItemTemplate>
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="3" />
+                        </CollectionView.ItemsLayout>
+                        
+                        <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="4*"/>
-                                            <ColumnDefinition Width="6*"/>
+                                            <ColumnDefinition Width="5*"/>
+                                            <ColumnDefinition Width="5*"/>
                                             
                                         </Grid.ColumnDefinitions>
-                                        <Image Grid.Column="0" >
+                                        <Image Grid.Column="0" Margin="3">
                                             <Image.Source>
                                                 <FontImageSource Color="{DynamicResource colorPrimaryDark}"
                                                 FontFamily="{DynamicResource MaterialFontFamily}"                                            
@@ -64,6 +67,7 @@
 
                                         <Label Text="{Binding NameAndHCAP}"  VerticalOptions="Center"  Grid.Column="1" Style="{DynamicResource listStyle}"  />
                                         <Label Text="{Binding FullName}"  VerticalOptions="Center" Grid.Column="2"  Style="{DynamicResource labelStyle}" />
+                                        <BoxView BackgroundColor="Silver" Grid.Row="0" Grid.ColumnSpan="3" HeightRequest="1" VerticalOptions="End"/>
                                     </Grid>
 
                                 
@@ -76,7 +80,8 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </RefreshView>
-            <Button Text="Add Player"  VerticalOptions="EndAndExpand"   Style="{DynamicResource stdButton}"  Command="{Binding AddCommand}"/>
+            <Button Text="Add Player"  VerticalOptions="EndAndExpand"   Style="{DynamicResource stdButton}" 
+                    Command="{Binding AddCommand}" IsEnabled="{Binding UserPlayer.AdminYN}"/>
 
             </StackLayout>
 

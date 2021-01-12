@@ -128,15 +128,15 @@
         <ShellContent ContentTemplate="{DataTemplate local:SocietyCompPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Route="results" 
-                Title="Results"
+    <FlyoutItem Route="reports" 
+                Title="Reports"
                 Style="{StaticResource kShell}">
         <FlyoutItem.FlyoutIcon>
             <FontImageSource Color="{DynamicResource colorPrimaryDark}"
                              FontFamily="{DynamicResource MaterialFontFamily}"
-                             Glyph="{x:Static icons:MaterialIcon.Announcement}"   />
+                             Glyph="{x:Static icons:MaterialIcon.LibraryBooks}"   />
         </FlyoutItem.FlyoutIcon>
-        <ShellContent ContentTemplate="{DataTemplate local:ResultsPage}" />
+        <ShellContent ContentTemplate="{DataTemplate local:ReportsPage}" />
     </FlyoutItem>
     
     <!--
@@ -166,6 +166,18 @@
                 <FontImageSource Color="{DynamicResource colorPrimaryLight}"
                              FontFamily="{DynamicResource MaterialFontFamily}"
                              Glyph="{x:Static icons:MaterialIcon.GolfCourse}"   />
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent  Title="Societies" ContentTemplate="{DataTemplate local:SocietyPage}" >
+            <ShellContent.FlyoutIcon>
+                <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.Group}"   />
+            </ShellContent.FlyoutIcon>
+            <ShellContent.Icon>
+                <FontImageSource Color="{DynamicResource colorPrimaryLight}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.Group}"   />
             </ShellContent.Icon>
         </ShellContent>
     </FlyoutItem>

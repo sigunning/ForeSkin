@@ -36,7 +36,9 @@
 
             <StackLayout Orientation="Horizontal" Padding="10" >
                 <Label Text="Admin User" VerticalOptions="Center" />
-                <Switch  IsToggled="{Binding Player.AdminYN, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+                
+                <Switch  IsToggled="{Binding Player.AdminYN, Mode=TwoWay}" HorizontalOptions="FillAndExpand" 
+                        IsEnabled="{Binding UserPlayer.AdminYN}" />
             </StackLayout>
             <Label Text="{Binding ValidationText}" Style="{DynamicResource  validationStyle}" HorizontalOptions="Center" VerticalOptions="End" />
           
@@ -58,7 +60,8 @@
 
 
 
-            <Button Text="Save" Style="{DynamicResource stdButton}" Command="{Binding SaveCommand}" VerticalOptions="EndAndExpand"/>
+            <Button Text="Save" Style="{DynamicResource stdButton}" Command="{Binding SaveCommand}" 
+                    VerticalOptions="EndAndExpand" IsEnabled="{Binding UserPlayer.AdminYN}"/>
 
 
         </StackLayout>

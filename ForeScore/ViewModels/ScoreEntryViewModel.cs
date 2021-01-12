@@ -123,6 +123,12 @@ namespace ForeScore.ViewModels
              
                     default: break;
                 }
+
+                // calc totals
+                item.Tot_Score = Utils.GetScoreOut(item) + Utils.GetScoreIn(item);
+                item.Tot_Net = Utils.GetNetOut(item, Course) + Utils.GetNetIn(item, Course);
+                item.Tot_Pts = Utils.GetPtsOut(item, Course, false) + Utils.GetPtsIn(item, Course, false);
+
                 // save to db
                 await azureService.SavePlayerScoreAsync(item);
             }

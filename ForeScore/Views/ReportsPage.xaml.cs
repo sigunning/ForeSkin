@@ -13,7 +13,7 @@ namespace ForeScore.Views
         public ReportsPage()
         {
             InitializeComponent();
-            ReportsViewModel vm = new ReportsViewModel(this.Navigation);
+            ReportsViewModel vm = new ReportsViewModel();
             BindingContext = vm;
         }
 
@@ -25,46 +25,12 @@ namespace ForeScore.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if (viewModel == null || !viewModel.CanLoadMore || viewModel.IsBusy)
-                return;
-
-            viewModel.OnAppearing();
-
-        }
-
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-
-            viewModel.OnDisappearing();
+           // if (viewModel == null || !viewModel.CanLoadMore || viewModel.IsBusy)
+           //     return;
+            viewModel.LoadData();
+           
 
         }
 
-
-        void OnTournamentSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            if (viewModel == null || !viewModel.CanLoadMore || viewModel.IsBusy)
-                return;
-
-            viewModel.OnTournamentSelected(sender, e);
-        }
-
-        void OnRoundSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            if (viewModel == null || !viewModel.CanLoadMore || viewModel.IsBusy)
-                return;
-
-            //viewModel.OnRoundSelected(sender, e);
-            viewModel.RoundSelected(sender, e);
-        }
-
-        void OnPlayerSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            if (viewModel == null || !viewModel.CanLoadMore || viewModel.IsBusy)
-                return;
-
-            viewModel.PlayerSelected(sender, e);
-
-        }
     }
 }

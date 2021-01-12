@@ -94,10 +94,13 @@ namespace ForeScore.ViewModels
 
                 IsBusy = true;
                 // remove from list, set deleted on and add back to force binding change on list
-                SocietyMembers.Remove(societyPlayer);
-                societyPlayer.DeletedYN = (!societyPlayer.DeletedYN);
-                SocietyMembers.Add(societyPlayer);
-
+                // cant remove creator!
+                if (societyPlayer.PlayerId != Society.CreatedByPlayerId)
+                {
+                    SocietyMembers.Remove(societyPlayer);
+                    societyPlayer.DeletedYN = (!societyPlayer.DeletedYN);
+                    SocietyMembers.Add(societyPlayer);
+                }
                 IsBusy = false;
 
             });
@@ -167,6 +170,17 @@ namespace ForeScore.ViewModels
             }
         }
 
+        private bool _societyAdminYN;
+        public bool SocietyAdminYN
+        {
+            get { return _societyAdminYN; }
+            set
+            {
+                _societyAdminYN = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public async Task LoadData()
         {
@@ -185,10 +199,19 @@ namespace ForeScore.ViewModels
                 SocietyOwner = await azureService.GetPlayer(Society.CreatedByPlayerId);
                 // load members
                 SocietyMembers = await azureService.GetSocietyPlayers(Society.SocietyId);
+                // am I an admin? Must be if new record
+                if (IsNew)
+                {
+                    SocietyAdminYN = IsNew;
+                }
+                else
+                { 
+                    SocietyPlayer sp = SocietyMembers.Where(o => o.PlayerId == Preferences.Get("PlayerId", null)).FirstOrDefault();
+                    SocietyAdminYN = sp==null ? false : sp.SocietyAdmin;
+                }
+                
+
             }
-
-
-            
 
 
             IsBusy = false;
@@ -206,6 +229,7 @@ namespace ForeScore.ViewModels
                 OnPropertyChanged();
             }
         }
+
 
 
         

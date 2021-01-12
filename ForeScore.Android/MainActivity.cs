@@ -6,6 +6,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using ForeScore.LogOn;
+
 
 namespace ForeScore.Droid
 {
@@ -29,6 +31,8 @@ namespace ForeScore.Droid
 
             // azure service
             azureService = Xamarin.Forms.DependencyService.Get<AzureService>();
+
+           
 
             LoadApplication(new App());
         }

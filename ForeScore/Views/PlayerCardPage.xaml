@@ -86,10 +86,10 @@
                                 EmptyView="No Player Cards" 
                                 ItemsSource="{Binding PlayerCards}"
                                 SelectionMode="None"
-                                Margin="0" >
+                                Margin="1" >
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid BackgroundColor="LightGray" Padding="1">
+                        <Grid BackgroundColor="Silver" Padding="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -115,14 +115,14 @@
                             <!--<Label Text="{Binding Path=PlayerId, Converter={StaticResource PlayerNameConverter}, ConverterParameter=None   } " 
                                                Style="{DynamicResource labelStyle}"   VerticalOptions="Center" Grid.Column="1"   />-->
                            
-                            <Label Text="{Binding HoleName} " HorizontalOptions="Center" 
+                            <Label Text="{Binding HoleName} " HorizontalOptions="Center" TextColor="Black"
                                                Style="{DynamicResource labelStyle}"   VerticalOptions="Center" Grid.Column="0" FontAttributes="Bold" />
                            
                             <Label   Text="{Binding Path=Par}"   Grid.Column="1" Style="{DynamicResource labelStyle}" 
                                      VerticalOptions="Center" HorizontalOptions="Center"/>
 
                             <Label   Text="{Binding Path=SI}" TextColor="Red"  Grid.Column="2" Style="{DynamicResource labelStyle}" 
-                                     VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsVisible}"/>
+                                     VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsSIVisible}"/>
 
 
                             <BoxView Color="PapayaWhip" Grid.Column="3" WidthRequest="20" HeightRequest="1" IsVisible="{Binding IsUnderPar}"/>
@@ -135,8 +135,11 @@
                             <Label   Text="{Binding Path=Net}"   Grid.Column="4" Style="{DynamicResource labelStyle}" 
                                      VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsVisible}"/>
 
-                            <Label   Text="{Binding Path=Pts}"   Grid.Column="5" Style="{DynamicResource labelStyle}" 
+                            <Label   Text="{Binding Path=Pts}"   Grid.Column="5" Style="{DynamicResource labelStyle}" TextColor="Blue"
                                      VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsVisible}"/>
+
+                            <!-- Separator -->
+                            <BoxView BackgroundColor="Silver" Grid.ColumnSpan="6" Grid.Row="0" HeightRequest="1" VerticalOptions="End"/>
                         </Grid>
 
 

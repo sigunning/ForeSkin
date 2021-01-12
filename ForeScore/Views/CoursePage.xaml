@@ -73,14 +73,18 @@
                                 SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference lstCourses}}"
                                 >
                     <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="10" HorizontalItemSpacing="10" Span="1"/>
+                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="3" />
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            
-                                <StackLayout Orientation="Horizontal" Spacing="5" VerticalOptions="Center">
-                                    <Image >
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.Column="0" Margin="3">
                                         <Image.Source>
                                             <FontImageSource Color="{DynamicResource colorPrimaryDark}"
                                             FontFamily="{DynamicResource MaterialFontFamily}"
@@ -88,10 +92,11 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="{Binding CourseName}"  VerticalOptions="Center" Style="{DynamicResource listStyle}" />
-                                </StackLayout>
-                           
-                        </DataTemplate>
+                                    <Label Text="{Binding CourseName}" Grid.Column="1" VerticalOptions="Center" Style="{DynamicResource listStyle}" />
+                                    <BoxView BackgroundColor="Silver"  HeightRequest="1" Grid.ColumnSpan="2" VerticalOptions="End"/>
+                                </Grid>
+
+                            </DataTemplate>
 
                     </CollectionView.ItemTemplate>
                 </CollectionView>

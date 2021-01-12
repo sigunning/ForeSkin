@@ -34,7 +34,11 @@ namespace ForeScore.ViewModels
                     return;
 
                 IsBusy = true;
-                // save player then inform subscribers
+                // save player then inform subscribers. Ensure user is admin if player=user 
+                // or may lock yourself out. Only admins can save.
+                if (_player.PlayerId == UserPlayer.PlayerId)
+                    _player.AdminYN = true;
+
                 await azureService.SavePlayerAsync(_player);
                 if (IsNew)
                 {

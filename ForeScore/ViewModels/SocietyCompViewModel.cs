@@ -31,6 +31,7 @@ namespace ForeScore.ViewModels
         public ICommand EditSocietiesCommand { private set; get; }
         public ICommand EditCompetitionsCommand { private set; get; }
         public ICommand EditRoundsCommand { private set; get; }
+        public ICommand ResultsCommand { private set; get; }
         public ICommand PlayersCommand { private set; get; }
 
         //constructor
@@ -123,6 +124,19 @@ namespace ForeScore.ViewModels
 
             });
 
+            ResultsCommand = new Command(async () =>
+            {
+                IsBusy = true;
+                if (SelectedCompetition != null)
+                {
+                    // create new society object
+                    Competition item = SelectedCompetition;
+                    await Shell.Current.Navigation.PushAsync(new ResultsPage(item));
+                }
+                IsBusy = false;
+
+            });
+
             PlayersCommand = new Command(async () =>
             {
                 IsBusy = true;
@@ -175,7 +189,7 @@ namespace ForeScore.ViewModels
             set
             {
                 _selectedSociety = value;
-
+                OnPropertyChanged();
                 // store to settings and load competitions for this society             
                 if (value != null)
                 {
@@ -185,7 +199,7 @@ namespace ForeScore.ViewModels
                     
 
                 }
-                OnPropertyChanged();
+                
 
             }
         }
@@ -253,7 +267,7 @@ namespace ForeScore.ViewModels
             set
             {
                 _selectedCompetition = value;
-
+                OnPropertyChanged();
                 // store to settings               
                 if (value != null)
                 {
@@ -261,7 +275,7 @@ namespace ForeScore.ViewModels
                     Preferences.Set("CompetitionId", value.CompetitionId);
                     LoadRoundsAsync();
                 }
-                OnPropertyChanged();
+                
 
             }
         }
@@ -321,7 +335,7 @@ namespace ForeScore.ViewModels
             set
             {
                 _selectedRound = value;
-
+                OnPropertyChanged();
                 // store to settings               
                 if (value != null)
                 {
@@ -329,7 +343,7 @@ namespace ForeScore.ViewModels
                     Preferences.Set("RoundId", value.RoundId);
 
                 }
-                OnPropertyChanged();
+                
 
             }
         }
@@ -353,7 +367,7 @@ namespace ForeScore.ViewModels
             Rounds = await azureService.GetRoundsForCompetition(SelectedCompetition?.CompetitionId);
             IsBusy = false;
 
-            // set society pref on dropdown
+            // set round pref on dropdown
             Debug.WriteLine("Setting SelectedRound in ExecuteLoadRoundsCommand");
             SelectedRound = Rounds.FirstOrDefault(o => o.RoundId == Preferences.Get("RoundId", string.Empty).ToString());
             

@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="ForeScore.Views.DiscardPage"
+             xmlns:helpers="clr-namespace:ForeScore.Common;assembly=ForeScore"
+             xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore"
+             xmlns:icons="clr-namespace:ForeScore.Helpers"
+             xmlns:viewModels="clr-namespace:ForeScore.ViewModels"
+             Visual="Material"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <helpers:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <StackLayout Padding="3">
+
+                    <Grid RowSpacing="0" ColumnSpacing="0"  Padding="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="20*" />
+                            <ColumnDefinition Width="30*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <BoxView  Grid.ColumnSpan="3" Grid.Row="0" Color="{DynamicResource colorPrimary}"  CornerRadius="5"/>
+
+                        <Label  Grid.Column="0" Grid.Row="0"  Style="{DynamicResource labelStyle}"  VerticalOptions="Center" Text="Round" TextColor="White" />
+                        <Label  Grid.Column="1" Grid.Row="0"  Style="{DynamicResource labelStyle}"  VerticalOptions="Center" Text="Par" TextColor="White"  />
+                        <Label Grid.Column="2" Grid.Row="0" Style="{DynamicResource labelStyle}"  VerticalOptions="Center" Text="On" TextColor="White"  />
+
+                        <Picker  Grid.Column="0" Grid.Row="1"    ItemsSource="{Binding Rounds}"  ItemDisplayBinding="{Binding CourseName}"
+                    SelectedItem="{Binding SelectedRound,Mode=TwoWay}" WidthRequest="200" VerticalOptions="Start" />
+
+
+                        <Label  Grid.Column="1" Grid.Row="1" Style="{DynamicResource labelStyle }"  VerticalOptions="Center" Text="{Binding CoursePar}"
+                           TextColor="Blue" />
+
+                        <Label Grid.Column="2" Grid.Row="1" Style="{DynamicResource labelStyle}"  VerticalOptions="Center" Text="{Binding SelectedRound.RoundDate,Mode=TwoWay,StringFormat='{0:dd-MMM-yy}'}"
+                           TextColor="Black"/>
+
+                    </Grid>
+
+
+                    <Grid RowSpacing="0" ColumnSpacing="0"  Padding="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="35*" />
+                            <ColumnDefinition Width="13*" />
+                            <ColumnDefinition Width="13*" />
+                            <ColumnDefinition Width="5*" />
+                            <ColumnDefinition Width="20*" />
+
+
+
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <BoxView Color="{DynamicResource colorAccent}" Grid.Row="0" Grid.ColumnSpan="7" CornerRadius="0"/>
+                        <Label Grid.Column="0" Text="Player"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center" HorizontalTextAlignment="Start" />
+                        
+                        <Label Grid.Column="1" Text="Out"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center"  HorizontalTextAlignment="Center"/>
+                        <Label Grid.Column="2" Text="In"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center"  HorizontalTextAlignment="Center"/>
+                        <!--<Label Grid.Column="3" Text="Pts"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center"  HorizontalTextAlignment="Center"/>-->
+                        <Label Grid.Column="4" Text="Discard"  Style="{DynamicResource labelStyle}" TextColor="White"   VerticalOptions="Center"  HorizontalTextAlignment="Center"/>
+                       
+
+
+                    </Grid>
+
+                    <CollectionView x:Name="lstPlayerSummaryScores" 
+                                EmptyView="No Player Scores" 
+                                ItemsSource="{Binding PlayerSummaryScores}"
+                                SelectionMode="None"
+                                Margin="0" >
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid RowSpacing="0" ColumnSpacing="0"  Padding="0" >
+                                    <Grid.ColumnDefinitions>
+
+                                        <ColumnDefinition Width="40*" />
+                                        <ColumnDefinition Width="13*" />
+                                        <ColumnDefinition Width="13*" />
+                                        <ColumnDefinition Width="5*" />
+                                        <ColumnDefinition Width="25*" />
+
+
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"  />
+                                    </Grid.RowDefinitions>
+
+
+                                    <Label  Text="{Binding PlayerNameHcap}" Grid.Column="0" Style="{DynamicResource labelStyle}"  TextColor="Black" VerticalOptions="Center"  HorizontalTextAlignment="Start"/>
+
+                                    <BoxView BackgroundColor="Silver" Grid.Column="1"   VerticalOptions="Center" IsVisible="{Binding DiscardOut}"/>
+                                    <Label  Text="{Binding Out_Pts}" Grid.Column="1" Style="{DynamicResource labelStyle}"  TextColor="Green" VerticalOptions="Center"  
+                                            HorizontalTextAlignment="Center"  />
+                                    
+                                    <BoxView BackgroundColor="Silver" Grid.Column="2"   VerticalOptions="Center" IsVisible="{Binding DiscardIn}"/>
+                                    <Label  Text="{Binding In_Pts}" Grid.Column="2" Style="{DynamicResource labelStyle}"  TextColor="Green" VerticalOptions="Center"  
+                                            HorizontalTextAlignment="Center"   />
+                                    
+                                    <!--<Label  Text="{Binding Tot_Pts}" Grid.Column="3" Style="{DynamicResource labelStyle}"  TextColor="Blue" VerticalOptions="Center"  HorizontalTextAlignment="Center"  />-->
+
+
+                                    <Button Text="{x:Static icons:MaterialIcon.Delete}"   HorizontalOptions="End" FontFamily="{StaticResource MaterialFontFamily}"
+                                        Command="{Binding Path=BindingContext.DiscardCommand, Source={x:Reference Name=lstPlayerSummaryScores}}" 
+                                        CommandParameter="{Binding .}" Style="{DynamicResource faButtonSmall}"  Grid.Column="4"  
+                                            IsEnabled="{Binding Path=BindingContext.SingleRound, Source={x:Reference Name=lstPlayerSummaryScores}}" />
+
+                                    <!-- Separator -->
+                                    <BoxView BackgroundColor="Silver" Grid.ColumnSpan="7"  HeightRequest="1" VerticalOptions="End"/>
+
+ 
+
+                                </Grid>
+
+                            </DataTemplate>
+
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                   
+
+                    <StackLayout VerticalOptions="StartAndExpand">
+                        <Label  Text="Click Delete button to highlight nine hole to discard " Grid.Column="2" Style="{DynamicResource labelStyle}"  VerticalOptions="Start"  
+                                            HorizontalOptions="CenterAndExpand"  HorizontalTextAlignment="Center" />
+
+                        <Button Text="Save Discards" Style="{DynamicResource stdButton}" Command="{Binding SaveDiscardCommand}" 
+                            VerticalOptions="EndAndExpand" IsEnabled="{Binding SingleRound}"/>
+                    </StackLayout>
+
+
+
+                </StackLayout>
+
+
+
+            </StackLayout>
+
+
+
+
+            <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{DynamicResource activityColor}"/>
+                <Frame  Padding="10,20"  BackgroundColor="{DynamicResource waitBackgroundColor}">
+                    <Label Text="{Binding ActivityMessage}" HorizontalOptions="Center" TextColor="{DynamicResource waitMsgColor}" />
+                </Frame>
+
+            </StackLayout>
+        </AbsoluteLayout>
+        
+    </ContentPage.Content>
+</ContentPage>

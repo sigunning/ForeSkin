@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Essentials;
 
 namespace ForeScore.Models
 {
@@ -16,6 +17,13 @@ namespace ForeScore.Models
         public string CreatedByPlayerId { get; set; }
 
         public bool DeletedYN { get; set; }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public string Glyph
+        {
+            get => (CreatedByPlayerId == Preferences.Get("PlayerId",null) ? Helpers.MaterialIcon.People : Helpers.MaterialIcon.PeopleOutline );
+            //get =>  Helpers.MaterialIcon.PersonOutline;
+        }
 
         // lookups
         //[Newtonsoft.Json.JsonIgnore]

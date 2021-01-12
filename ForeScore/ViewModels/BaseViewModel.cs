@@ -5,9 +5,10 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using ForeScore.Helpers;
 using ForeScore.Views;
+using ForeScore.Models;
 using Xamarin.Forms;
 using Xamarin.Essentials;
-
+using System.Threading.Tasks;
 
 namespace ForeScore.ViewModels
 {
@@ -24,8 +25,13 @@ namespace ForeScore.ViewModels
             azureService = DependencyService.Get<AzureService>();
 
             // #### temp user setting
-            Preferences.Set("UserId", "11E66BCF-BA40-434A-8F8E-0D5CB0F7968B" );
+            // PlayerId='867DC91B-BFBE-48BC-9A8D-1F133ADD4A6D'
+            Preferences.Set("UserId", "867DC91B-BFBE-48BC-9A8D-1F133ADD4A6D");
             Preferences.Set("PlayerId", "867DC91B-BFBE-48BC-9A8D-1F133ADD4A6D");
+            
+
+            // set current player
+            SetUserPlayer();
 
             // Go for it!
             PlayCommand = new Command(async () =>
@@ -56,6 +62,9 @@ namespace ForeScore.ViewModels
                 SetProperty(ref title, value);
             }
         }
+
+        
+
 
         //---------------------------------------------------------------------------------------
         private string connectedIcon = null;
@@ -118,8 +127,30 @@ namespace ForeScore.ViewModels
         {
             // set connectivity icon property for view binding
             SetMode();
+            
 
         }
+
+        //---------------------------------------------------------------------------------------
+        // Get the current user Player details
+        //---------------------------------------------------------------------------------------
+        private Player _userPlayer;
+        /// Gets or sets the current user Player
+        public Player UserPlayer
+        {
+            get { return _userPlayer; }
+            set 
+            { 
+                _userPlayer = value;
+                OnPropertyChanged(nameof(UserPlayer));
+            }
+        }
+
+        private async Task SetUserPlayer()
+        {
+            UserPlayer = await azureService.GetPlayer(Preferences.Get("PlayerId", null));
+        }
+        //---------------------------------------------------------------------------------------
 
         public void SetMode()
         {
@@ -212,7 +243,8 @@ namespace ForeScore.ViewModels
         {
             get
             {
-                string resource = "ForeScore.Resources.pinscribe-splash-gn.png";
+                //string resource = "ForeScore.Resources.pinscribe-splash-gn.png";
+                string resource = "ForeScore.Resources.splash.jpg";
                 return ImageSource.FromResource(resource);
             }
         }
@@ -220,7 +252,7 @@ namespace ForeScore.ViewModels
         {
             get
             {
-                string resource = "ForeScore.Resources.logo.gif";
+                string resource = "ForeScore.Resources.logo.png";
                 return ImageSource.FromResource(resource);
             }
         }

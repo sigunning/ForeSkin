@@ -9,15 +9,17 @@ using Xamarin.Forms;
 
 namespace ForeScore.Views
 {
-    public partial class ResultsPage : ContentPage
+   
+    public partial class DiscardPage : ContentPage
     {
-        public ResultsPage(Competition _competition)
+        public DiscardPage(Competition _competition)
         {
             InitializeComponent();
-            BindingContext = new ResultsViewModel();
+
+            ResultsViewModel vm = new ResultsViewModel();
+            BindingContext = vm;
 
             viewModel.Competition = _competition;
-
         }
 
         private ResultsViewModel viewModel
@@ -25,15 +27,13 @@ namespace ForeScore.Views
             get { return BindingContext as ResultsViewModel; }
         }
 
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
             if (viewModel == null || !viewModel.CanLoadMore || viewModel.IsBusy)
                 return;
-
-            
             viewModel.LoadData();
+
 
         }
 

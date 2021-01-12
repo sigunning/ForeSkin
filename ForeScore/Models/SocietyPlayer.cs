@@ -24,5 +24,6 @@ namespace ForeScore.Models
         {
             get { return SocietyId == null ? string.Empty : Lookups._dictSocieties[SocietyId]; }
         }
+        
     }
 }
