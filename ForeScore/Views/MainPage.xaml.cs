@@ -7,12 +7,18 @@ using Xamarin.Forms;
 using ForeScore.ViewModels;
 using Xamarin.Essentials;
 
+using System.Net.Http;
+using Microsoft.Identity.Client;
+using ForeScore.LogOn;
+using ForeScore.Helpers;
+
+
 namespace ForeScore.Views
 {
     public partial class MainPage : ContentPage
     {
 
-        
+        //private bool isSignedIn;
 
         public MainPage()
         {
@@ -27,6 +33,9 @@ namespace ForeScore.Views
             get { return BindingContext as BaseViewModel; }
         }
 
+        
+
+
         protected override bool OnBackButtonPressed()
         {
             Device.BeginInvokeOnMainThread(async () =>
@@ -38,5 +47,25 @@ namespace ForeScore.Views
             return true;
         }
 
+
+        // -------------------------------------------------------------------------
+        //  TEMP HOME FOR SIGNUPIN
+        // -------------------------------------------------------------------------
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            //SignIn();
+            // only open Login page when no valid login
+            // btnPlay.IsVisible = isSignedIn;
+
+            // check user loggedIn
+            // viewModel.CheckSignIn();
+        }
+
+        
+        
+
+        
     }
 }

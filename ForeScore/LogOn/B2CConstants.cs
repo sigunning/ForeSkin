@@ -18,4 +18,6 @@
         public static string AuthorityPasswordReset = $"{AuthorityBase}{PolicyResetPassword}";
         public static string IOSKeyChainGroup = "com.microsoft.adalcache";
     }
+
+
 }

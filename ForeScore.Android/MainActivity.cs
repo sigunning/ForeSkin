@@ -6,8 +6,12 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Microsoft.Identity.Client;
+using Xamarin.Forms;
+using ForeScore;
 using ForeScore.LogOn;
-
+using Plugin.CurrentActivity;
+using Android.Content;
 
 namespace ForeScore.Droid
 {
@@ -22,6 +26,9 @@ namespace ForeScore.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
+            CrossCurrentActivity.Current.Init(this, savedInstanceState);
+            DependencyService.Register<IParentWindowLocatorService, AndroidParentWindowLocatorService>();
+
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.SetFlags("Shell_Experimental", "CollectionView_Experimental");
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
@@ -35,6 +42,12 @@ namespace ForeScore.Droid
            
 
             LoadApplication(new App());
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+            AuthenticationContinuationHelper.SetAuthenticationContinuationEventArgs(requestCode, resultCode, data);
         }
     }
 }

@@ -15,12 +15,14 @@
             <Color x:Key="colorPrimaryPale">#C8E6C9</Color>
             <Color x:Key="colorAccent">#B455B6</Color>
             <Color x:Key="colorDisabled">#999999</Color>
+            <Color x:Key="colorPaleSilver">#f2f3f4</Color>
 
             <!-- Shell Colors -->
             <Color x:Key="BackGroundColor">#60ad5e</Color>
             <Color x:Key="FlyoutBackGroundColor">#60ad5e</Color>
             <Color x:Key="NavigationPrimary">#005005</Color>
             <Color x:Key="FlyoutHeaderBackGroundColor">#005005</Color>
+            
 
             <!-- Controls -->
 
@@ -70,15 +72,16 @@
             </Style>
             <Style  x:Key="faButtonSmall" TargetType="Button">
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="BorderRadius" Value="10" />
                 <Setter Property="BackgroundColor" Value="{StaticResource colorPrimaryDark}" />
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="WidthRequest" Value="40"/>
-                <Setter Property="FontSize" Value="Large" />
+                <Setter Property="FontSize" Value="Medium" />
                 <Setter Property="Margin"  Value="2" />
             </Style>
             <Style  x:Key="faButtonStyle" TargetType="Button">
-                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="BorderRadius" Value="15" />
                 <Setter Property="BackgroundColor" Value="{StaticResource colorPrimaryDark}" />

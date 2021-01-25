@@ -9,6 +9,7 @@
              xmlns:helpers="clr-namespace:ForeScore.Common;assembly=ForeScore"
              xmlns:icons="clr-namespace:ForeScore.Helpers"
              x:Class="ForeScore.Views.SocietyDetailPage"
+             Shell.TabBarIsVisible="False"
              Visual="Material"
              Title="{Binding Title}">
 

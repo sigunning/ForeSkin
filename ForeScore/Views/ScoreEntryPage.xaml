@@ -55,11 +55,11 @@
 
 
                     <!--Player Score Section-->
-                    <Grid Margin="5">
+                    <Grid Margin="5" >
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="12*"/>
-                            <ColumnDefinition Width="60*"/>
-                            <ColumnDefinition Width="17*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="15*"/>
                             <ColumnDefinition Width="12*"/>
                             <ColumnDefinition Width="13*"/>
                         </Grid.ColumnDefinitions>
@@ -83,7 +83,8 @@
                                 EmptyView="No Players Selected" 
                                 ItemsSource="{Binding PlayerScores}"
                                 SelectionMode="None"
-                                Margin="5" >
+                                Margin="5" 
+                                    >
                         <CollectionView.ItemTemplate>
                             
                             <DataTemplate>
@@ -91,10 +92,10 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="10*"/>
-                                        <ColumnDefinition Width="60*"/>
-                                        <ColumnDefinition Width="12*"/>
-                                        <ColumnDefinition Width="10*"/>
+                                        <ColumnDefinition Width="50*"/>
                                         <ColumnDefinition Width="15*"/>
+                                        <ColumnDefinition Width="12*"/>
+                                        <ColumnDefinition Width="18*"/>
                                     </Grid.ColumnDefinitions>
 
                                     <Label  Text="{Binding Path=Current_ShotStars, Mode=TwoWay}" Style="{DynamicResource headingStyle}"
@@ -103,17 +104,23 @@
                                                Style="{DynamicResource labelStyle}"   VerticalOptions="Center" Grid.Column="1"   />-->
                                     <Label Text="{Binding PlayerNameHcap} " 
                                                Style="{DynamicResource labelStyle}"   VerticalOptions="Center" Grid.Column="1"   />
-                                    <Picker Title="#" TextColor="Blue"  ItemsSource="{Binding Path=BindingContext.PickerScore, Source={x:Reference Name=lstPlayers} }"
-                                    SelectedItem="{Binding Path=Current_Score, Mode=TwoWay}" Grid.Column="2" Style="{DynamicResource headingStyle}"  />
+                                    <Picker  TextColor="Blue"  ItemsSource="{Binding Path=BindingContext.PickerScore, Source={x:Reference Name=lstPlayers} }"
+                                    SelectedItem="{Binding Path=Current_Score, Mode=TwoWay}" Grid.Column="2" Style="{DynamicResource headingStyle}" 
+                                            HorizontalOptions="FillAndExpand" VerticalOptions="Start"  Visual="Default" Title="#" 
+                                             BackgroundColor="{DynamicResource colorPaleSilver}"/>
 
 
                                     <!--<Entry Placeholder="Pts"  Text="{Binding Path=Current_Pts}"   Grid.Column="3" IsReadOnly="True"/>-->
                                     <Label   Text="{Binding Path=Current_Pts}"   Grid.Column="3" Style="{DynamicResource headingStyle}" 
                                      VerticalOptions="Center" HorizontalOptions="Center"/>
 
-                                    <Button Text="{x:Static icons:FontAwesomeIcon.Calculator}" FontFamily="{StaticResource FontAwesomeFamily}"  HorizontalOptions="End"
+                                    <Button Text="{x:Static icons:FontAwesomeIcon.Calculator}" FontFamily="{StaticResource FontAwesomeFamily}"  HorizontalOptions="EndAndExpand"
                                         Command="{Binding Path=BindingContext.PlayerCardCommand, Source={x:Reference Name=lstPlayers}}" 
-                                        CommandParameter="{Binding .}" Style="{DynamicResource faButtonSmall}" Grid.Column="4"/>
+                                        CommandParameter="{Binding .}" Style="{DynamicResource faButtonSmall}" Grid.Column="4" 
+                                            />
+
+                                    <!-- Separator -->
+                                    <BoxView BackgroundColor="Silver" Grid.ColumnSpan="5" Grid.Row="0" HeightRequest="1" VerticalOptions="End"/>
                                 </Grid>
 
 

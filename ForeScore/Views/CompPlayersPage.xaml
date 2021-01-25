@@ -9,7 +9,7 @@
              x:Name="Page"
              xmlns:icons="clr-namespace:ForeScore.Helpers"
              xmlns:helpers="clr-namespace:ForeScore.Common;assembly=ForeScore"
-             Visual="Material"
+             Visual="Default"
              Title="{Binding Title}">
 
     <ContentPage.Resources>
@@ -28,8 +28,9 @@
                     <!-- Add Player-->
 
                     <StackLayout Orientation="Horizontal">
-                        <Picker Title="Add Players" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding PlayersPicker}"  ItemDisplayBinding="{Binding PlayerName}"
-                    SelectedItem="{Binding SelectedPlayer, Mode=TwoWay}"/>
+                        <Picker Title="Add Players" HorizontalOptions="FillAndExpand"   ItemsSource="{Binding PlayersPicker}"  
+                            ItemDisplayBinding="{Binding PlayerName}"
+                            SelectedItem="{Binding SelectedPlayer, Mode=TwoWay}"/>
                         <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Add}"   HorizontalOptions="End"
                                      Command="{Binding AddPlayerCommand}" Style="{DynamicResource faButtonSmall}"/>
                         <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.GroupAdd}"   HorizontalOptions="End"

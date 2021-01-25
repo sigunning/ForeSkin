@@ -10,10 +10,10 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Microsoft.Identity.Client;
-
+using Plugin.CurrentActivity;
 using ForeScore.LogOn;
 
-namespace UserDetailsClient.Droid
+namespace ForeScore.Droid
 {
     class AndroidParentWindowLocatorService : IParentWindowLocatorService
     {

@@ -61,7 +61,7 @@ namespace ForeScore.LogOn
             return newContext;
         }
 
-        private async Task<UserContext> AcquireTokenSilent()
+        public async Task<UserContext> AcquireTokenSilent()
         {
             IEnumerable<IAccount> accounts = await _pca.GetAccountsAsync();
             AuthenticationResult authResult = await _pca.AcquireTokenSilent(B2CConstants.Scopes, GetAccountByPolicy(accounts, B2CConstants.PolicySignUpSignIn))

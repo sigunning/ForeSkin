@@ -4,7 +4,7 @@
              x:Class="ForeScore.Views.CoursePage"
              xmlns:icons="clr-namespace:ForeScore.Helpers"
              xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore"
-             Visual="Material"
+             Visual="Default"
              Title="{Binding Title}">
     <ContentPage.Content>
 

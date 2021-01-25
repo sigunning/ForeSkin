@@ -1,89 +1,140 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-using ForeScore.ViewModels;
-using Xamarin.Essentials;
-
-using System.Net.Http;
+using System.Windows.Input;
+using ForeScore.Models;
+using ForeScore.Views;
 using Microsoft.Identity.Client;
 using ForeScore.LogOn;
 using ForeScore.Helpers;
+using System.Diagnostics;
+using Xamarin.Forms;
+using System.Threading.Tasks;
 
-namespace ForeScore.Views
+namespace ForeScore.ViewModels
 {
+    class LoginViewModel : BaseViewModel
+    {
 
-	public partial class LoginPage : ContentPage
-	{
-        void Handle_Clicked(object sender, System.EventArgs e)
+        public ICommand SignInCommand {  set; get; }
+        public ICommand LogoutCommand  {  set; get; }
+
+
+        public LoginViewModel()
         {
-           // Shell.CurrentShell.SendBackButtonPressed();
+            // constructor
+            SignInCommand = new Command(async () =>
+            {
+               
+                IsBusy = true;
+                Debug.WriteLine("Sign In... ");
+                await SignInSignOut(true);
+                IsBusy = false;
+
+            });
+
+            LogoutCommand = new Command(async () =>
+            {
+
+                IsBusy = true;
+                Debug.WriteLine("Sign Out... ");
+                await SignInSignOut(false);
+                IsBusy = false;
+
+            });
+
+
+            SetMode();
         }
 
-        public LoginPage()
+        public async Task ExecuteLogout()
         {
-            InitializeComponent();
-            BindingContext = new LoginViewModel();
-           
-        }
-        private LoginViewModel viewModel
-        {
-            get { return BindingContext as LoginViewModel; }
+            await SignInSignOut(false);
+            
         }
 
-        // override back button if not logged in
-        protected override bool OnBackButtonPressed()
+        private bool _isSignedIn;
+        public bool IsSignedIn { get => _isSignedIn; set => SetProperty(ref _isSignedIn, value) ; }
+
+
+
+        private UserContext _userContext;
+        public  UserContext UserContext
         {
-            if (StaticHelpers.UserPlayer == null)
-                return true;
+            get { return _userContext; }
+            set
+            {
+                _userContext = value;
+                OnPropertyChanged();
+                // trigger bindings in UI
+                IsSignedIn = _userContext == null ? false : _userContext.IsLoggedOn;
+                SetShell(IsSignedIn);
+            }
+        }
+
+        private string _signInSignOutText="Sign in";
+        public string SignInSignOutText { get => _signInSignOutText; set => SetProperty(ref _signInSignOutText, value); }
+
+        private string _flyoutBehaviour;
+        public string FlyoutBehaviour { get => _flyoutBehaviour; set => SetProperty(ref _flyoutBehaviour, value); }
+
+        private string _greeting = "Flyout";
+        public string Greeting { get => _greeting; set => SetProperty(ref _greeting, value); }
+        
+
+        private void SetShell(bool isSignedIn)
+        {
+            IsSignedIn = isSignedIn;
+            SignInSignOutText = isSignedIn ? "Sign out" : "Sign in";
+            FlyoutBehaviour = isSignedIn ? "Flyout" : "Disabled";
+            Greeting = string.Concat("Hi ", isSignedIn ? UserContext.Name : "Guest" );
+            
+        }
+        
+        // -------------------------------------------------------------------------
+
+
+        public async void CheckSignIn()
+        {
+            // if we have no connection, use local copy
+
+            if (ConnectedMode)
+            {
+                // if UserContext not already set...
+                if (UserContext == null)
+                    UserContext = StaticHelpers.UserPlayer;
+            }
             else
-                return base.OnBackButtonPressed();
+            {
+                // use local context
+
+            }
+
+
+
         }
 
-
-        protected override void OnAppearing()
+        private async Task<bool> SignInSignOut(bool blnSignIn)
         {
-            base.OnAppearing();
-            UpdateSignInState(StaticHelpers.UserPlayer);
-
-            // check user loggedIn
-            /*
-            if (StaticHelpers.UserPlayer != null)
-                UpdateSignInState(StaticHelpers.UserPlayer);
-            else
-                btnSignInSignOut.Text = "Sign in";
-            */
-        }
-
-
-        async void OnSignInSignOut(object sender, EventArgs e)
-        {
+            IsBusy = true;
             try
             {
-                if (btnSignInSignOut.Text == "Sign in")
+                if (blnSignIn)
                 {
                     var userContext = await B2CAuthenticationService.Instance.SignInAsync();
                     UpdateSignInState(userContext);
                     UpdateUserInfo(userContext);
-                    if (userContext.IsLoggedOn)
-                    {
-
-                        StaticHelpers.UserPlayer = userContext;
-                        //await Shell.Current.Navigation.PopModalAsync();
-                        await Shell.Current.GoToAsync($"//home");
-                    }
+                  
                 }
                 else
                 {
                     var userContext = await B2CAuthenticationService.Instance.SignOutAsync();
-                    StaticHelpers.UserPlayer = null;
                     UpdateSignInState(userContext);
                     UpdateUserInfo(userContext);
-
                     
                 }
+                IsBusy = false;
+                return true;
             }
             catch (Exception ex)
             {
@@ -91,10 +142,20 @@ namespace ForeScore.Views
                 // should ONLY be done for B2C
                 // reset and not any other error.
                 if (ex.Message.Contains("AADB2C90118"))
+                {
                     OnPasswordReset();
+                    
+                }
                 // Alert if any exception excluding user canceling sign-in dialog
                 else if (((ex as MsalException)?.ErrorCode != "authentication_canceled"))
-                    await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
+                {
+                    //await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
+                    Debug.WriteLine(ex.ToString());
+                    
+                }
+                IsBusy = false;
+                return false;
+
             }
         }
 
@@ -145,7 +206,8 @@ namespace ForeScore.Views
             {
                 // Alert if any exception excluding user canceling sign-in dialog
                 if (((ex as MsalException)?.ErrorCode != "authentication_canceled"))
-                    await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
+                    //await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
+                    Debug.WriteLine(ex.ToString());
             }
         }
         async void OnResetPassword(object sender, EventArgs e)
@@ -160,7 +222,8 @@ namespace ForeScore.Views
             {
                 // Alert if any exception excluding user canceling sign-in dialog
                 if (((ex as MsalException)?.ErrorCode != "authentication_canceled"))
-                    await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
+                    //await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
+                    Debug.WriteLine(ex.ToString());
             }
         }
         async void OnPasswordReset()
@@ -175,32 +238,36 @@ namespace ForeScore.Views
             {
                 // Alert if any exception excluding user canceling sign-in dialog
                 if (((ex as MsalException)?.ErrorCode != "authentication_canceled"))
-                    await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
+                    //await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
+                    Debug.WriteLine(ex.ToString());
             }
         }
 
         void UpdateSignInState(UserContext userContext)
         {
-            bool isSignedIn;
-            isSignedIn =  userContext==null ? false : userContext.IsLoggedOn ;
+            UserContext = userContext;
+            StaticHelpers.UserPlayer = userContext;
 
-            btnSignInSignOut.Text = isSignedIn ? "Sign out" : "Sign in";
-            btnCached.IsVisible = !isSignedIn;
-
-            //Shell.SetNavBarIsVisible(this, isSignedIn);
-
-            // Shell.SetFlyoutBehavior(this, isSignedIn ? FlyoutBehavior.Flyout : FlyoutBehavior.Disabled);
             /*
+            var isSignedIn = userContext == null ? false : userContext.IsLoggedOn;
+
+            SignInSignOutText = isSignedIn ? "Sign out" : "Sign in";
+
+            SignInSignOutText.IsVisible = !isSignedIn;
+            btnPlay.IsVisible = isSignedIn;
+            Shell.SetNavBarIsVisible(this, isSignedIn);
+
+            Shell.SetFlyoutBehavior(this, isSignedIn ? FlyoutBehavior.Flyout : FlyoutBehavior.Disabled);
+            
             btnEditProfile.IsVisible = isSignedIn;
             btnCallApi.IsVisible = isSignedIn;
             slUser.IsVisible = isSignedIn;
             lblApi.Text = "";
             */
-
-
         }
         public void UpdateUserInfo(UserContext userContext)
         {
+           
             /*
             lblName.Text = userContext.Name;
             lblGivenName.Text = userContext.GivenName;
@@ -210,5 +277,6 @@ namespace ForeScore.Views
             lblNewUser.Text = userContext.IsNewUser.ToString();
             */
         }
+
     }
 }

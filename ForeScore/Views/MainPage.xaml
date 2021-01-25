@@ -4,28 +4,44 @@
              xmlns:local="clr-namespace:ForeScore.Models"
              x:Class="ForeScore.Views.MainPage"
              xmlns:icons="clr-namespace:ForeScore.Helpers"
+             xmlns:convert="clr-namespace:ForeScore.Common"
              xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
              Visual="Material"
              Title="ForeSkins!"
-             
+             Shell.NavBarIsVisible="True"
              BackgroundImage="{Binding SplashSource}">
+
+    <!--Shell.NavBarIsVisible="{Binding IsSignedIn, Mode=TwoWay}"-->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding Greeting, Mode=TwoWay}"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <convert:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
    
-    <StackLayout Padding="0">
-        
     
+    <StackLayout Padding="0">
+
         <StackLayout Padding="25" HorizontalOptions="CenterAndExpand" VerticalOptions="Start" >
-                <!-- Place new controls here -->
+            <!-- Place new controls here -->
             <controls:CircleImage  Source="{Binding LogoSource}" HorizontalOptions="Center" VerticalOptions="Center"
                                    HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
-            
+
         </StackLayout>
         <StackLayout Padding="15">
             <Label Text="Golf Scoring App"  Style="{DynamicResource labelStyle}" TextColor="White" HorizontalOptions="Center" />
-
-            </StackLayout>
             
-            <Button Text="{x:Static icons:FontAwesomeIcon.Play_sign}"   VerticalOptions="EndAndExpand" FontSize="40"
-                  FontFamily="{StaticResource FontAwesomeFamily}"   Command="{Binding PlayCommand}" Style="{DynamicResource stdButton}"/>
+        </StackLayout>
+        <!--<Button x:Name="btnSignInSignOut" Text="{Binding SignInSignOutText, Mode=TwoWay}"  Style="{DynamicResource stdButton}"
+                    VerticalOptions="EndAndExpand"  Opacity="0.8"  Command="{Binding SignInCommand}"
+                IsVisible="{Binding Path=IsSignedIn, Converter={StaticResource InverseBoolConverter}, ConverterParameter=None   }"/>-->
+        <Button x:Name="btnPlay" Text="{x:Static icons:FontAwesomeIcon.Play_sign}"   VerticalOptions="EndAndExpand" 
+                FontSize="40" Opacity="0.6"
+                  FontFamily="{StaticResource FontAwesomeFamily}"   
+                Command="{Binding PlayCommand}" Style="{DynamicResource stdButton}" />
 
 
     </StackLayout>

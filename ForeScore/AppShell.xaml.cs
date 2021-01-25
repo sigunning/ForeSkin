@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using ForeScore.ViewModels;
 using ForeScore.Views;
 using Xamarin.Forms;
 
@@ -9,32 +10,37 @@ namespace ForeScore
     public partial class AppShell : Xamarin.Forms.Shell
     {
 
-
+        
 
         public AppShell()
         {
             InitializeComponent();
 
-
-            BindingContext = this;
+            BindingContext = new BaseViewModel();
 
             RegisterRoutes();
         }
 
-        private void RegisterRoutes()
+        private BaseViewModel viewModel
         {
-            //Routing.RegisterRoute("login", typeof(LoginPage));
-           // Routing.RegisterRoute("teamdetail", typeof(TeamDetailPage));
-            //Routing.RegisterRoute("jobdetail", typeof(JobDetailPage));
+            get { return BindingContext as BaseViewModel; }
         }
 
+        private void RegisterRoutes()
+        {
+           //Routing.RegisterRoute("login", typeof(LoginPage));
+           Routing.RegisterRoute($"//login", typeof(LoginPage));
+ 
 
+        }
+
+        
         // handle the hardware Back button
         protected override bool OnBackButtonPressed()
         {
             // if we are the Home page, allow exit
-            string route = Shell.Current.CurrentItem.Title;
-            if (route == "Home") 
+            string route = Shell.Current.CurrentItem.Route;
+            if (route == "home") 
                 return base.OnBackButtonPressed();
 
             // otherwise, either pop page if navigation stack is >1 or  or go to home page and stay in app
@@ -49,6 +55,14 @@ namespace ForeScore
 
             return true;
 
+        }
+        
+
+        private async void OnLogoutClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//login");
+            Shell.Current.FlyoutIsPresented = false;
+            //await Shell.Current.Navigation.PushModalAsync(new LoginPage());
         }
 
     }

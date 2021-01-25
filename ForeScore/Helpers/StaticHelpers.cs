@@ -15,6 +15,7 @@ namespace ForeScore.Helpers
         public static ObservableCollection<Course> Courses { get; set; }
 
 
+        public static ForeScore.LogOn.UserContext UserPlayer { get; set; }
 
         
     }
