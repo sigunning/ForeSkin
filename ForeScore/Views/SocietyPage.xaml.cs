@@ -29,9 +29,11 @@ namespace ForeScore.Views
 			base.OnAppearing();
 			if (viewModel == null)
 				return;
-			if (viewModel.Societies == null)
-				viewModel.LoadData();
 
+			// load list
+			// if (viewModel.Societies == null)
+			viewModel.LoadData();
+			
 		}
 
 		private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)

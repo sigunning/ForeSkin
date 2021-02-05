@@ -189,17 +189,15 @@ namespace ForeScore.ViewModels
             set
             {
                 _selectedSociety = value;
-                OnPropertyChanged();
+                
                 // store to settings and load competitions for this society             
                 if (value != null)
                 {
                     Debug.WriteLine("Setting SelectedSociety property in Preferences to "+value.SocietyName);
                     Preferences.Set("SocietyId", value.SocietyId );
                     LoadCompetitionsAsync();
-                    
-
                 }
-                
+                OnPropertyChanged();
 
             }
         }
@@ -230,16 +228,25 @@ namespace ForeScore.ViewModels
 
             //DoStuff
             await azureService.LoadSocietyLookup(Preferences.Get("PlayerId", string.Empty));
-            SocietiesPicker = Common.Pickers.PickerSociety.ToList();
+            
 
             IsBusy = false;
 
-            // set society pref on dropdown  
-            SelectedSociety = SocietiesPicker.FirstOrDefault(o => o.SocietyId == Preferences.Get("SocietyId",string.Empty).ToString() );
-           
-            Debug.WriteLine("Set SelectedSociety in ExecuteLoadSocietiesCommand: " + SelectedSociety.SocietyName);
-           
-
+            if (Common.Pickers.PickerSociety.Count > 0)
+            {
+                SocietiesPicker = Common.Pickers.PickerSociety.ToList();
+                // set society pref on dropdown  
+                string societyId = Preferences.Get("SocietyId", null);
+                if (societyId != null)
+                {
+                    var society = SocietiesPicker.FirstOrDefault(o => o.SocietyId == societyId);
+                    if (society != null)
+                    {
+                        SelectedSociety = society;
+                        Debug.WriteLine("Set SelectedSociety in ExecuteLoadSocietiesCommand: " + SelectedSociety.SocietyName);
+                    }
+                }
+            }
         }
 
         // -----------------------------------------------------------------------
@@ -297,16 +304,28 @@ namespace ForeScore.ViewModels
 
             IsBusy = true;
 
-            //DoStuff
+            // if no society...
             await azureService.LoadCompetitionLookup(SelectedSociety.SocietyId);
-            CompetitionsPicker = Common.Pickers.PickerCompetition.ToList();
+            
 
             IsBusy = false;
 
             // set competition pref on dropdown
-            Debug.WriteLine("Setting SelectedCompetition in ExecuteLoadCompetitionsCommand");
-            SelectedCompetition = CompetitionsPicker.FirstOrDefault(o => o.CompetitionId == Preferences.Get("CompetitionId", string.Empty).ToString());
-            
+            if (Common.Pickers.PickerCompetition.Count > 0)
+            {
+                
+                CompetitionsPicker = Common.Pickers.PickerCompetition.ToList();
+                string competitionId = Preferences.Get("CompetitionId", null);
+                if (competitionId != null)
+                {
+                    var competition = CompetitionsPicker.FirstOrDefault(o => o.CompetitionId == competitionId);
+                    if (competition != null)
+                    {
+                        SelectedCompetition = competition;
+                        Debug.WriteLine("Set SelectedCompetition to " + competition.CompetitionName);
+                    }
+                }
+            }
 
         }
 
@@ -367,10 +386,20 @@ namespace ForeScore.ViewModels
             Rounds = await azureService.GetRoundsForCompetition(SelectedCompetition?.CompetitionId);
             IsBusy = false;
 
-            // set round pref on dropdown
-            Debug.WriteLine("Setting SelectedRound in ExecuteLoadRoundsCommand");
-            SelectedRound = Rounds.FirstOrDefault(o => o.RoundId == Preferences.Get("RoundId", string.Empty).ToString());
-            
+            if (Rounds.Count > 0)
+            {
+                // set round pref on dropdown
+                string roundId = Preferences.Get("RoundId", null);
+                if (roundId != null)
+                {
+                    var round = Rounds.FirstOrDefault(o => o.RoundId == roundId);
+                    if (round != null)
+                    {
+                        SelectedRound = round;
+                        Debug.WriteLine("Set SelectedRound to "+ round.CourseName);
+                    }
+                }
+            }
 
         }
     }

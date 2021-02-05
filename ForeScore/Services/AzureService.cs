@@ -41,10 +41,9 @@ namespace ForeScore
         IMobileServiceSyncTable<SocietyPlayer> tableSocietyPlayer;
         IMobileServiceSyncTable<Competition> tableCompetition;
         IMobileServiceSyncTable<Course> tableCourse;
-      
         IMobileServiceSyncTable<Round> tableRound;
         IMobileServiceSyncTable<PlayerScore> tablePlayerScore;
-        //IMobileServiceSyncTable<PlayerRound> tablePlayerRound;
+   
         
        
 
@@ -90,9 +89,7 @@ namespace ForeScore
             store.DefineTable<Competition>();
             store.DefineTable<Course>();
             store.DefineTable<Round>();
-            store.DefineTable<PlayerScore>();
-           // store.DefineTable<PlayerRound>();
-           
+            store.DefineTable<PlayerScore>();          
             store.DefineTable<Society>();
             store.DefineTable<SocietyPlayer>();
             
@@ -118,22 +115,7 @@ namespace ForeScore
             tableRound = client.GetSyncTable<Round>();
             Debug.WriteLine("Setting PlayerScore table... ");
             tablePlayerScore = client.GetSyncTable<PlayerScore>();
-            /*
             
-           
-            
-            Debug.WriteLine("Setting PlayerRound table... ");
-            tablePlayerRound = client.GetSyncTable<PlayerRound>();
-            Debug.WriteLine("Setting Scores table... ");
-            tableScores = client.GetSyncTable<Scores>();
-            */
-
-            //Debug.WriteLine("Setting Sledge table... ");   
-            //tableSledge = client.GetSyncTable<Sledge>();
-
-
-            //purge data
-            //await tableSledge.PurgeAsync();
 
 
             Debug.WriteLine("Finished Initialize");
@@ -205,8 +187,8 @@ namespace ForeScore
                 if (SyncOptionsObj.Societies)
                 { 
                     await tableSociety.PullAsync(_queryId, tableSociety.CreateQuery(), pullOptions);
-                    //await tableSocietyPlayer.PullAsync(_queryId, tableSocietyPlayer.CreateQuery(), pullOptions);
-                    await tableSocietyPlayer.PullAsync(_queryId, tableSocietyPlayer.CreateQuery().Where(u => u.PlayerId == Preferences.Get("PlayerId",null)), pullOptions);
+                    await tableSocietyPlayer.PullAsync(_queryId, tableSocietyPlayer.CreateQuery(), pullOptions);
+                    //await tableSocietyPlayer.PullAsync(_queryId, tableSocietyPlayer.CreateQuery().Where(u => u.PlayerId == Preferences.Get("PlayerId",null)), pullOptions);
                 }
                 if (SyncOptionsObj.Competitions)
                 {
@@ -283,6 +265,19 @@ namespace ForeScore
                
         }
 
+        public async Task<Player> GetPlayerByUserId(string userId)
+        {
+            await Initialize();
+            //await SyncPlayers();
+            ObservableCollection<Player> results = await tablePlayer
+                .Where(x => x.userId == userId)
+                .ToCollectionAsync();
+            return results.SingleOrDefault();
+
+
+        }
+
+
         public async Task LoadPlayerLookup(bool reload=false)
         {
             // if we have already loaded courses to picker lists, just return new collection
@@ -357,9 +352,20 @@ namespace ForeScore
         {
             // need to get societies where player is a member - join to SocietyPlayer
             await Initialize();
+            
+
+            List<Society> societies = await tableSociety.ToListAsync();
+            List<SocietyPlayer>  societyPlayers = await tableSocietyPlayer
+                .Where(o => o.PlayerId == playerId).ToListAsync();
+
+            List<Society> lstPlayerSocieties = (from s1 in societies
+                                                join sp1 in societyPlayers on s1.SocietyId equals sp1.SocietyId
+                                                select s1).ToList();
+
+            /*
             ObservableCollection<Society> societies = await GetSocieties();
             ObservableCollection<SocietyPlayer> societyPlayers = await GetSocietyPlayers();
-            List<Society> lstPlayerSocieties = new List<Society>();
+            List <Society> lstPlayerSocieties = new List<Society>();
             lstPlayerSocieties = (from s1 in societies 
                      join sp1 in societyPlayers.Where(o => o.PlayerId == playerId) on s1.SocietyId equals sp1.SocietyId
                      select new Society
@@ -371,6 +377,7 @@ namespace ForeScore
                          CreatedByPlayerId= s1.CreatedByPlayerId,
                          CreatedDate = s1.CreatedDate
                      }).ToList();
+            */
 
             return new ObservableCollection<Society>( lstPlayerSocieties
                 .OrderBy(x => x.SocietyName) );
@@ -392,6 +399,16 @@ namespace ForeScore
             Lookups._dictSocieties = lstSocieties.ToDictionary(x => x.SocietyId, x => x.SocietyName);
   
         }
+
+        public async Task<Society> GetHomeSociety(string playerId)
+        {
+            await Initialize();
+            List<Society> lstSocieties = await tableSociety
+                .Where(o => o.CreatedByPlayerId == playerId).ToListAsync();
+            return lstSocieties.FirstOrDefault();   
+
+        }
+
 
         public async Task SaveSocietyAsync(Society society)
         {
@@ -568,7 +585,6 @@ namespace ForeScore
         }
 
         #endregion Competition
-
 
         #region Course
 
@@ -781,8 +797,6 @@ namespace ForeScore
 
         #endregion Course
 
-
-
         #region Round
 
         public async Task SyncRounds()
@@ -982,8 +996,6 @@ namespace ForeScore
         }
 
         #endregion PlayerScore
-
-
 
 
 

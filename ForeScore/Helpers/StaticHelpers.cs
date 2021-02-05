@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ForeScore.Helpers
 {
-    class StaticHelpers
+    static class StaticHelpers
     {
 
         //static lists of courses for grouping

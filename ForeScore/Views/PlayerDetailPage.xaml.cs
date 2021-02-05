@@ -1,5 +1,6 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
 using ForeScore.Models;
 using ForeScore.ViewModels;
 
@@ -37,6 +38,13 @@ namespace ForeScore.Views
             
             await viewModel.LoadData();
 
+        }
+
+        private void ImageButton_Clicked(object sender, System.EventArgs e)
+        {
+            
+            DisplayAlert($"PlayerId", viewModel.Player.PlayerId, "Copy to Clipoard");
+            Clipboard.SetTextAsync(viewModel.Player.PlayerId);
         }
     }
 }

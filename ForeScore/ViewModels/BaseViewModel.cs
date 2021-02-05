@@ -26,12 +26,12 @@ namespace ForeScore.ViewModels
 
             // #### temp user setting
             // PlayerId='867DC91B-BFBE-48BC-9A8D-1F133ADD4A6D'
-            Preferences.Set("UserId", "867DC91B-BFBE-48BC-9A8D-1F133ADD4A6D");
-            Preferences.Set("PlayerId", "867DC91B-BFBE-48BC-9A8D-1F133ADD4A6D");
-            
+            //Preferences.Set("UserId", "867DC91B-BFBE-48BC-9A8D-1F133ADD4A6D");
+            // e8cd8702-5e92-4b57-8f1e-5adb80d0aad0
+            //Preferences.Set("PlayerId", "867DC91B-BFBE-48BC-9A8D-1F133ADD4A6D");
 
-            // set current player
-            SetUserPlayer();
+
+            
 
             // Go for it!
             PlayCommand = new Command(async () =>
@@ -63,8 +63,15 @@ namespace ForeScore.ViewModels
             }
         }
 
-        
-
+        private string _greeting;
+        public string Greeting
+        {
+            get { return _greeting; }
+            set
+            {
+                SetProperty(ref _greeting, value);
+            }
+        }
 
         //---------------------------------------------------------------------------------------
         private string connectedIcon = null;
@@ -134,21 +141,22 @@ namespace ForeScore.ViewModels
         //---------------------------------------------------------------------------------------
         // Get the current user Player details
         //---------------------------------------------------------------------------------------
-        private Player _userPlayer;
+        private LogOn.UserContext _userPlayer;
         /// Gets or sets the current user Player
-        public Player UserPlayer
+        public LogOn.UserContext UserPlayer
         {
-            get { return _userPlayer; }
-            set 
-            { 
-                _userPlayer = value;
-                OnPropertyChanged(nameof(UserPlayer));
-            }
+            get { return StaticHelpers.UserPlayer; }
+            //set 
+            //{ 
+            //    _userPlayer = value;
+            //    OnPropertyChanged(nameof(UserPlayer));
+            //}
         }
 
-        private async Task SetUserPlayer()
+        public async Task SetUserPlayer()
         {
-            UserPlayer = await azureService.GetPlayer(Preferences.Get("PlayerId", null));
+            //UserPlayer = await azureService.GetPlayer(Preferences.Get("PlayerId", null));
+            
         }
         //---------------------------------------------------------------------------------------
 

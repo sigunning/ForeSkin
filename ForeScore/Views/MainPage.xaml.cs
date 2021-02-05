@@ -27,6 +27,9 @@ namespace ForeScore.Views
 
             // start in offline mode
             Preferences.Set("OfflineMode", true);
+
+
+
         }
         private BaseViewModel viewModel
         {
@@ -55,6 +58,11 @@ namespace ForeScore.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            // set greeting on Toolbar
+            viewModel.Greeting =  StaticHelpers.UserPlayer == null ? "Guest" : StaticHelpers.UserPlayer.DisplayName;
+
+
             //SignIn();
             // only open Login page when no valid login
             // btnPlay.IsVisible = isSignedIn;

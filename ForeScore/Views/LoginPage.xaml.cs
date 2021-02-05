@@ -36,7 +36,8 @@ namespace ForeScore.Views
         // override back button if not logged in
         protected override bool OnBackButtonPressed()
         {
-            if (StaticHelpers.UserPlayer == null)
+            // can only go back to main page if authenticated and registered
+            if (StaticHelpers.UserPlayer == null  || StaticHelpers.UserPlayer.PlayerId == null)
                 return true;
             else
                 return base.OnBackButtonPressed();
@@ -46,7 +47,9 @@ namespace ForeScore.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            UpdateSignInState(StaticHelpers.UserPlayer);
+            //UpdateSignInState(StaticHelpers.UserPlayer);
+
+            viewModel.Init();
 
             // check user loggedIn
             /*

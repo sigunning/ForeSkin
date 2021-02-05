@@ -12,7 +12,7 @@ namespace ForeScore.Models
         
         public string Id { get; set; }
 
-        public string userid { get; set; }
+        public string userId { get; set; }
         public string PlayerId { get; set; }
         public string PlayerName { get; set; }
         public string FirstName { get; set; }
@@ -35,12 +35,12 @@ namespace ForeScore.Models
         [Newtonsoft.Json.JsonIgnore]
         public bool RegisteredYN
         {
-            get => (userid != null);
+            get => (userId != null);
         }
         [Newtonsoft.Json.JsonIgnore]
         public string Glyph
         {
-            get => (userid == null) ? Helpers.MaterialIcon.PersonOutline : Helpers.MaterialIcon.Person ; 
+            get => (userId == null) ? Helpers.MaterialIcon.PersonOutline : Helpers.MaterialIcon.Person ; 
             //get =>  Helpers.MaterialIcon.PersonOutline;
         }
 

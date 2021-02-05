@@ -2,31 +2,81 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ForeScore.Views.LoginPage"
+             xmlns:convert="clr-namespace:ForeScore.Common"
+             xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore"
              Shell.NavBarIsVisible="false"
              Shell.PresentationMode="ModalAnimated"
              BackgroundImage="{Binding SplashSource}"
              Title="{Binding Title}"
-             >
-    <StackLayout>
-        <StackLayout Padding="15">
+             Visual="Material">
 
-            <Label Text="Welcome to ForeSkins" HorizontalOptions="Center" 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <convert:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <StackLayout>
+        <StackLayout Padding="10">
+
+            <Label Text="{Binding PlayerName}" HorizontalOptions="Center" 
                    FontSize="Large" TextColor="{DynamicResource colorPrimaryDark}"/>
 
         </StackLayout>
+        
+        <StackLayout Padding="40" Orientation="Vertical">
+            <Label Text="Connection Status" Style="{DynamicResource headingStyle}" TextColor="White" HorizontalOptions="Center"/>
 
+            <controls:FontAwesomeLabel Text="{Binding ConnectedIcon}" 
+                         HorizontalOptions="Center"     TextColor="White" FontSize="50"/>
+
+            <Label Text="{Binding ConnectedMsg}"  HorizontalOptions="Center"  TextColor="White"/>
+        </StackLayout>
+
+        <!--Activity Indicator-->
+        <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                     AbsoluteLayout.LayoutFlags="PositionProportional"
+                     AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" />
+            <Label Text="{Binding ActivityMessage}" HorizontalOptions="Center" />
+        </StackLayout>
+
+        <!--Registration-->
+        <StackLayout Padding="10">
+
+            <Entry x:Name="RegisterEntry" Placeholder="Enter Registration Code" BackgroundColor="White" 
+                   IsVisible="{Binding IsNewPlayer}"/>
+            <Button x:Name="btnRegister" Text="Register" CommandParameter="{Binding Source={x:Reference RegisterEntry}, Path=Text}"
+                    Style="{DynamicResource stdButton}" Command="{Binding RegisterCommand}"
+                    IsVisible="{Binding IsNewPlayer}"
+                        VerticalOptions="StartAndExpand" Opacity="0.9"/>
+            <Label Text="{Binding ValidationText}" TextColor="White" Style="{DynamicResource  labelStyle}"
+                   HorizontalOptions="Center" VerticalOptions="End" />
+
+            <!--IsVisible="{Binding IsNewPlayer}"-->
+        </StackLayout>
+
+        <!--Buttons-->
         <StackLayout  VerticalOptions="EndAndExpand">
 
-            <Button x:Name="btnSignInSignOut" Text="Sign in" Clicked="OnSignInSignOut" 
-                    Style="{DynamicResource stdButton}" 
+            <Button x:Name="btnSignInSignOut" Text="{Binding SignInSignOutText}" 
+                    Style="{DynamicResource stdButton}" Command="{Binding SignInOutCommand}"
+                    IsEnabled="{Binding ConnectedMode}"
                         VerticalOptions="EndAndExpand" Opacity="0.9"/>
 
 
 
-            <Button x:Name="btnCached" Text="Use Offline Creds" Clicked="OnSignInSignOut" 
-                    Style="{DynamicResource stdButton}" 
-                        VerticalOptions="EndAndExpand"  Opacity="0.9"/>
+            <Button x:Name="btnCached" Text="Offline Sign in" Clicked="OnSignInSignOut" 
+                    Style="{DynamicResource stdButton}" VerticalOptions="EndAndExpand"  Opacity="0.9"
+                     Command="{Binding SignInCachedCommand}"
+                    IsVisible="{Binding Path=IsSignedIn, Converter={StaticResource InverseBoolConverter}, ConverterParameter=None   }"/>
+            <!--IsEnabled="{Binding Path=ConnectedMode, Converter={StaticResource InverseBoolConverter}, ConverterParameter=None   }"-->
 
+            <Button x:Name="btnProfile" Text="Edit Profile" 
+                    Style="{DynamicResource stdButton}" VerticalOptions="EndAndExpand"  Opacity="0.9"
+                     Command="{Binding EditProfileCommand}"
+                    IsVisible="{Binding IsSignedIn}"/>
         </StackLayout>
     </StackLayout>
 

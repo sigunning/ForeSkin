@@ -12,37 +12,45 @@
              Visual="Material"
              Title="{Binding Title}">
 
-    
-    
+
+
     <ContentPage.Content>
         <StackLayout>
 
             <StackLayout Orientation="Horizontal" >
                 <Entry Placeholder="Player Name"  Text="{Binding Player.PlayerName, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
                 <Entry Placeholder="HCAP"  Text="{Binding Player.LastHCAP, Mode=TwoWay}" HorizontalOptions="End"  WidthRequest="68"/>
-                <Image  HeightRequest="48" WidthRequest="48">
+                <!--<Image  HeightRequest="48" WidthRequest="48"  > 
                     <Image.Source>
                         <FontImageSource Color="{DynamicResource colorPrimaryDark}"
                                                 FontFamily="{DynamicResource MaterialFontFamily}"
                                                 Glyph="{Binding Player.Glyph}"  />
                     </Image.Source>
-                </Image>
+                </Image>-->
+
+                <ImageButton Clicked="ImageButton_Clicked" HeightRequest="48" WidthRequest="48">
+                    <ImageButton.Source>
+                        <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                                                FontFamily="{DynamicResource MaterialFontFamily}"
+                                                Glyph="{Binding Player.Glyph}"  />
+                    </ImageButton.Source>
+                </ImageButton>
+
             </StackLayout>
             <StackLayout Orientation="Horizontal"  >
                 <Entry Placeholder="First Name"  Text="{Binding Player.FirstName,Mode=TwoWay}"  HorizontalOptions="FillAndExpand" />
                 <Entry Placeholder="Last Name"  Text="{Binding Player.LastName,Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
             </StackLayout>
             <Entry Placeholder="Email"  Text="{Binding Player.EmailAddress}"  HorizontalOptions="FillAndExpand" />
-            
 
             <StackLayout Orientation="Horizontal" Padding="10" >
                 <Label Text="Admin User" VerticalOptions="Center" />
-                
-                <Switch  IsToggled="{Binding Player.AdminYN, Mode=TwoWay}" HorizontalOptions="FillAndExpand" 
-                        IsEnabled="{Binding UserPlayer.AdminYN}" />
+                <Switch  IsToggled="{Binding Player.AdminYN, Mode=TwoWay}" HorizontalOptions="FillAndExpand"
+                         IsEnabled="{Binding UserPlayer.AdminYN}"/>
             </StackLayout>
-            <Label Text="{Binding ValidationText}" Style="{DynamicResource  validationStyle}" HorizontalOptions="Center" VerticalOptions="End" />
-          
+
+            <Label Text="{Binding ValidationText}"  HorizontalOptions="Center" VerticalOptions="End" />
+
 
             <Label Text="Society Memberships"  Style="{DynamicResource labelStyle}"/>
             <ListView ItemsSource="{Binding Societies}" Margin="5">

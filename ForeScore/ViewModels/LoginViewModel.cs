@@ -10,128 +10,216 @@ using ForeScore.Helpers;
 using System.Diagnostics;
 using Xamarin.Forms;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace ForeScore.ViewModels
 {
     class LoginViewModel : BaseViewModel
     {
+        // service and property vars
+        private AzureService azureService;
 
-        public ICommand SignInCommand {  set; get; }
-        public ICommand LogoutCommand  {  set; get; }
+        public ICommand SignInOutCommand {  set; get; }
+        public ICommand SignInCachedCommand { set; get; }
+        public ICommand RegisterCommand { set; get; }
+        public ICommand EditProfileCommand { set; get; }
 
 
         public LoginViewModel()
         {
-            // constructor
-            SignInCommand = new Command(async () =>
+
+            azureService = DependencyService.Get<AzureService>();
+
+            // for button SignInSignOut
+            SignInOutCommand = new Command(async () =>
             {
                
                 IsBusy = true;
-                Debug.WriteLine("Sign In... ");
-                await SignInSignOut(true);
+                Debug.WriteLine("Sign In/out... ");
+                await SignInSignOut();
                 IsBusy = false;
 
             });
 
-            LogoutCommand = new Command(async () =>
+            // for button cached sign on
+            SignInCachedCommand = new Command(async () =>
             {
 
                 IsBusy = true;
-                Debug.WriteLine("Sign Out... ");
-                await SignInSignOut(false);
+                Debug.WriteLine("Sign In cached... ");
+                UserContext userContext = new UserContext()
+                {
+                    IsLoggedOn = true,
+                    UserIdentifier = Preferences.Get("UserId",null),
+                    GivenName = Preferences.Get("GivenName", null)
+                };
+                UpdateSignInState(userContext);
+                await Shell.Current.GoToAsync($"//home");
                 IsBusy = false;
 
             });
 
 
+            // for button SignInSignOut
+            RegisterCommand = new Command<String>(async (string registrationCode) =>
+            {
+
+                IsBusy = true;
+                Debug.WriteLine("Sign In/out... ");
+                await Register(registrationCode);
+                IsBusy = false;
+
+            });
+
+            EditProfileCommand = new Command(async () =>
+            {
+
+                IsBusy = true;
+                Debug.WriteLine("Profile ");
+                await EditProfile();
+                // re-run signin
+                IsSignedIn = false;
+                await SignInSignOut();
+                IsBusy = false;
+
+            });
+
+            // set connection mode
             SetMode();
         }
 
-        public async Task ExecuteLogout()
+        public void Init()
         {
-            await SignInSignOut(false);
-            
+            // we could be in any of these states:
+            // # Signed in and registered - arrived from Logout option [UserPlayer not null && UserPlayer.PlayerId not null]
+            // # Signed in but not registered [UserPlayer not Null && UserPlayer.PlayerId = null]
+            // # Not signed in or registered [UserPlayer = Null]
+
+            UpdateSignInState(StaticHelpers.UserPlayer);
         }
 
+        // binding properties
+
+        // Signed in with B2C
         private bool _isSignedIn;
         public bool IsSignedIn { get => _isSignedIn; set => SetProperty(ref _isSignedIn, value) ; }
 
+       
+        private bool _isRegistered;
+        public bool IsRegistered { get => _isRegistered; set => SetProperty(ref _isRegistered, value); }
 
-
-        private UserContext _userContext;
-        public  UserContext UserContext
-        {
-            get { return _userContext; }
-            set
-            {
-                _userContext = value;
-                OnPropertyChanged();
-                // trigger bindings in UI
-                IsSignedIn = _userContext == null ? false : _userContext.IsLoggedOn;
-                SetShell(IsSignedIn);
-            }
-        }
-
-        private string _signInSignOutText="Sign in";
+        private string _signInSignOutText;
         public string SignInSignOutText { get => _signInSignOutText; set => SetProperty(ref _signInSignOutText, value); }
 
-        private string _flyoutBehaviour;
-        public string FlyoutBehaviour { get => _flyoutBehaviour; set => SetProperty(ref _flyoutBehaviour, value); }
+        // Registered as a player
+        private bool _isNewPlayer;
+        public bool IsNewPlayer { get => _isNewPlayer; set => SetProperty(ref _isNewPlayer, value); }
 
-        private string _greeting = "Flyout";
-        public string Greeting { get => _greeting; set => SetProperty(ref _greeting, value); }
-        
+        private string _validationText;
+        public string ValidationText { get => _validationText; set => SetProperty(ref _validationText, value); }
 
-        private void SetShell(bool isSignedIn)
-        {
-            IsSignedIn = isSignedIn;
-            SignInSignOutText = isSignedIn ? "Sign out" : "Sign in";
-            FlyoutBehaviour = isSignedIn ? "Flyout" : "Disabled";
-            Greeting = string.Concat("Hi ", isSignedIn ? UserContext.Name : "Guest" );
-            
-        }
-        
+
+        private string _playerName;
+        public string PlayerName { get => _playerName; set => SetProperty(ref _playerName, value); }
+
+
         // -------------------------------------------------------------------------
 
-
-        public async void CheckSignIn()
+        private async Task<bool> Register(string playerId)
         {
-            // if we have no connection, use local copy
+            // find the player code 
+            Player player = await azureService.GetPlayer(playerId);
 
-            if (ConnectedMode)
+            // if found and userid is empty, we can update
+            if (player == null || player.userId != null)
             {
-                // if UserContext not already set...
-                if (UserContext == null)
-                    UserContext = StaticHelpers.UserPlayer;
-            }
-            else
-            {
-                // use local context
-
+                ValidationText = "Invalid Registration Code! Try Again";
+                return false;
             }
 
+            // set playerid
+            StaticHelpers.UserPlayer.PlayerId = player.PlayerId;
 
+            IsBusy = true;
 
+            // update
+            ValidationText = "Registration Successful!";
+            player.userId = StaticHelpers.UserPlayer.UserIdentifier;
+            player.EmailAddress = StaticHelpers.UserPlayer.EmailAddress;
+            player.PlayerName = StaticHelpers.UserPlayer.DisplayName;
+            player.FirstName = StaticHelpers.UserPlayer.GivenName;
+            player.LastName = StaticHelpers.UserPlayer.FamilyName;
+            await azureService.SavePlayerAsync(player);
+
+            
+
+            // create home society
+            Society society = new Society();
+            society.SocietyId = Guid.NewGuid().ToString();
+            society.SocietyName = "Home";
+            society.SocietyDescription = "General Play";
+            society.CreatedByPlayerId = playerId;
+            society.CreatedDate = DateTime.Now;
+
+            // save record and then notify subscribers 
+            await azureService.SaveSocietyAsync(society);
+            
+
+            // add current player as a member of society
+            SocietyPlayer societyPlayer = new SocietyPlayer();
+            societyPlayer.PlayerId = playerId;
+            societyPlayer.SocietyId = society.SocietyId;
+            societyPlayer.SocietyAdmin = true;
+            societyPlayer.JoinedDate = DateTime.Now;
+            await azureService.SaveSocietyPlayerAsync( societyPlayer);
+
+            // set prefs
+            Preferences.Set("SocietyId", society.SocietyId);
+            Preferences.Set("PlayerId", player.PlayerId);
+            Preferences.Set("UserId", player.userId);
+
+            UpdateSignInState(StaticHelpers.UserPlayer);
+
+            // go to main page
+            await Shell.Current.GoToAsync($"//home");
+
+            IsBusy = false;
+            return true;
         }
 
-        private async Task<bool> SignInSignOut(bool blnSignIn)
+        private async Task<bool> SignInSignOut()
         {
             IsBusy = true;
             try
             {
-                if (blnSignIn)
+                if (!IsSignedIn)
                 {
                     var userContext = await B2CAuthenticationService.Instance.SignInAsync();
-                    UpdateSignInState(userContext);
-                    UpdateUserInfo(userContext);
-                  
+                    
+                    if (userContext.IsLoggedOn)
+                    {
+                        if ( await SetUserPreferences(userContext) )
+                        {
+                            await SetUserPlayer();
+                            // go to main page
+                            await Shell.Current.GoToAsync($"//home");
+                        }
+                        else
+                        {
+                            // must get reg code
+                            UpdateSignInState(userContext);
+                            
+
+                        }
+
+                    }
                 }
                 else
                 {
                     var userContext = await B2CAuthenticationService.Instance.SignOutAsync();
-                    UpdateSignInState(userContext);
-                    UpdateUserInfo(userContext);
-                    
+                    // clear user object
+                    StaticHelpers.UserPlayer = null;
+                    UpdateSignInState(StaticHelpers.UserPlayer);
                 }
                 IsBusy = false;
                 return true;
@@ -157,6 +245,31 @@ namespace ForeScore.ViewModels
                 return false;
 
             }
+        }
+
+        private async Task<bool> SetUserPreferences(UserContext userContext)
+        {
+            // maybe different user, so clear all preferences
+            Preferences.Clear();
+
+            StaticHelpers.UserPlayer = userContext;
+            // store for cached login
+            Preferences.Set("UserId", userContext.UserIdentifier);
+            Preferences.Set("PlayerName", userContext.GivenName);
+            // get PlayerId - if none, ask for code
+            Player player = await azureService.GetPlayerByUserId(userContext.UserIdentifier);
+            if (player != null)
+            {
+                // get home society
+                var society = await azureService.GetHomeSociety(player.PlayerId);
+                Preferences.Set("SocietyId", society.SocietyId);
+                StaticHelpers.UserPlayer.PlayerId = player.PlayerId;
+                StaticHelpers.UserPlayer.AdminYN = player.AdminYN;
+                StaticHelpers.UserPlayer.DisplayName = player.PlayerName;
+                Preferences.Set("PlayerId", player.PlayerId);
+                return true;
+            }
+            return false;
         }
 
         /*
@@ -194,13 +307,14 @@ namespace ForeScore.ViewModels
         }
         */
 
-        async void OnEditProfile(object sender, EventArgs e)
+        async Task<bool> EditProfile()
         {
             try
             {
                 var userContext = await B2CAuthenticationService.Instance.EditProfileAsync();
                 UpdateSignInState(userContext);
                 UpdateUserInfo(userContext);
+                return true;
             }
             catch (Exception ex)
             {
@@ -208,6 +322,7 @@ namespace ForeScore.ViewModels
                 if (((ex as MsalException)?.ErrorCode != "authentication_canceled"))
                     //await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
                     Debug.WriteLine(ex.ToString());
+                return false;
             }
         }
         async void OnResetPassword(object sender, EventArgs e)
@@ -245,29 +360,30 @@ namespace ForeScore.ViewModels
 
         void UpdateSignInState(UserContext userContext)
         {
-            UserContext = userContext;
-            StaticHelpers.UserPlayer = userContext;
+            // userContext is Static userPlayer
+            // we could be in any of these states:
+            // # Signed in and registered - arrived from Logout option [UserPlayer not null && UserPlayer.PlayerId not null]
+            // # Signed in but not registered [UserPlayer not Null && UserPlayer.PlayerId = null]
+            // # Not signed in or registered [UserPlayer = Null]
 
-            /*
-            var isSignedIn = userContext == null ? false : userContext.IsLoggedOn;
 
-            SignInSignOutText = isSignedIn ? "Sign out" : "Sign in";
+            IsSignedIn = userContext != null;
 
-            SignInSignOutText.IsVisible = !isSignedIn;
-            btnPlay.IsVisible = isSignedIn;
-            Shell.SetNavBarIsVisible(this, isSignedIn);
+            IsNewPlayer = (IsSignedIn &&  userContext.PlayerId == null);
 
-            Shell.SetFlyoutBehavior(this, isSignedIn ? FlyoutBehavior.Flyout : FlyoutBehavior.Disabled);
+            SignInSignOutText = IsSignedIn ? "Sign out" : "Sign in";
+
+            PlayerName = userContext==null ? "NOT SIGNED IN" : userContext.DisplayName?? "HELLO";
+
+            ValidationText = string.Empty;
+
             
-            btnEditProfile.IsVisible = isSignedIn;
-            btnCallApi.IsVisible = isSignedIn;
-            slUser.IsVisible = isSignedIn;
-            lblApi.Text = "";
-            */
         }
         public void UpdateUserInfo(UserContext userContext)
         {
-           
+            
+            
+
             /*
             lblName.Text = userContext.Name;
             lblGivenName.Text = userContext.GivenName;
