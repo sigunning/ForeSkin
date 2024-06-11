@@ -36,7 +36,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Mobile.Client" Version="4.1.2" />
     <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore" Version="4.1.2" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.24.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.61.3" />
     <PackageReference Include="Xam.Plugins.Forms.ImageCircle" Version="3.0.0.5" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.2" />
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1821" />
