@@ -72,6 +72,12 @@ namespace ForeScore.ViewModels
                     if (ps != null && ps.Discard9 != item.Discard9)
                     {
                         ps.Discard9 = item.Discard9;
+                        switch (ps.Discard9)
+                        {
+                            case 1: ps.Dis_Pts = item.Out_Pts; break;
+                            case 2: ps.Dis_Pts = item.In_Pts; break;
+                            default: ps.Dis_Pts = 0; break;
+                        }
                         await azureService.SavePlayerScoreAsync(ps);
                     }
                 }

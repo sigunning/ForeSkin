@@ -50,6 +50,12 @@ namespace ForeScore.Models
         public int Tot_Score { get; set; }
         public int Tot_Net { get; set; }
         public int Tot_Pts { get; set; }
+        public int Dis_Pts { get; set; }
+        public int Out_Pts { get; set; }
+        public int In_Pts { get; set; }
+
+
+
 
 
         // Current hole properties - not bound to UI
@@ -248,6 +254,7 @@ namespace ForeScore.Models
         public int Out_Pts { get; set; }
         public int In_Pts { get; set; }
         public int Tot_Pts { get; set; }
+        public int Dis_Pts { get; set; }
         public bool Multiple_RoundsYN  { get => Tot_Par > 80; }
 
 

@@ -22,13 +22,15 @@
     <ContentPage.Content>
         <StackLayout>
             <StackLayout Orientation="Horizontal">
-                <Entry Placeholder="Society Name"  Text="{Binding Society.SocietyName, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+                <Entry Placeholder="Society Name"  Text="{Binding Society.SocietyName, Mode=TwoWay}" 
+                       Keyboard="Chat" HorizontalOptions="FillAndExpand" />
                 <Label Text="{x:Static icons:MaterialIcon.Edit}"   HorizontalOptions="End"  FontFamily="{DynamicResource  MaterialFontFamily}"
                      Style="{DynamicResource  faLabel}" VerticalOptions="Center"             IsVisible="{Binding Path=BindingContext.SocietyAdminYN, Source={x:Reference Name=lstPlayers}}"/>
             </StackLayout>
-            <Entry Placeholder="Society Description"  Text="{Binding Society.SocietyDescription, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
-            <StackLayout Orientation="Horizontal">
-            <Entry Placeholder="Creator"  Text="{Binding SocietyOwner.PlayerName, Mode=TwoWay}" Style="{DynamicResource  accentStyle}" HorizontalOptions="FillAndExpand" IsReadOnly="True" />
+            <Entry Placeholder="Society Description"  Text="{Binding Society.SocietyDescription, Mode=TwoWay}" 
+                   Keyboard="Chat" HorizontalOptions="FillAndExpand" />
+            <StackLayout Orientation="Horizontal"  >
+            <Entry Placeholder="Owner"  Text="{Binding SocietyOwner.PlayerName, Mode=TwoWay}" Style="{DynamicResource  accentStyle}" HorizontalOptions="FillAndExpand" IsReadOnly="True" />
 
             <Entry Placeholder="Created On"  Text="{Binding Society.CreatedDate,StringFormat='{0:dd-MMM-yyyy}'}" Style="{DynamicResource  accentStyle}"  HorizontalOptions="FillAndExpand" IsReadOnly="True" />
             </StackLayout>

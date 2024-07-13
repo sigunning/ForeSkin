@@ -28,7 +28,7 @@ namespace ForeScore.Views
 			base.OnAppearing();
 			if (viewModel == null)
 				return;
-			if (viewModel.Players == null)
+			//if (viewModel.Players == null)
 				viewModel.LoadItemsCommand.Execute(null);
 
 		}

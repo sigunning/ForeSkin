@@ -19,12 +19,12 @@
 
                 <StackLayout>
                     <StackLayout Orientation="Vertical">
-                        <Label Text="Connection Status" Style="{DynamicResource headingStyle}" HorizontalOptions="Center"/>
+                        <!--<Label Text="Connection Status" Style="{DynamicResource accentStyle}" HorizontalOptions="Center"/>-->
 
                         <controls:FontAwesomeLabel Text="{Binding ConnectedIcon}" 
-                         HorizontalOptions="Center"    Style="{DynamicResource faLabel}" FontSize="50"/>
+                         HorizontalOptions="Center"   Style="{DynamicResource headingStyle}"  FontSize="45"/>
 
-                        <Label Text="{Binding ConnectedMsg}"  HorizontalOptions="Center"  />
+                        <Label Text="{Binding ConnectedMsg}" Style="{DynamicResource accentStyle}" HorizontalOptions="Center"  />
                     </StackLayout>
 
 
@@ -40,12 +40,16 @@
                             <TableSection Title="Reset">
                                 <SwitchCell x:Name="scReset" Text="Clear All Local Data" OnChanged="SwitchCell_OnChanged" On="{Binding SyncOptionsObj.Reset, Mode=TwoWay}" />
                             </TableSection>
+                            <TableSection Title="Web">
+                                <SwitchCell x:Name="scUpload" Text="Upload DB to Web Site" OnChanged="SwitchCell_OnChanged" On="{Binding SyncOptionsObj.Upload, Mode=TwoWay}" />
+                            </TableSection>
                         </TableRoot>
                     </TableView>
                 </StackLayout>
 
                 <Label Text="{Binding StatusMsg, Mode=TwoWay}"  HorizontalOptions="Center"  />
-                <Button Text="Synchronise Data" VerticalOptions="EndAndExpand"  Style="{DynamicResource stdButton}" Command="{Binding SyncCommand}" IsEnabled="{Binding ConnectedMode}"/>
+                <Button Text="Synchronise Data" VerticalOptions="EndAndExpand"  Style="{DynamicResource stdButton}" 
+                        Command="{Binding SyncCommand}" IsEnabled="{Binding ConnectedMode}"/>
 
             </StackLayout>
 

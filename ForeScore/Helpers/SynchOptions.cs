@@ -16,6 +16,7 @@ namespace ForeScore.Helpers
         public string SyncMsg { get; set; }
 
         public bool Reset { get; set; }
+        public bool Upload { get; set; }
 
 
 

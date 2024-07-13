@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ForeScore.Views.KeyVaultPage"
+             Visual="Material"
+             Title="Key Storage"
+             >
+    
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Encrypt Key Data Locally" Style="{DynamicResource headingStyle}"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+
+            <Entry Placeholder="Key Name"  x:Name="KeyName" 
+                   HorizontalOptions="FillAndExpand" Keyboard="Default"/>
+            <Entry Placeholder="Key Value"  x:Name="KeyValue" 
+                   HorizontalOptions="FillAndExpand" Keyboard="Default"/>
+            
+            <Label Text="" x:Name="lblMsg" Style="{DynamicResource validationStyle}"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+            
+            <Button Text="Get Value" VerticalOptions="Start"  Style="{DynamicResource stdButton}" Clicked="GetValueButton_Clicked"/>
+            <Button Text="Store Value" VerticalOptions="Start"  Style="{DynamicResource stdButton}" Clicked="StoreValueButton_Clicked"/>
+            <Button Text="Remove Key" VerticalOptions="Start"  Style="{DynamicResource stdButton}" Clicked="RemoveKeyButton_Clicked"/>
+
+
+            
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

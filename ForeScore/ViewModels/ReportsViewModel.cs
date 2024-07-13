@@ -168,10 +168,12 @@ namespace ForeScore.ViewModels
             get { return _selectedCompetition; }
             set
             {
-                Preferences.Set("CompetitionId", value.CompetitionId);
+                if (value != null)
+                {
+                    Preferences.Set("CompetitionId", value.CompetitionId);
+                }
                 _selectedCompetition = value;
                 OnPropertyChanged();
-                
 
             }
         }

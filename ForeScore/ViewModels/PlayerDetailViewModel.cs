@@ -27,7 +27,7 @@ namespace ForeScore.ViewModels
             azureService = DependencyService.Get<AzureService>();
 
             // implement the ICommands
-            SaveCommand = new Command(async () =>
+            SaveCommand = new Command(execute: async () =>
             {
                 // all valid?
                 if (!Validate())
@@ -42,18 +42,41 @@ namespace ForeScore.ViewModels
                 await azureService.SavePlayerAsync(_player);
                 if (IsNew)
                 {
+                    // need to add to own Home group
+                    SocietyPlayer item = new SocietyPlayer();
+                    //item. = Guid.NewGuid().ToString();
+                    item.PlayerId = _player.PlayerId;
+                    item.SocietyId = UserPlayer.HomeSocietyId;
+                    item.SocietyAdmin = false;
+                    item.JoinedDate = DateTime.Now;
+                    await azureService.SaveSocietyPlayerAsync(item);
+
                     MessagingCenter.Send(_player, "AddNew");
+                    IsNew = false;
                 }
                 else
                 {
                     MessagingCenter.Send(_player, "Update");
                 }
 
+                RefreshCanExecutes();
+
                 Debug.WriteLine("Player saved: ");
                 await Shell.Current.Navigation.PopAsync();
                 IsBusy = false;
 
-            });
+            }
+            ,
+                 canExecute: () =>
+                 {
+                     return (Player != null); 
+                 }
+                 );
+        }
+
+        private void RefreshCanExecutes()
+        {
+            (SaveCommand as Command).ChangeCanExecute();
         }
 
         public Player Player

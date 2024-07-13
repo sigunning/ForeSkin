@@ -18,6 +18,10 @@ namespace ForeScore.Models
         public string CompetitionDescription { get; set; }
         public string SocietyId { get; set; }
         public string Venue { get; set; }
+        public string Accommodation { get; set; }
+
+        public string CodeName { get; set; }
+        public string Winner { get; set; }
 
         public DateTime StartDate { get; set; }
         public bool ClosedYN { get; set; }

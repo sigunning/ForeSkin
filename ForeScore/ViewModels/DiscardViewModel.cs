@@ -33,6 +33,7 @@ namespace ForeScore.ViewModels
             {
                 IsBusy = true;
                 
+
                 IsBusy = false;
 
             });

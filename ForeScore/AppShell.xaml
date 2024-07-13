@@ -153,9 +153,17 @@
         </FlyoutItem.FlyoutIcon>
         <ShellContent ContentTemplate="{DataTemplate local:SocietyPage}" />
     </FlyoutItem>
-    
 
-    
+    <FlyoutItem Route="competition" 
+                Title="Competitions"
+                Style="{StaticResource kShell}">
+        <FlyoutItem.FlyoutIcon>
+            <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.Stars}"   />
+        </FlyoutItem.FlyoutIcon>
+        <ShellContent ContentTemplate="{DataTemplate local:CompetitionPage}" />
+    </FlyoutItem>
 
     <FlyoutItem Route="play" 
                 Title="Play"
@@ -251,7 +259,7 @@
 
     <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
 
-    <MenuItem Text="Logout" Clicked="OnLogoutClicked"   >
+    <!--<MenuItem Text="Logout" Clicked="OnLogoutClicked"   >
         <MenuItem.IconImageSource>
             <FontImageSource
                 FontFamily="{DynamicResource MaterialFontFamily}" 
@@ -259,6 +267,28 @@
                 Glyph="{x:Static icons:MaterialIcon.Person}" 
                 />
         </MenuItem.IconImageSource>
+    </MenuItem>-->
+
+    <MenuItem Text="mScoreCard" Clicked="OnWebViewClicked"   >
+        <MenuItem.IconImageSource>
+            <FontImageSource
+                FontFamily="{DynamicResource MaterialFontFamily}" 
+                Color="{DynamicResource colorPrimaryDark}"
+                Glyph="{x:Static icons:MaterialIcon.Web}" 
+                />
+        </MenuItem.IconImageSource>
     </MenuItem>
+
+    <FlyoutItem Route="keystorage" 
+                Title="Key Storage"
+                Style="{StaticResource kShell}">
+        <FlyoutItem.FlyoutIcon>
+            <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                             FontFamily="{DynamicResource MaterialFontFamily}"
+                             Glyph="{x:Static icons:MaterialIcon.Security}"   />
+        </FlyoutItem.FlyoutIcon>
+        <ShellContent ContentTemplate="{DataTemplate local:KeyVaultPage}" />
+    </FlyoutItem>
+
 
 </Shell>

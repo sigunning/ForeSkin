@@ -5,18 +5,43 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="ForeScore.Views.CompetitionDetailPage"
+             xmlns:helpers="clr-namespace:ForeScore.Common;assembly=ForeScore"
+             xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore"
+             xmlns:icons="clr-namespace:ForeScore.Helpers"
              Visual="Material"
              Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <helpers:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     
     <ContentPage.Content>
         <StackLayout>
-            <Entry Placeholder="Society" Style="{DynamicResource  accentStyle}"  Text="{Binding Competition.SocietyName, Mode=TwoWay}" HorizontalOptions="FillAndExpand" IsReadOnly="True" />
-
-            <Entry Placeholder="Competition Name"  Text="{Binding Competition.CompetitionName, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
-            <Entry Placeholder="Competition Description"  Text="{Binding Competition.CompetitionDescription, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
-            <Entry Placeholder="Venue"  Text="{Binding Competition.Venue, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+            <StackLayout Orientation="Horizontal">
+                <Entry Placeholder="Society" Style="{DynamicResource  accentStyle}"  Text="{Binding Competition.SocietyName, Mode=TwoWay}" 
+                       HorizontalOptions="FillAndExpand" IsReadOnly="True" 
+                       IsVisible="{Binding Path=IsEditSociety, Converter={StaticResource InverseBoolConverter}, ConverterParameter=None   }"/>
+                <Picker Title="Society" HorizontalOptions="FillAndExpand"  ItemsSource="{Binding SocietiesPicker}"  ItemDisplayBinding="{Binding SocietyName}"
+                    SelectedItem="{Binding SelectedSociety,Mode=TwoWay}" IsVisible="{Binding IsEditSociety}"/>
+                <controls:FontAwesomeButton Text="{x:Static icons:MaterialIcon.Edit}"   HorizontalOptions="End"
+                                     Command="{Binding EditSocietyCommand}" Style="{DynamicResource faButtonSmall}"/>
+            </StackLayout>
+            <Entry Placeholder="Competition Name"  Text="{Binding Competition.CompetitionName, Mode=TwoWay}"
+                   Keyboard="Chat" HorizontalOptions="FillAndExpand" />
+            <Entry Placeholder="Competition Description"  Text="{Binding Competition.CompetitionDescription, Mode=TwoWay}" 
+                   Keyboard="Chat" HorizontalOptions="FillAndExpand" />
+            <StackLayout Orientation="Horizontal">
+                <Entry Placeholder="Venue"  Text="{Binding Competition.Venue, Mode=TwoWay}" HorizontalOptions="FillAndExpand" Keyboard="Chat" />
+                <Entry Placeholder="Code Name"  Text="{Binding Competition.CodeName, Mode=TwoWay}" HorizontalOptions="FillAndExpand" Keyboard="Chat" />
+            </StackLayout>
             <Label Text="Start Date" Style="{DynamicResource  labelStyle}" Margin="15,0,0,0" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
             <DatePicker Date="{Binding Competition.StartDate, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+            
+            <Entry Placeholder="Accommodation"  Text="{Binding Competition.Accommodation, Mode=TwoWay}" HorizontalOptions="FillAndExpand" Keyboard="Chat" />
+            <Entry Placeholder="Winner"  Text="{Binding Competition.Winner, Mode=TwoWay}" HorizontalOptions="FillAndExpand" Keyboard="Chat" />
+
             <StackLayout Orientation="Horizontal">
                 <Label Text="Closed and Locked" Style="{DynamicResource  labelStyle}" Margin="15,0,0,0" VerticalOptions="End" HorizontalOptions="Start"/>
                 <Switch IsToggled="{Binding Competition.ClosedYN}" HorizontalOptions="EndAndExpand" />

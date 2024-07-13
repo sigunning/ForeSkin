@@ -30,8 +30,8 @@ namespace ForeScore
         {
            //Routing.RegisterRoute("login", typeof(LoginPage));
            Routing.RegisterRoute($"//login", typeof(LoginPage));
- 
 
+           Routing.RegisterRoute($"//webview", typeof(WebViewPage));
         }
 
         
@@ -61,6 +61,13 @@ namespace ForeScore
         private async void OnLogoutClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("//login");
+            Shell.Current.FlyoutIsPresented = false;
+            //await Shell.Current.Navigation.PushModalAsync(new LoginPage());
+        }
+
+        private async void OnWebViewClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//webview");
             Shell.Current.FlyoutIsPresented = false;
             //await Shell.Current.Navigation.PushModalAsync(new LoginPage());
         }

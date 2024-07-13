@@ -45,6 +45,10 @@ namespace ForeScore
         IMobileServiceSyncTable<PlayerScore> tablePlayerScore;
    
         
+        public string DBPath
+        {
+            get => Path.Combine(MobileServiceClient.DefaultDatabasePath, "forescore.db");
+        }
        
 
         #region Init
@@ -63,9 +67,10 @@ namespace ForeScore
 
 
             //InitialzeDatabase for path
-            var path = "forescore.db";
-            path = Path.Combine(MobileServiceClient.DefaultDatabasePath, path);
-              
+            var path = DBPath;
+            //var path = "forescore.db";
+            //path = Path.Combine(MobileServiceClient.DefaultDatabasePath, path);
+
 
             // delete store if setting
             if (Preferences.Get("ResetData", false) == true) 
@@ -180,16 +185,19 @@ namespace ForeScore
                 { 
                     await tableCourse.PullAsync(_queryId, tableCourse.CreateQuery(), pullOptions);  
                 }
-                if (SyncOptionsObj.Players)
-                {   
-                    await tablePlayer.PullAsync(_queryId, tablePlayer.CreateQuery(), pullOptions);  
-                }
+                
                 if (SyncOptionsObj.Societies)
                 { 
                     await tableSociety.PullAsync(_queryId, tableSociety.CreateQuery(), pullOptions);
                     await tableSocietyPlayer.PullAsync(_queryId, tableSocietyPlayer.CreateQuery(), pullOptions);
                     //await tableSocietyPlayer.PullAsync(_queryId, tableSocietyPlayer.CreateQuery().Where(u => u.PlayerId == Preferences.Get("PlayerId",null)), pullOptions);
                 }
+
+                if (SyncOptionsObj.Players)
+                {
+                    await tablePlayer.PullAsync(_queryId, tablePlayer.CreateQuery(), pullOptions);
+                }
+
                 if (SyncOptionsObj.Competitions)
                 {
                     await tableCompetition.PullAsync(_queryId, tableCompetition.CreateQuery(), pullOptions);
@@ -245,13 +253,37 @@ namespace ForeScore
         public async Task<ObservableCollection<Player>> GetPlayers()
         {
             await Initialize();
+           
             await SyncPlayers();
             return await tablePlayer
                 .OrderBy(x => x.PlayerName)
                 .ToCollectionAsync();
+           
+
         }
 
-        
+        public async Task<ObservableCollection<Player>> GetPlayers(string playerId)
+        {
+            // get players for all societies where player is a member
+            await Initialize();
+           
+            List<Player> players = await tablePlayer.ToListAsync();
+            List<SocietyPlayer> societyPlayers = await tableSocietyPlayer.ToListAsync();
+            List<SocietyPlayer> mySocieties = await tableSocietyPlayer
+               .Where(o => o.PlayerId == playerId).ToListAsync();
+
+            List<Player> lstPlayers = (from s1 in mySocieties
+                                                 join sp1 in societyPlayers on s1.SocietyId equals sp1.SocietyId
+                                                 join p1 in players on sp1.PlayerId equals p1.PlayerId
+                                       select p1).Distinct().ToList();
+
+
+            return new ObservableCollection<Player>(lstPlayers
+                .OrderBy(x => x.PlayerName));
+
+        }
+
+
 
         public async Task<Player> GetPlayer(string playerId)
         {
@@ -328,7 +360,7 @@ namespace ForeScore
                 {
                     await tablePlayer.UpdateAsync(player);
                 }
-                await SyncPlayers();
+                // await SyncPlayers();
             }
             catch (Exception ex)
             {
@@ -403,8 +435,13 @@ namespace ForeScore
         public async Task<Society> GetHomeSociety(string playerId)
         {
             await Initialize();
+            // get home society player for player
+            List<SocietyPlayer> lstSocietyPlayers = await tableSocietyPlayer
+                .Where(o => o.PlayerId == playerId && o.HomeYN==true).ToListAsync();
+            SocietyPlayer sp = lstSocietyPlayers.FirstOrDefault();
+
             List<Society> lstSocieties = await tableSociety
-                .Where(o => o.CreatedByPlayerId == playerId).ToListAsync();
+                .Where(o => o.SocietyId == sp.SocietyId).ToListAsync();
             return lstSocieties.FirstOrDefault();   
 
         }

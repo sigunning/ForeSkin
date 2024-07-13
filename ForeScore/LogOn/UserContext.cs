@@ -20,5 +20,7 @@
         //Extra properties for app
         public string PlayerId { get; internal set; }
         public bool AdminYN { get; internal set; }
+
+        public string HomeSocietyId { get; internal set; }
     }
 }

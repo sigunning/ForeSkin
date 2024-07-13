@@ -106,6 +106,8 @@ namespace ForeScore.ViewModels
             {
                 Courses.Add(course);
                 await azureService.SaveCourseAsync(course);
+                // refresh course lookups
+                await azureService.LoadCourseLookup(true);
                 Title = $"Courses ({Courses.Count})";
             });
 

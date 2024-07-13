@@ -311,7 +311,7 @@ namespace ForeScore.ViewModels
             IsBusy = false;
 
             // set competition pref on dropdown
-            if (Common.Pickers.PickerCompetition.Count > 0)
+            //if (Common.Pickers.PickerCompetition.Count > 0)
             {
                 
                 CompetitionsPicker = Common.Pickers.PickerCompetition.ToList();

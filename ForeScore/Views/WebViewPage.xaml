@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ForeScore.Views.WebViewPage"
+             Visual="Material"
+             Title="Search for Course Data"
+             Shell.NavBarIsVisible="false">
+    
+    <ContentPage.Content>
+        <StackLayout Padding="5">
+            <StackLayout >
+                <ProgressBar HorizontalOptions="FillAndExpand" x:Name="progress"/>
+                <ScrollView >
+                    <WebView x:Name="webView" 
+                         HeightRequest="2000" 
+                         WidthRequest="1000"                          
+                         VerticalOptions= "FillAndExpand" 
+                         Navigating="webOnNavigating"
+                         Navigated="webOnEndNavigating" 
+                             Source="https://www.mscorecard.com/mscorecard/courses.php">
+ 
+                    </WebView>
+                </ScrollView>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Button x:Name="btnApply"  Text="Apply Hole Data"   VerticalOptions="EndAndExpand"  Style="{DynamicResource stdButton}"
+                         HorizontalOptions="FillAndExpand" Clicked="btnApply_Clicked"/>
+                <Button  Text="Cancel"   VerticalOptions="EndAndExpand"  Style="{DynamicResource stdButton}"
+                         HorizontalOptions="FillAndExpand" Clicked="btnCancel_Clicked"/>
+            </StackLayout>
+        </StackLayout>
+        
+    </ContentPage.Content>
+</ContentPage>

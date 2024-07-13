@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ForeScore.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Xamarin.Essentials;
@@ -21,7 +22,7 @@ namespace ForeScore.Models
         [Newtonsoft.Json.JsonIgnore]
         public string Glyph
         {
-            get => (CreatedByPlayerId == Preferences.Get("PlayerId",null) ? Helpers.MaterialIcon.People : Helpers.MaterialIcon.PeopleOutline );
+            get => (SocietyId == StaticHelpers.UserPlayer.HomeSocietyId ? Helpers.MaterialIcon.People : Helpers.MaterialIcon.PeopleOutline );
             //get =>  Helpers.MaterialIcon.PersonOutline;
         }
 

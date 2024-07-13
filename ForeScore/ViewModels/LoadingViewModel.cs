@@ -39,8 +39,12 @@ namespace ShellLogin.ViewModels
                 // check if new user not yet registered. Will have a playerId if so.
                 Player player = await azureService.GetPlayerByUserId(userContext.UserIdentifier);
                 // store player id to static
+                
                 StaticHelpers.UserPlayer.PlayerId = player == null ? null : player.PlayerId;
                 StaticHelpers.UserPlayer.AdminYN = player.AdminYN;
+                // get home society
+                var society = await azureService.GetHomeSociety(player.PlayerId);
+                StaticHelpers.UserPlayer.HomeSocietyId = society.SocietyId;
                 StaticHelpers.UserPlayer.DisplayName = player.PlayerName;
                 isRegistered = (player.PlayerId != null);
                 // store prefs
@@ -61,7 +65,7 @@ namespace ShellLogin.ViewModels
             if (isAuthenticated && isRegistered )
             {
                 // all good, go to main page
-                await SetUserPlayer();
+                // await SetUserPlayer();
                 await Shell.Current.GoToAsync($"//home");
             }
             else

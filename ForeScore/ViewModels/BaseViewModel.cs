@@ -18,6 +18,7 @@ namespace ForeScore.ViewModels
         private AzureService azureService;
 
         public ICommand PlayCommand { private set; get; }
+        public ICommand ProfileCommand { private set; get; }
 
         public BaseViewModel()
         {
@@ -38,6 +39,17 @@ namespace ForeScore.ViewModels
             {
                 IsBusy = true;
                 await Shell.Current.Navigation.PushAsync(new SocietyCompPage());
+                IsBusy = false;
+
+            });
+
+            // profile and logout
+            ProfileCommand = new Command(async () =>
+            {
+                IsBusy = true;
+                // await Shell.Current.Navigation.PushAsync(new LoginPage());
+                await Shell.Current.GoToAsync("//login");
+                Shell.Current.FlyoutIsPresented = false;
                 IsBusy = false;
 
             });

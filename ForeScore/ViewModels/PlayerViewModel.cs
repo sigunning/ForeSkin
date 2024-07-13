@@ -105,6 +105,7 @@ namespace ForeScore.ViewModels
             MessagingCenter.Subscribe<Player>(this, "Update", async (player) =>
             {
                 // refresh list?
+                
             });
         }
 
@@ -144,7 +145,8 @@ namespace ForeScore.ViewModels
             Debug.WriteLine("Loading players...");
             try
             {
-                Players = await azureService.GetPlayers();
+                //Players = await azureService.GetPlayers();
+                Players = await azureService.GetPlayers(UserPlayer.PlayerId);
                 Title = $"Players ({Players.Count})";
             }
             catch (Exception ex)

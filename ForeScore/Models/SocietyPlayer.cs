@@ -12,6 +12,7 @@ namespace ForeScore.Models
         public string PlayerId { get; set; }
         public DateTime JoinedDate { get; set; }
         public bool SocietyAdmin { get; set; }
+        public bool HomeYN { get; set; }
         public bool DeletedYN { get; set; }
 
         [Newtonsoft.Json.JsonIgnore]

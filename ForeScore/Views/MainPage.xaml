@@ -13,7 +13,7 @@
 
     <!--Shell.NavBarIsVisible="{Binding IsSignedIn, Mode=TwoWay}"-->
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{Binding Greeting, Mode=TwoWay}"/>
+        <ToolbarItem Text="{Binding Greeting, Mode=TwoWay}" Command="{Binding ProfileCommand}"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>

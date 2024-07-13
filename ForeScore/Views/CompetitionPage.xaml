@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ForeScore.Views.CompetitionPage"
+             xmlns:controls="clr-namespace:ForeScore.Controls;assembly=ForeScore"
+             xmlns:icons="clr-namespace:ForeScore.Helpers"
+             Visual="Material"
+             Title="{Binding Title}">
+    
+    
+    <ContentPage.Content>
+
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+
+                <StackLayout>
+
+                    <!-- comps -->
+                   
+                        <Picker Title="Society" HorizontalOptions="FillAndExpand"  ItemsSource="{Binding SocietiesPicker}"  ItemDisplayBinding="{Binding SocietyName}"
+                    SelectedItem="{Binding SelectedSociety,Mode=TwoWay}"/>
+                        
+                    
+                    <CollectionView x:Name="lstCompetitions" 
+                                EmptyView="No Competitions Found" 
+                                ItemsSource="{Binding Competitions}"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding SelectedCompetition, Mode=TwoWay}"
+                                SelectionChangedCommand="{Binding SelectionCommand}"
+                                SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference lstCompetitions}}"
+                        >
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="3" />
+                        </CollectionView.ItemsLayout>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                
+
+                                <Grid  >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.Column="0" Margin="3" >
+                                        <Image.Source>
+                                            <FontImageSource Color="{DynamicResource colorPrimaryDark}"
+                                                FontFamily="{DynamicResource MaterialFontFamily}"                                            
+                                                Glyph="{x:Static icons:MaterialIcon.Stars}"  />
+                                        </Image.Source>
+                                    </Image>
+
+                                    <Label Text="{Binding CompetitionName}" Grid.Column="1"  HorizontalOptions="StartAndExpand" VerticalOptions="Center"
+                                            Style="{DynamicResource listStyle}"  />
+                                    <BoxView BackgroundColor="Silver" Grid.Row="0" Grid.ColumnSpan="2" HeightRequest="1" VerticalOptions="End"/>
+                                </Grid>
+
+                            </DataTemplate>
+
+
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+        
+                    <Button Text="Add Competition"  VerticalOptions="EndAndExpand"   Style="{DynamicResource stdButton}"  
+                        Command="{Binding AddCompetitionsCommand}" IsEnabled="{Binding UserPlayer.AdminYN}"/>
+
+
+
+                </StackLayout>
+
+
+                <!--Activity Indicator-->
+                <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                     AbsoluteLayout.LayoutFlags="PositionProportional"
+                     AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" />
+                    <Label Text="{Binding ActivityMessage}" HorizontalOptions="Center" />
+                </StackLayout>
+
+            </StackLayout>
+        </AbsoluteLayout>
+
+    </ContentPage.Content>
+</ContentPage>

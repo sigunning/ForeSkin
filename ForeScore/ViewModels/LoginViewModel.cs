@@ -127,57 +127,78 @@ namespace ForeScore.ViewModels
 
         private async Task<bool> Register(string playerId)
         {
+
+            // download players
+            SyncOptions sync = new SyncOptions() { Players = true };
+            await azureService.SyncAllData(sync);
+
             // find the player code 
             Player player = await azureService.GetPlayer(playerId);
 
-            // if found and userid is empty, we can update
-            if (player == null || player.userId != null)
+            // if re-installed app, player may be registered already
+            if (player.RegisteredYN)
             {
-                ValidationText = "Invalid Registration Code! Try Again";
-                return false;
+                ValidationText = "You are already Registered!";
+                StaticHelpers.UserPlayer.DisplayName = player.PlayerName;
+                StaticHelpers.UserPlayer.UserIdentifier = player.userId;
+                StaticHelpers.UserPlayer.AdminYN = player.AdminYN;
+                // store prefs
+                Preferences.Set("UserId", player.userId);
+                Preferences.Set("PlayerId", player.PlayerId);
+
             }
+            else
+            {
+                // if found and userid is empty, we can update
+                if (player == null || player.userId != null)
+                {
+                    ValidationText = "Invalid Registration Code! Try Again";
+                    return false;
+                }
 
-            // set playerid
-            StaticHelpers.UserPlayer.PlayerId = player.PlayerId;
+                // set playerid
+                StaticHelpers.UserPlayer.PlayerId = player.PlayerId;
 
-            IsBusy = true;
+                IsBusy = true;
 
-            // update
-            ValidationText = "Registration Successful!";
-            player.userId = StaticHelpers.UserPlayer.UserIdentifier;
-            player.EmailAddress = StaticHelpers.UserPlayer.EmailAddress;
-            player.PlayerName = StaticHelpers.UserPlayer.DisplayName;
-            player.FirstName = StaticHelpers.UserPlayer.GivenName;
-            player.LastName = StaticHelpers.UserPlayer.FamilyName;
-            await azureService.SavePlayerAsync(player);
+                // update
+                ValidationText = "Registration Successful!";
+                player.userId = StaticHelpers.UserPlayer.UserIdentifier;
+                player.EmailAddress = StaticHelpers.UserPlayer.EmailAddress;
+                player.PlayerName = StaticHelpers.UserPlayer.DisplayName;
+                player.FirstName = StaticHelpers.UserPlayer.GivenName;
+                player.LastName = StaticHelpers.UserPlayer.FamilyName;
+                await azureService.SavePlayerAsync(player);
 
-            
 
-            // create home society
-            Society society = new Society();
-            society.SocietyId = Guid.NewGuid().ToString();
-            society.SocietyName = "Home";
-            society.SocietyDescription = "General Play";
-            society.CreatedByPlayerId = playerId;
-            society.CreatedDate = DateTime.Now;
 
-            // save record and then notify subscribers 
-            await azureService.SaveSocietyAsync(society);
-            
+                // create home society
+                Society society = new Society();
+                society.SocietyId = Guid.NewGuid().ToString();
+                society.SocietyName = StaticHelpers.UserPlayer.DisplayName;
+                society.SocietyDescription = "General Play";
+                society.CreatedByPlayerId = playerId;
+                society.CreatedDate = DateTime.Now;
 
-            // add current player as a member of society
-            SocietyPlayer societyPlayer = new SocietyPlayer();
-            societyPlayer.PlayerId = playerId;
-            societyPlayer.SocietyId = society.SocietyId;
-            societyPlayer.SocietyAdmin = true;
-            societyPlayer.JoinedDate = DateTime.Now;
-            await azureService.SaveSocietyPlayerAsync( societyPlayer);
+                // save record and then notify subscribers 
+                await azureService.SaveSocietyAsync(society);
 
-            // set prefs
-            Preferences.Set("SocietyId", society.SocietyId);
-            Preferences.Set("PlayerId", player.PlayerId);
-            Preferences.Set("UserId", player.userId);
 
+                // add current player as a member of society
+                SocietyPlayer societyPlayer = new SocietyPlayer();
+                societyPlayer.PlayerId = playerId;
+                societyPlayer.SocietyId = society.SocietyId;
+                societyPlayer.SocietyAdmin = true;
+                societyPlayer.HomeYN = true;
+                societyPlayer.JoinedDate = DateTime.Now;
+                await azureService.SaveSocietyPlayerAsync(societyPlayer);
+
+                // set prefs
+                Preferences.Set("SocietyId", society.SocietyId);
+                Preferences.Set("PlayerId", player.PlayerId);
+                Preferences.Set("UserId", player.userId);
+
+            }
             UpdateSignInState(StaticHelpers.UserPlayer);
 
             // go to main page
@@ -200,16 +221,15 @@ namespace ForeScore.ViewModels
                     {
                         if ( await SetUserPreferences(userContext) )
                         {
-                            await SetUserPlayer();
+                            // await SetUserPlayer();
                             // go to main page
                             await Shell.Current.GoToAsync($"//home");
                         }
                         else
-                        {
+                        {   
                             // must get reg code
                             UpdateSignInState(userContext);
                             
-
                         }
 
                     }
@@ -263,6 +283,7 @@ namespace ForeScore.ViewModels
                 // get home society
                 var society = await azureService.GetHomeSociety(player.PlayerId);
                 Preferences.Set("SocietyId", society.SocietyId);
+                StaticHelpers.UserPlayer.HomeSocietyId = society.SocietyId;
                 StaticHelpers.UserPlayer.PlayerId = player.PlayerId;
                 StaticHelpers.UserPlayer.AdminYN = player.AdminYN;
                 StaticHelpers.UserPlayer.DisplayName = player.PlayerName;

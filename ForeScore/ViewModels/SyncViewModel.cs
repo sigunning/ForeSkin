@@ -42,14 +42,34 @@ namespace ForeScore.ViewModels
 
             IsBusy = true;
             StatusMsg = "Synchronisation in progress...";
+            string ftpMsg = string.Empty;
+
             // set offline mode off
             Preferences.Set("OfflineMode", false);
 
+            // sync to SQL
             await azureService.SyncAllData(SyncOptionsObj);
+
+            if (SyncOptionsObj.Upload)
+            {
+                string host = "waws-prod-sn1-043.ftp.azurewebsites.windows.net";
+                //host = "104.214.114.166";
+                string user = await SecureStorage.GetAsync("ftpuser");
+                //string user = @"breadmakersgolf\$breadmakersgolf";
+                string password = await SecureStorage.GetAsync("ftppassword");
+                //string password = "1PLYdfcahrjsmqXjjlJTTJz9iwkWc92pBaZb8GWGQ7GJYAZecRl4F4jmL8Nv";
+                string source = azureService.DBPath;
+                // "/data/user/0/com.sprinklerhead.foreskin/files/forescore.db"
+                string dest = "/site/wwwroot/App_Data/forescore.db";
+                FTP ftp = new FTP();
+                FluentFTP.FtpStatus ftpStatus = await ftp.UploadFile(host, user, password, source, dest);
+                ftpMsg = ftpStatus == FluentFTP.FtpStatus.Success ? " - Upload Ok" : " - Upload Failed";
+
+            }
 
             Preferences.Set("OfflineMode", true);
             IsBusy = false;
-            StatusMsg = "Synchronisation completed";
+            StatusMsg = "Synchronisation completed" + ftpMsg;
         }
 
 

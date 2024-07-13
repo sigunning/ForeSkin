@@ -18,7 +18,8 @@
         <StackLayout>
 
             <StackLayout Orientation="Horizontal" >
-                <Entry Placeholder="Player Name"  Text="{Binding Player.PlayerName, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+                <Entry Placeholder="Player Name"  Text="{Binding Player.PlayerName, Mode=TwoWay}" 
+                       HorizontalOptions="FillAndExpand" Keyboard="Chat"/>
                 <Entry Placeholder="HCAP"  Text="{Binding Player.LastHCAP, Mode=TwoWay}" HorizontalOptions="End"  WidthRequest="68"/>
                 <!--<Image  HeightRequest="48" WidthRequest="48"  > 
                     <Image.Source>
@@ -38,8 +39,10 @@
 
             </StackLayout>
             <StackLayout Orientation="Horizontal"  >
-                <Entry Placeholder="First Name"  Text="{Binding Player.FirstName,Mode=TwoWay}"  HorizontalOptions="FillAndExpand" />
-                <Entry Placeholder="Last Name"  Text="{Binding Player.LastName,Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+                <Entry Placeholder="First Name"  Text="{Binding Player.FirstName,Mode=TwoWay}"  
+                       Keyboard="Chat" HorizontalOptions="FillAndExpand" />
+                <Entry Placeholder="Last Name"  Text="{Binding Player.LastName,Mode=TwoWay}" 
+                       Keyboard="Chat" HorizontalOptions="FillAndExpand" />
             </StackLayout>
             <Entry Placeholder="Email"  Text="{Binding Player.EmailAddress}"  HorizontalOptions="FillAndExpand" />
 
